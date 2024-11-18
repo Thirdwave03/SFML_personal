@@ -77,8 +77,6 @@ sf::Vector2f ViewMgr::ScreenToWorld(sf::Vector2i screenPos)
 	SceneDev1* tempScene = (SceneDev1*)(SCENE_MGR.GetCurrentScene());
 	tempMPos.x -= tempScene->GetIsoTileSize().x/2 * tempScene->GetIsoTileScale().x;
 	tempMPos.y -= tempScene->GetIsoTileSize().y/2 * tempScene->GetIsoTileScale().y;
-	tempMPos.x /= 2;
-	tempMPos.y /= 2;
 	return tempMPos;
 }
 
@@ -90,25 +88,92 @@ sf::Vector2i ViewMgr::WorldToScreen(sf::Vector2f worldPos)
 sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 {
 	sf::Vector2i isoCoord;
-	worldCoordFloat = mPosWorld.x + mPosWorld.y * 2;
+	worldCoordFloatBR = mPosWorld.y - mPosWorld.x / 2.f;
+	worldCoordFloatBL = mPosWorld.x/2.f + mPosWorld.y;
+	devidedBR = worldCoordFloatBR + tileSize.y / 2.f * tileScale.y;
+	devidedBL = worldCoordFloatBL + tileSize.y / 2.f * tileScale.y;
+	while (devidedBR >= (tileSize.x*tileScale.x)/2.f)
+		devidedBR -= (tileSize.x * tileScale.x) / 2.f;
+	while (devidedBR < 0)
+		devidedBR += (tileSize.x * tileScale.x) / 2.f;
+	while (devidedBL >= (tileSize.x * tileScale.x) / 2.f)
+		devidedBL -= (tileSize.x * tileScale.x) / 2.f;
+	float tempX = mPosWorld.x;
+	float tempY = mPosWorld.y;
+	xIndex = 0;
+	yIndex = 0;
+	while (tempX >= (tileSize.x * tileScale.x)/2)
+	{
+		tempX -= (tileSize.x * tileScale.x) / 2;
+		xIndex++;
+	}
+	while (tempY >= (tileSize.y * tileScale.y)/2)
+	{
+		tempY -= (tileSize.y * tileScale.y) / 2;
+		yIndex++;
+	}
 
-	//isoCoord.x = mPosWorld.x / (tileSize.x * tileScale.x) + mPosWorld.y / (tileSize.y * tileScale.y);
-	//isoCoord.y = mPosWorld.y / (tileSize.y * tileScale.y) - mPosWorld.x / (tileSize.x * tileScale.x);
-
-
-	if (((int)(mPosWorld.y + tileSize.y/2) / (int)(tileSize.y / 2.f * tileScale.y)) % 2 == 0)
-		isoCoord.x = mPosWorld.x / (tileSize.x * tileScale.x);
+	if (xIndex % 2 == 0)
+	{
+		if (yIndex % 2 == 0)
+		{
+			if (devidedBL < 32.f)
+			{
+				mPosIso.x = xIndex / 2;
+				mPosIso.y = yIndex;
+			}
+			else
+			{
+				mPosIso.x = xIndex / 2 - 1;
+				mPosIso.y = yIndex - 1;
+			}
+		}
+		else
+		{
+			if (devidedBR < 32.f)
+			{
+				mPosIso.x = xIndex / 2 - 1;
+				mPosIso.y = yIndex;
+			}
+			else
+			{
+				mPosIso.x = xIndex / 2;
+				mPosIso.y = yIndex - 1;
+			}
+		}
+	}
 	else
-		isoCoord.x = mPosWorld.x / (tileSize.x * tileScale.x) + 1;
+	{
+		if (yIndex % 2 == 0)
+		{
+			if (devidedBR >= 32.f)
+				mPosIso.y = yIndex - 1;
+			else
+				mPosIso.y = yIndex;
+			mPosIso.x = xIndex / 2;
+		}
+		else
+		{
+			if (devidedBL < 32.f)
+				mPosIso.y = yIndex;
+			else
+				mPosIso.y = yIndex-1;
+			mPosIso.x = xIndex / 2;
+		}
+	}
 	
-	if (((int)(mPosWorld.x + tileSize.x/2) / (int)(tileSize.x / 2.f * tileScale.x)) % 2 == 0)
-		isoCoord.y = mPosWorld.y / (tileSize.y / 2.f * tileScale.y);
-	else
-		isoCoord.y = mPosWorld.y / (tileSize.y / 2.f * tileScale.y) + 1;	
 
 
-	mPosIso.x = (int)isoCoord.x;
-	mPosIso.y = (int)isoCoord.y;
+	//if (((int)(mPosWorld.y + tileSize.y/2) / (int)(tileSize.y / 2.f * tileScale.y)) % 2 == 0)
+	//isoCoord.x = mPosWorld.x / (tileSize.x * tileScale.x);
+	//else
+	//isoCoord.x = mPosWorld.x / (tileSize.x * tileScale.x) + 1;
+	//	
+	//if (((int)(mPosWorld.x + tileSize.x/2) / (int)(tileSize.x / 2.f * tileScale.x)) % 2 == 0)
+	//isoCoord.y = mPosWorld.y / (tileSize.y / 2.f * tileScale.y);
+	//else
+	//isoCoord.y = mPosWorld.y / (tileSize.y / 2.f * tileScale.y) + 1;	
+
 
 	return mPosIso;
 }

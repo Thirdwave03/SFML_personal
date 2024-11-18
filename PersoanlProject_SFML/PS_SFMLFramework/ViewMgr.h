@@ -18,7 +18,13 @@ protected:
 	float viewMoveSpeed = 500.f;
 	sf::Vector2f viewSize;
 	sf::FloatRect viewBoundary;
-	float worldCoordFloat;
+	float worldCoordFloatBL;
+	float worldCoordFloatBR;
+	float devidedBR;
+	float devidedBL;
+
+	int xIndex = 0;
+	int yIndex = 0;
 
 	sf::Vector2f mPosWorld;
 	sf::Vector2i mPosScreen;
@@ -51,7 +57,14 @@ public:
 	sf::Vector2f GetWorldMousePos() { return mPosWorld; }
 	sf::Vector2i GetScreenMousePos() { return mPosScreen; }
 	sf::Vector2i GetIsoMousePos() { return mPosIso; }
-	float GetWorldMousePosFloat() {	return worldCoordFloat;	}
+	float GetWorldMousePosFloatBL() { return worldCoordFloatBL; }
+	float GetWorldMousePosFloatBR() { return worldCoordFloatBR; }
+	float GetDevidedBR() { return devidedBR; }
+	float GetDevidedBL() { return devidedBL; }
+	
+	int GetXindex() { return xIndex; }
+	int GetYindex() { return yIndex; }
+	
 
 	void SetScreenMousePos(sf::Vector2i mPosScreen);
 

@@ -58,31 +58,42 @@ void UiHud::Reset()
 	mCoordsScreen.setFont(font);
 	mCoordsScreen.setCharacterSize(textSize);
 	mCoordsScreen.setFillColor(sf::Color::Yellow);
-	mCoordsScreen.setPosition({ 50.f, 150.f });
+	mCoordsScreen.setPosition({ 50.f, 200.f });
 	Utils::SetOrigin(mCoordsScreen, Origins::TL);
 
 	mCoordsIso.setFont(font);
 	mCoordsIso.setCharacterSize(textSize);
 	mCoordsIso.setFillColor(sf::Color::Red);
-	mCoordsIso.setPosition({ 50.f, 250.f });
+	mCoordsIso.setPosition({ 50.f, 300.f });
 	Utils::SetOrigin(mCoordsIso, Origins::TL);
 
 	worldFloat.setFont(font);
 	worldFloat.setCharacterSize(textSize);
 	worldFloat.setFillColor(sf::Color::Magenta);
-	worldFloat.setPosition({ 50.f, 350.f });
+	worldFloat.setPosition({ 50.f, 400.f });
 	Utils::SetOrigin(worldFloat, Origins::TL);
 }
 
 void UiHud::Update(float dt)
 {
+	auto tempX = (int)VIEW_MGR.GetWorldMousePos().x;
+	while (tempX >= 128)
+		tempX -= 128;
+	auto tempY = (int)VIEW_MGR.GetScreenMousePos().y;
+	while (tempY >= 64)
+		tempY -= 64;
+
 	mCoordsWorld.setString(
-		"Worlds X : " + std::to_string(VIEW_MGR.GetWorldMousePos().x)
-		+ "\nWorlds Y : " + std::to_string(VIEW_MGR.GetWorldMousePos().y));
+		"Worlds X : " + std::to_string((int)VIEW_MGR.GetWorldMousePos().x)
+		+ "\nWorlds Y : " + std::to_string((int)VIEW_MGR.GetWorldMousePos().y)
+		+ "\nTile X : " + std::to_string(tempX)
+		+ "\nTile Y : " + std::to_string(tempY)
+		);
 	Utils::SetOrigin(mCoordsWorld, Origins::TL);
 	mCoordsScreen.setString(
 		"Screen X : " + std::to_string(VIEW_MGR.GetScreenMousePos().x)
-		+ "\nScreen Y : " + std::to_string(VIEW_MGR.GetScreenMousePos().y));
+		+ "\nScreen Y : " + std::to_string(VIEW_MGR.GetScreenMousePos().y)
+		);
 	Utils::SetOrigin(mCoordsScreen, Origins::TL);
 
 	mCoordsIso.setString(
@@ -92,13 +103,24 @@ void UiHud::Update(float dt)
 
 	// for World Float Check only
 
-	auto tempFloat = VIEW_MGR.GetWorldMousePosFloat() + 32.f;
-	while (tempFloat >= 64.f)
-		tempFloat -= 64.f;
+	//auto tempBL = VIEW_MGR.GetWorldMousePosFloatBL() + 32.f;
+	//while (tempBL >= 64.f)
+	//	tempBL -= 64.f;
+
+	//auto tempBR = VIEW_MGR.GetWorldMousePosFloatBR() + 32.f;
+	//while (tempBR >= 64.f)
+	//	tempBR -= 64.f;
+	//while (tempBR < 0)
+	//	tempBR += 64.f;
 
 	worldFloat.setString(
-		"WorldFloat : " + std::to_string(VIEW_MGR.GetWorldMousePosFloat())
-		+ "\nTileFloat : " + std::to_string(tempFloat));
+		"WorldFloat(BL) : " + std::to_string(VIEW_MGR.GetWorldMousePosFloatBL())
+		+ "\nTileFloat(BL) : " + std::to_string(VIEW_MGR.GetDevidedBL())
+		+ "\nWorldFloat(BR) : " + std::to_string(VIEW_MGR.GetWorldMousePosFloatBR())
+		+ "\nTileFloat(BR) : " + std::to_string(VIEW_MGR.GetDevidedBR())
+		+ "\nX index : " + std::to_string(VIEW_MGR.GetXindex())
+		+ "\nY index : " + std::to_string(VIEW_MGR.GetYindex())
+		);
 	Utils::SetOrigin(worldFloat, Origins::TL);
 }
 
