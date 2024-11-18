@@ -102,7 +102,7 @@ void Scene::Draw(sf::RenderWindow& window)
 	}
 
 	window.setView(VIEW_MGR.GetUiView());
-
+	window.draw(TIME_MGR.GetFrameText());
 	while (!drawUiQueue.empty())
 	{
 		GameObject* obj = drawUiQueue.top();
@@ -173,22 +173,23 @@ void Scene::ApplyRemoveGO()
 
 sf::Vector2f Scene::ScreenToWorld(sf::Vector2i screenPos)
 {
-	return FRAMEWORK.GetWindow().mapPixelToCoords(screenPos, worldView);
+	// can be seen as : Pixel ( Screen ), Coords( x,y axis on WorldMap)
+	return FRAMEWORK.GetWindow().mapPixelToCoords(screenPos, VIEW_MGR.GetWorldView());
 }
 
 sf::Vector2i Scene::WorldToScreen(sf::Vector2f worldPos)
 {
-	return FRAMEWORK.GetWindow().mapCoordsToPixel(worldPos, worldView);
+	return FRAMEWORK.GetWindow().mapCoordsToPixel(worldPos, VIEW_MGR.GetWorldView());
 }
 
 sf::Vector2f Scene::ScreenToUi(sf::Vector2i screenPos)
 {
-	return FRAMEWORK.GetWindow().mapPixelToCoords(screenPos, uiView);
+	return FRAMEWORK.GetWindow().mapPixelToCoords(screenPos, VIEW_MGR.GetUiView());
 }
 
 sf::Vector2i Scene::UIToScreen(sf::Vector2f worldPos)
 {
-	return FRAMEWORK.GetWindow().mapCoordsToPixel(worldPos, uiView);
+	return FRAMEWORK.GetWindow().mapCoordsToPixel(worldPos, VIEW_MGR.GetUiView());
 }
 
 void Scene::TurnDebugBox(bool active, sf::Color color)

@@ -43,7 +43,6 @@ void Framework::Do()
 
         window.clear();
         SCENE_MGR.Draw(window);
-        window.draw(TIME_MGR.GetFrameText());
         window.display();
     }
 }

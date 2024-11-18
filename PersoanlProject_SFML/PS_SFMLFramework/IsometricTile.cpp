@@ -3,6 +3,7 @@
 
 IsometricTile::IsometricTile()
 {
+
 }
 
 bool IsometricTile::SetIsoTile(const int* tileType, sf::Vector2i count)
@@ -10,6 +11,9 @@ bool IsometricTile::SetIsoTile(const int* tileType, sf::Vector2i count)
 	if (!TEXTURE_MGR.Load(tileTexId))
 		return false;
 	texture = &TEXTURE_MGR.Get(tileTexId);
+
+	vaTileRS.texture = texture;
+	SetScale({ 2.f,2.f });
 
 	tileCnt = count;
 	vaTile.setPrimitiveType(sf::PrimitiveType::Triangles);
@@ -53,7 +57,7 @@ void IsometricTile::SetIsoLine()
 	vaLineToBR.resize((tileCnt.x + tileCnt.y) * 2);
 	vaLineToBL.setPrimitiveType(sf::Lines);
 	vaLineToBL.resize((tileCnt.x + tileCnt.y) * 2);
-	
+
 	int j = 0;
 
 	for (int i = 0; i < tileCnt.x + (tileCnt.y)/2+1; i++)
@@ -62,29 +66,29 @@ void IsometricTile::SetIsoLine()
 		{
 			if (tileCnt.x - 2 - i >= ((tileCnt.y - 1) / 2))
 			{
-				vaLineToBR[i * 2 + 0].position = sf::Vector2f(32.f + i * 64.f, 0.f);
-				vaLineToBR[i * 2 + 1].position = sf::Vector2f((i + (tileCnt.y + 2) / 2.f) * 64.f, (tileCnt.y + 1) * 16.f);
+				vaLineToBR[i * 2 + 0].position = sf::Vector2f((tileSize.x * scale.x)/2 + i * (tileSize.x * scale.x), 0.f);
+				vaLineToBR[i * 2 + 1].position = sf::Vector2f((i + (tileCnt.y + 2) / 2.f) * (tileSize.x * scale.x), (tileCnt.y + 1) * (tileSize.y * scale.y)/2);
 			}
 			else
 			{
 				auto temp = ((tileCnt.y - 1) / 2) - (tileCnt.x - 2 - i);
-				vaLineToBR[i * 2 + 0].position = sf::Vector2f(32.f + i * 64.f, 0.f);
-				vaLineToBR[i * 2 + 1].position = sf::Vector2f((i - temp + (tileCnt.y + 3) / 2.f) * 64.f, (tileCnt.y + 2 - 2 * temp) * 16.f);
+				vaLineToBR[i * 2 + 0].position = sf::Vector2f((tileSize.x * scale.x)/2 + i * (tileSize.x * scale.x), 0.f);
+				vaLineToBR[i * 2 + 1].position = sf::Vector2f((i - temp + (tileCnt.y + 3) / 2.f) * (tileSize.x * scale.x), (tileCnt.y + 2 - 2 * temp) * (tileSize.y * scale.y)/2);
 			}
 
 			if (i - 2 >= (tileCnt.y - 1) / 2)
 			{
-				vaLineToBL[i * 2 + 0].position = sf::Vector2f(32.f + (i) * 64.f, 0);
+				vaLineToBL[i * 2 + 0].position = sf::Vector2f((tileSize.x * scale.x)/2 + (i) * (tileSize.x * scale.x), 0);
 				vaLineToBL[i * 2 + 0].color = sf::Color::Magenta;
-				vaLineToBL[i * 2 + 1].position = sf::Vector2f((i - (tileCnt.y) / 2.f) * 64.f, (tileCnt.y + 1) * 16.f);
+				vaLineToBL[i * 2 + 1].position = sf::Vector2f((i - (tileCnt.y) / 2.f) * (tileSize.x * scale.x), (tileCnt.y + 1) * (tileSize.y * scale.y)/2);
 				vaLineToBL[i * 2 + 1].color = sf::Color::Magenta;
 			}
 			else
 			{
 				auto temp = ((tileCnt.y - 1) / 2) - (i - 1);
-				vaLineToBL[i * 2 + 0].position = sf::Vector2f(32.f + (i) * 64.f, 0);
+				vaLineToBL[i * 2 + 0].position = sf::Vector2f((tileSize.x * scale.x)/2 + (i) * (tileSize.x * scale.x), 0);
 				vaLineToBL[i * 2 + 0].color = sf::Color::Magenta;
-				vaLineToBL[i * 2 + 1].position = sf::Vector2f((i + temp - (tileCnt.y) / 2.f) * 64.f, (tileCnt.y + 1 - 2 * temp) * 16.f);
+				vaLineToBL[i * 2 + 1].position = sf::Vector2f((i + temp - (tileCnt.y) / 2.f) * (tileSize.x * scale.x), (tileCnt.y + 1 - 2 * temp) * (tileSize.y * scale.y)/2);
 				vaLineToBL[i * 2 + 1].color = sf::Color::Magenta;
 			}
 		}
@@ -92,11 +96,11 @@ void IsometricTile::SetIsoLine()
 		{
 			/*if (tileCnt.y % 2 == 0)
 			{*/
-				vaLineToBR[tileCnt.x * 2 + j * 2].position = sf::Vector2f(0.f, j * 32.f + 16.f);
-				vaLineToBR[tileCnt.x * 2 + j * 2 + 1].position = sf::Vector2f(tileCnt.y * 32.f - j * 64.f, (tileCnt.y + 1) * 16.f);
-				vaLineToBL[tileCnt.x * 2 + j * 2].position = sf::Vector2f(tileCnt.x * 64.f + 32.f, j * 32.f);
+				vaLineToBR[tileCnt.x * 2 + j * 2].position = sf::Vector2f(0.f, j * (tileSize.x * scale.x)/2 + (tileSize.y * scale.y)/2);
+				vaLineToBR[tileCnt.x * 2 + j * 2 + 1].position = sf::Vector2f(tileCnt.y * (tileSize.x * scale.x)/2 - j * (tileSize.x * scale.x), (tileCnt.y + 1) * (tileSize.y * scale.y)/2);
+				vaLineToBL[tileCnt.x * 2 + j * 2].position = sf::Vector2f(tileCnt.x * (tileSize.x * scale.x) + (tileSize.x * scale.x)/2, j * (tileSize.x * scale.x)/2);
 				vaLineToBL[tileCnt.x * 2 + j * 2].color = sf::Color::Magenta;
-				vaLineToBL[tileCnt.x * 2 + j * 2 + 1].position = sf::Vector2f(tileCnt.x * 64 - (tileCnt.y * 32.f - j * 64.f), (tileCnt.y + 1) * 16.f);
+				vaLineToBL[tileCnt.x * 2 + j * 2 + 1].position = sf::Vector2f(tileCnt.x * (tileSize.x * scale.x) - (tileCnt.y * (tileSize.x * scale.x)/2 - j * (tileSize.x * scale.x)), (tileCnt.y + 1) * (tileSize.y * scale.y)/2);
 				vaLineToBL[tileCnt.x * 2 + j * 2 + 1].color = sf::Color::Magenta;
 				j++;
 			/*}
@@ -107,6 +111,12 @@ void IsometricTile::SetIsoLine()
 			}*/
 		}
 	}	
+}
+
+void IsometricTile::SetScale(const sf::Vector2f& scale)
+{
+	this->scale = scale;
+	vaTileRS.transform.scale(scale);
 }
 
 
@@ -128,13 +138,20 @@ void IsometricTile::Reset()
 
 void IsometricTile::Update(float dt)
 {
+
 }
 
 void IsometricTile::Draw(sf::RenderWindow& window)
 {
 	sf::RenderStates rs;
 	rs.texture = this->texture;
-	window.draw(vaTile, rs);
+	//rs.transform.scale({ 2.f,2.f });
+	window.draw(vaTile, vaTileRS);
 	window.draw(vaLineToBL);
 	window.draw(vaLineToBR);
+}
+
+sf::FloatRect IsometricTile::GetTileRect()
+{
+	return vaTile.getBounds();
 }

@@ -7,10 +7,6 @@ protected:
 	std::list<GameObject*> addGameObjects;
 	std::list<GameObject*> removeGameObjects;
 
-	sf::View uiView;
-	sf::View worldView;
-	sf::View EditorView;
-
 	bool isDebugMode = false;
 	
 public:

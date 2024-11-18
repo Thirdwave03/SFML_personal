@@ -5,10 +5,11 @@ class UiHud : public GameObject
 {
 protected:
     sf::Text mCoordsWorld;
-    sf::Text mCoordsUi;
+    sf::Text mCoordsScreen;
+	sf::Text mCoordsIso;
+	sf::Text worldFloat;
 
     sf::Text forCalibrationCheck;
-
 
 public:
     UiHud(const std::string& name = "");

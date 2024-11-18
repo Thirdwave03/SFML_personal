@@ -125,7 +125,7 @@ float Utils::Magnitude(const sf::Vector2f& vec) // 대각선거리
     return std::sqrtf(SqrMagnitude(vec));
 }
 
-void Utils::Normailize(sf::Vector2f& vec)   // 매개변수의 대각선거리값이 0이 아니면 
+void Utils::Normalize(sf::Vector2f& vec)   // 매개변수의 대각선거리값이 0이 아니면 
 {                                           // 매개변수의 대각선거리값으로 매개변수(벡터)를 나눔
     float mag = Magnitude(vec);
     if (mag != 0)

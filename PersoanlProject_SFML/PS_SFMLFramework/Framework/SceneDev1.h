@@ -26,5 +26,8 @@ public:
 
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+
+	sf::Vector2f GetIsoTileSize();
+	sf::Vector2f GetIsoTileScale();
 };
 
