@@ -3,6 +3,7 @@
 
 bool Variables::isDrawHitBox = false;
 Languages Variables::currentLang = Languages::English;
+Stages Variables::currentStage = Stages::Default;
 
 void Variables::SetFont(sf::Text& text)
 {

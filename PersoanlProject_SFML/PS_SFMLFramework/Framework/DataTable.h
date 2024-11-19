@@ -1,12 +1,12 @@
 #pragma once
+
 class DataTable
 {
 public:
 	enum class Types
 	{
 		String,
-		Zombie,
-		Item,
+		TileMap,
 	};
 	
 	static const int noOfTypes = 1;

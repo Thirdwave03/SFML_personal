@@ -1,0 +1,18 @@
+﻿ID,Korean
+HI,안녕
+RELOAD,재장전중..
+NOBULLET,R 키로재장전
+INSUFFICIENT,총알 부족
+GAMEOVER,엔터키로 재시작
+UP1,1.공격속도 증가
+UP2,2.공격력 증가
+UP3,3.탄창 증가
+UP4,4.최대 체력 증가
+UP5,5.체력 획득 증가
+UP6,6.탄창 획득 증가
+UP7,7.이동속도 증가
+UP7MAX,7.이동속도 증가 (최대)
+SCORE,점수 : 
+HIGHSCORE,최고점수 : 
+WAVE,웨이브 : 
+ZOMBIE,좀비 수 : 

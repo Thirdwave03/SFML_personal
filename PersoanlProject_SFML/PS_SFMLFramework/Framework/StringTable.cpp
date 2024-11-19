@@ -68,78 +68,12 @@ bool StringTable::Load() // csv 직접 파싱하지 않고 라이브러리 사용
 		table[row[0]] = converter.from_bytes(row[1]);
 	}
 	return true;
-
-	//for (int i = 0; i < docKor.GetRowCount(); i++) // 이하 4종 언어 row 수 같을 경우만 동작
-	//{
-	//	std::vector<std::string> strings = docKor.GetRow<std::string>(i);
-	//	auto itKor = tableKor.find(strings[0]); // 0번째는 ID, 중복검사
-	//	if (itKor != tableKor.end())
-	//	{
-	//		std::cout << "Korean string table key exists already" << std::endl;
-	//		return false;
-	//	}
-	//	
-	//	std::wstring& wstrKor = tableKor[strings[0]];
-	//	wstrKor = converter.from_bytes(strings[1]);
-
-	//	strings = docEng.GetRow<std::string>(i);
-	//	auto itEng = tableEng.find(strings[0]); // 0번째는 ID, 중복검사
-	//	if (itEng != tableEng.end())
-	//	{
-	//		std::cout << "English string table key exists already" << std::endl;
-	//		return false;
-	//	}
-
-	//	std::wstring& wstrEng = tableEng[strings[0]];
-	//	wstrEng = converter.from_bytes(strings[1]);
-
-	//	strings = docJap.GetRow<std::string>(i);
-	//	auto itJap = tableJap.find(strings[0]); // 0번째는 ID, 중복검사
-	//	if (itJap != tableJap.end())
-	//	{
-	//		std::cout << "Japanese string table key exists already" << std::endl;
-	//		return false;
-	//	}
-
-	//	std::wstring& wstrJap = tableJap[strings[0]];
-	//	wstrJap = converter.from_bytes(strings[1]);
-
-	//	strings = docChn.GetRow<std::string>(i);
-	//	auto itChn = tableChn.find(strings[0]); // 0번째는 ID, 중복검사
-	//	if (itChn != tableChn.end())
-	//	{
-	//		std::cout << "Chinese string table key exists already" << std::endl;
-	//		return false;
-	//	}
-
-	//	std::wstring& wstrChn = tableChn[strings[0]];
-	//	wstrChn = converter.from_bytes(strings[1]);
-	//}
-
-	//return true;
 }
 
 void StringTable::Release()
 {
 	table.clear();
 }
-
-//const std::wstring& StringTable::Get(const std::string& id)
-//{
-//	return Get(id, Variables::currentLang);
-//}
-
-//const std::wstring& StringTable::Get(const std::string& id, Languages lang)
-//{
-//	auto find = table.find(id);
-//	if (find == table.end())
-//	{
-//		return Undefined; // String table에 없는 아이디 리턴 요청한 것
-//	}
-//	return (find->second)[(int)lang]; // lang Index값에 해당하는 value
-//	 // (find->second) = StringTable의 table Value 데이터형(wstring의 vector)
-//	 // 해당 vector의 인덱스 (0~3) 각 Kor Eng Jap, Chn 들어감
-//}
 
 const std::wstring& StringTable::Get(const std::string& id)
 {

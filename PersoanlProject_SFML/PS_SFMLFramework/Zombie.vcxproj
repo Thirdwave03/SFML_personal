@@ -172,7 +172,8 @@
     <ClCompile Include="Framework\TimeMgr.cpp" />
     <ClCompile Include="Framework\Variables.cpp" />
     <ClCompile Include="Framework\XXXGo.cpp" />
-    <ClCompile Include="IsometricTile.cpp" />
+    <ClCompile Include="IsometricTileMap.cpp" />
+    <ClCompile Include="TileTable.cpp" />
     <ClCompile Include="UiHud.cpp" />
     <ClCompile Include="ViewMgr.cpp" />
   </ItemGroup>
@@ -204,7 +205,8 @@
     <ClInclude Include="Framework\TimeMgr.h" />
     <ClInclude Include="Framework\Variables.h" />
     <ClInclude Include="Framework\XXXGo.h" />
-    <ClInclude Include="IsometricTile.h" />
+    <ClInclude Include="IsometricTileMap.h" />
+    <ClInclude Include="TileTable.h" />
     <ClInclude Include="UiHud.h" />
     <ClInclude Include="ViewMgr.h" />
   </ItemGroup>

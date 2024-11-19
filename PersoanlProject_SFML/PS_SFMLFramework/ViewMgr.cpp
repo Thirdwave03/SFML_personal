@@ -92,7 +92,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	worldCoordFloatBL = mPosWorld.x/2.f + mPosWorld.y;
 	devidedBR = worldCoordFloatBR + tileSize.y / 2.f * tileScale.y;
 	devidedBL = worldCoordFloatBL + tileSize.y / 2.f * tileScale.y;
-	while (devidedBR >= (tileSize.x*tileScale.x)/2.f)
+	while (devidedBR >= (tileSize.x * tileScale.x) / 2.f)
 		devidedBR -= (tileSize.x * tileScale.x) / 2.f;
 	while (devidedBR < 0)
 		devidedBR += (tileSize.x * tileScale.x) / 2.f;
@@ -102,7 +102,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	float tempY = mPosWorld.y;
 	xIndex = 0;
 	yIndex = 0;
-	while (tempX >= (tileSize.x * tileScale.x)/2)
+	while (tempX >= (tileSize.x * tileScale.x) / 2)
 	{
 		tempX -= (tileSize.x * tileScale.x) / 2;
 		xIndex++;
@@ -117,7 +117,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	{
 		if (yIndex % 2 == 0)
 		{
-			if (devidedBL < 32.f)
+			if (devidedBL < (tileSize.y * tileScale.y)/2.f)
 			{
 				mPosIso.x = xIndex / 2;
 				mPosIso.y = yIndex;
@@ -130,7 +130,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 		}
 		else
 		{
-			if (devidedBR < 32.f)
+			if (devidedBR < (tileSize.y * tileScale.y) / 2.f)
 			{
 				mPosIso.x = xIndex / 2 - 1;
 				mPosIso.y = yIndex;

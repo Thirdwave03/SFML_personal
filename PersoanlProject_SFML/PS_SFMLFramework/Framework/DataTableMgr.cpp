@@ -10,6 +10,7 @@ void DataTableMgr::Init()
 {
 	Release();
 	tables.insert({ DataTable::Types::String, new StringTable() });
+	tables.insert({ DataTable::Types::TileMap, new TileTable() });
 
 	for (auto t : tables)
 	{

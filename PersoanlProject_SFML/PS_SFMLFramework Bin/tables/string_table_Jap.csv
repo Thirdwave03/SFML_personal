@@ -1,0 +1,18 @@
+﻿ID,Japanese
+HI,こんにちは
+RELOAD,リロード中。。
+NOBULLET,Rキーでリロード
+INSUFFICIENT,銃弾不足
+GAMEOVER,エンターキーでリスタート
+UP1,1.発射速度増加
+UP2,2.ダメージ増加
+UP3,3.クリップサイズ増加
+UP4,4.ヒットポイント増加
+UP5,5.回復獲得増加
+UP6,6.弾丸獲得増加
+UP7,7.移動速度増加
+UP7MAX,7.移動速度増加 (最大)
+SCORE,点数 : 
+HIGHSCORE,最高点数 : 
+WAVE,ウェーブ : 
+ZOMBIE,ゾンビ : 

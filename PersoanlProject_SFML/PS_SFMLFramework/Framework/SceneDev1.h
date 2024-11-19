@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "IsometricTile.h"
+#include "IsometricTileMap.h"
 
 class UiHud;
 
@@ -13,7 +13,7 @@ protected:
 	sf::FloatRect uiViewBorder;
 	
 	UiHud* uiHud;
-	IsometricTile* isoTile;
+	IsometricTileMap* isoTile;
 	
 
 public:

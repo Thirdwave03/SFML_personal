@@ -1,0 +1,18 @@
+﻿ID,Chinese
+HI,你好
+RELOAD,冲单中。。
+NOBULLET,按R冲子弹
+INSUFFICIENT,子弹不够
+GAMEOVER,按输入键重新开始
+UP1,1.增加发射速度
+UP2,2.增加攻击力
+UP3,3.增加最多子弹量
+UP4,4.增加最大体力
+UP5,5.增加回复效率
+UP6,6.增加捡弹效率
+UP7,7.增加移动速度
+UP7MAX,7.增加移动速度 (最大)
+SCORE,分数 : 
+HIGHSCORE,最高分数 : 
+WAVE,浪潮 : 
+ZOMBIE,僵尸 : 

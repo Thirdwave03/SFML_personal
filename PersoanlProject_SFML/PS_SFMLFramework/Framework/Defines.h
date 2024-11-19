@@ -1,12 +1,22 @@
 #pragma once
 
+enum class Stages
+{
+	None,
+	Default,
+	Stage1,
+	Stage2,
+	Stage3,
+	Stage4,
+	Stage5,
+};
+
 enum class ViewTypes
 {
 	WorldView,
 	UiView,
 	EditorView,
 };
-
 
 enum class Languages
 {

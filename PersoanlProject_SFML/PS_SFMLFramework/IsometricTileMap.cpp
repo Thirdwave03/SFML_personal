@@ -1,57 +1,87 @@
 #include "stdafx.h"
-#include "IsometricTile.h"
+#include "IsometricTileMap.h"
 
-IsometricTile::IsometricTile()
+IsometricTileMap::IsometricTileMap()
 {
 
 }
 
-bool IsometricTile::SetIsoTile(const int* tileType, sf::Vector2i count)
+bool IsometricTileMap::SetIsoTile(std::unordered_map<int, std::vector<int>>& tileType, sf::Vector2i count, sf::Vector2f scale)
 {
 	if (!TEXTURE_MGR.Load(tileTexId))
 		return false;
 	texture = &TEXTURE_MGR.Get(tileTexId);
 
 	vaTileRS.texture = texture;
-	SetScale({ 2.f,2.f });
+	SetScale(scale);
+	SetTileCnt(count);
+	SetLoadedTileType(tileType);
 
-	tileCnt = count;
 	vaTile.setPrimitiveType(sf::PrimitiveType::Triangles);
 	vaTile.resize(count.x * count.y * 6);
 	
+	//for (int i = 0; i < count.x; i++)
+	//{
+	//	bool isEvenRow = false;
+	//	for (int j = 0; j < count.y; j++)
+	//	{			
+	//		int tileNo = tileType[i + j * count.x];
+	//		
+	//		int tileCoordXIndex = tileNo % 3; // no of tiles in vertical
+	//		int tileCoordYIndex = tileNo / 3; // to be added later
+	//			
+	//		// using triangle to draw single square shape requires 6 vertices
+	//		sf::Vertex* triangles = &vaTile[(i + j * count.x) * 6];
+	//		
+	//		triangles[0].position = sf::Vector2f(i * 64.f + (int)isEvenRow * 32.f, (j + 1) * 16.f);
+	//		triangles[1].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, j * 16.f);
+	//		triangles[2].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, (j+2) * 16.f);
+	//		triangles[3].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, j * 16.f);
+	//		triangles[4].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, (j + 2) * 16.f);
+	//		triangles[5].position = sf::Vector2f((i+1) * 64.f + (int)isEvenRow * 32.f, (j + 1) * 16.f);
+
+	//		triangles[0].texCoords = sf::Vector2f(tileCoordXIndex * 64.f, (tileCoordYIndex + 1) * 16.f);
+	//		triangles[1].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, tileCoordYIndex * 16.f);
+	//		triangles[2].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, (tileCoordYIndex + 2) * 16.f);
+	//		triangles[3].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, tileCoordYIndex * 16.f);
+	//		triangles[4].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, (tileCoordYIndex + 2) * 16.f);
+	//		triangles[5].texCoords = sf::Vector2f((tileCoordXIndex+1) * 64.f, (tileCoordYIndex + 1) * 16.f);
+	//		isEvenRow = !isEvenRow;
+	//	}
+	//}
 	for (int i = 0; i < count.x; i++)
 	{
 		bool isEvenRow = false;
 		for (int j = 0; j < count.y; j++)
-		{			
-			int tileNo = tileType[i + j * count.x];
-			
+		{
+			int tileNo = tileType[j][i];
+
 			int tileCoordXIndex = tileNo % 3; // no of tiles in vertical
 			int tileCoordYIndex = tileNo / 3; // to be added later
-				
+
 			// using triangle to draw single square shape requires 6 vertices
 			sf::Vertex* triangles = &vaTile[(i + j * count.x) * 6];
-			
+
 			triangles[0].position = sf::Vector2f(i * 64.f + (int)isEvenRow * 32.f, (j + 1) * 16.f);
 			triangles[1].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, j * 16.f);
-			triangles[2].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, (j+2) * 16.f);
+			triangles[2].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, (j + 2) * 16.f);
 			triangles[3].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, j * 16.f);
 			triangles[4].position = sf::Vector2f(32.f + i * 64.f + (int)isEvenRow * 32.f, (j + 2) * 16.f);
-			triangles[5].position = sf::Vector2f((i+1) * 64.f + (int)isEvenRow * 32.f, (j + 1) * 16.f);
+			triangles[5].position = sf::Vector2f((i + 1) * 64.f + (int)isEvenRow * 32.f, (j + 1) * 16.f);
 
-			triangles[0].texCoords = sf::Vector2f(tileCoordXIndex * 64.f, (tileCoordYIndex + 1) * 16.f);
-			triangles[1].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, tileCoordYIndex * 16.f);
-			triangles[2].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, (tileCoordYIndex + 2) * 16.f);
-			triangles[3].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, tileCoordYIndex * 16.f);
-			triangles[4].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, (tileCoordYIndex + 2) * 16.f);
-			triangles[5].texCoords = sf::Vector2f((tileCoordXIndex+1) * 64.f, (tileCoordYIndex + 1) * 16.f);
+			triangles[0].texCoords = sf::Vector2f(tileCoordXIndex * 64.f, (tileCoordYIndex) * 32.f + 16.f);
+			triangles[1].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, tileCoordYIndex * 32.f);
+			triangles[2].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, (tileCoordYIndex) * 32.f + 32.f);
+			triangles[3].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, tileCoordYIndex * 32.f);
+			triangles[4].texCoords = sf::Vector2f(32.f + tileCoordXIndex * 64.f, (tileCoordYIndex) * 32.f + 32.f);
+			triangles[5].texCoords = sf::Vector2f((tileCoordXIndex + 1) * 64.f, (tileCoordYIndex) * 32.f + 16.f);
 			isEvenRow = !isEvenRow;
 		}
 	}
 	return true;
 }
 
-void IsometricTile::SetIsoLine()
+void IsometricTileMap::SetIsoLine()
 {
 	vaLineToBR.setPrimitiveType(sf::Lines);
 	vaLineToBR.resize((tileCnt.x + tileCnt.y) * 2);
@@ -92,7 +122,7 @@ void IsometricTile::SetIsoLine()
 				vaLineToBL[i * 2 + 1].color = sf::Color::Magenta;
 			}
 		}
-		else if (tileCnt.x > tileCnt.y)
+		else/* if (tileCnt.x > tileCnt.y)*/
 		{
 			/*if (tileCnt.y % 2 == 0)
 			{*/
@@ -113,35 +143,45 @@ void IsometricTile::SetIsoLine()
 	}	
 }
 
-void IsometricTile::SetScale(const sf::Vector2f& scale)
+void IsometricTileMap::SetScale(const sf::Vector2f& scale)
 {
 	this->scale = scale;
 	vaTileRS.transform.scale(scale);
 }
 
+void IsometricTileMap::SetTileCnt(sf::Vector2i tileCnt)
+{
+	this->tileCnt = tileCnt;
+}
 
-void IsometricTile::Init()
+
+void IsometricTileMap::SetLoadedTileType(std::unordered_map<int, std::vector<int>>& tileMap)
+{
+	this->tileTypeMap = tileMap;
+}
+
+void IsometricTileMap::Init()
 {
 	sortingLayer = SortingLayers::Background;
 	sortingOrder = -1;
 }
 
-void IsometricTile::Release()
+void IsometricTileMap::Release()
 {
 }
 
-void IsometricTile::Reset()
+void IsometricTileMap::Reset()
 {
 	sortingLayer = SortingLayers::Background;
 	sortingOrder = -1;
 }
 
-void IsometricTile::Update(float dt)
+void IsometricTileMap::Update(float dt)
 {
 
 }
 
-void IsometricTile::Draw(sf::RenderWindow& window)
+void IsometricTileMap::Draw(sf::RenderWindow& window)
 {
 	sf::RenderStates rs;
 	rs.texture = this->texture;
@@ -151,7 +191,7 @@ void IsometricTile::Draw(sf::RenderWindow& window)
 	window.draw(vaLineToBR);
 }
 
-sf::FloatRect IsometricTile::GetTileRect()
+sf::FloatRect IsometricTileMap::GetTileRect()
 {
 	return vaTile.getBounds();
 }
