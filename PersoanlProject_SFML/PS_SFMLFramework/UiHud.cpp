@@ -70,7 +70,7 @@ void UiHud::Reset()
 	worldFloat.setFont(font);
 	worldFloat.setCharacterSize(textSize);
 	worldFloat.setFillColor(sf::Color::Magenta);
-	worldFloat.setPosition({ 50.f, 400.f });
+	worldFloat.setPosition({ 50.f, 450.f });
 	Utils::SetOrigin(worldFloat, Origins::TL);
 }
 
@@ -98,7 +98,10 @@ void UiHud::Update(float dt)
 
 	mCoordsIso.setString(
 		"Iso X : " + std::to_string(VIEW_MGR.GetIsoMousePos().x)
-		+ "\nIso Y : " + std::to_string(VIEW_MGR.GetIsoMousePos().y));
+		+ "\nIso Y : " + std::to_string(VIEW_MGR.GetIsoMousePos().y)
+		+ "\nIsoToWorld X : " + std::to_string(VIEW_MGR.IsoToWorldTest().x)
+		+ "\nIsoToWorld Y : " + std::to_string(VIEW_MGR.IsoToWorldTest().y)
+		);
 	Utils::SetOrigin(mCoordsIso, Origins::TL);
 
 	// for World Float Check only

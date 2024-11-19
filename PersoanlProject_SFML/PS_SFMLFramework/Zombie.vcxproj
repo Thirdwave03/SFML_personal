@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\DataTable.cpp" />
@@ -174,10 +175,12 @@
     <ClCompile Include="Framework\XXXGo.cpp" />
     <ClCompile Include="IsometricTileMap.cpp" />
     <ClCompile Include="TileTable.cpp" />
+    <ClCompile Include="Towers.cpp" />
     <ClCompile Include="UiHud.cpp" />
     <ClCompile Include="ViewMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="Framework\DataTable.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="Framework\XXXGo.h" />
     <ClInclude Include="IsometricTileMap.h" />
     <ClInclude Include="TileTable.h" />
+    <ClInclude Include="Towers.h" />
     <ClInclude Include="UiHud.h" />
     <ClInclude Include="ViewMgr.h" />
   </ItemGroup>

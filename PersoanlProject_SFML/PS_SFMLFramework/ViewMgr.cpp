@@ -67,8 +67,7 @@ void ViewMgr::Reset()
 
 void ViewMgr::Draw(sf::RenderWindow& window)
 {
-	ResetViewCheckRect();
-	//window.draw(viewCheckRect);
+	
 }
 
 sf::Vector2f ViewMgr::ScreenToWorld(sf::Vector2i screenPos)
@@ -98,6 +97,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 		devidedBR += (tileSize.x * tileScale.x) / 2.f;
 	while (devidedBL >= (tileSize.x * tileScale.x) / 2.f)
 		devidedBL -= (tileSize.x * tileScale.x) / 2.f;
+	
 	float tempX = mPosWorld.x;
 	float tempY = mPosWorld.y;
 	xIndex = 0;
@@ -146,7 +146,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	{
 		if (yIndex % 2 == 0)
 		{
-			if (devidedBR >= 32.f)
+			if (devidedBR >= (tileSize.y * tileScale.y) / 2.f)
 				mPosIso.y = yIndex - 1;
 			else
 				mPosIso.y = yIndex;
@@ -154,7 +154,7 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 		}
 		else
 		{
-			if (devidedBL < 32.f)
+			if (devidedBL < (tileSize.y * tileScale.y) / 2.f)
 				mPosIso.y = yIndex;
 			else
 				mPosIso.y = yIndex-1;
@@ -178,9 +178,37 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	return mPosIso;
 }
 
-sf::Vector2f ViewMgr::IsoToWorld(sf::Vector2i isoMouseCoord)
+sf::Vector2f ViewMgr::IsoToWorld(sf::Vector2i mPosIso, sf::Vector2f tileSize, sf::Vector2f tileScale)
 {
-	return sf::Vector2f();
+	sf::Vector2f worldPos;
+
+	// 기본 타일 크기
+	float tileWidth = tileSize.x * tileScale.x;
+	float tileHeight = tileSize.y * tileScale.y;
+
+	// 타일의 기본 위치 계산 (중심 좌표)
+	float centerX = mPosIso.x * tileWidth + tileWidth/2;
+	float centerY = mPosIso.y * (tileHeight / 2.f) + tileHeight/2;
+
+	// 행 홀짝 확인
+	if (mPosIso.y % 2 != 0) // 홀수 x 좌표
+	{
+		centerX += tileWidth / 2.f;
+	}
+
+	worldPos.x = centerX;
+	worldPos.y = centerY;
+
+	mPosIsoToWorld = worldPos;
+
+	return worldPos;
+}
+
+sf::Vector2f ViewMgr::IsoToWorldTest()
+{
+	SceneDev1* tempScene = (SceneDev1*)(SCENE_MGR.GetCurrentScene());
+
+	return IsoToWorld(mPosIso, tempScene->GetIsoTileSize(), tempScene->GetIsoTileScale());
 }
 
 void ViewMgr::SetScreenMousePos(sf::Vector2i mPosScreen)
@@ -220,17 +248,5 @@ void ViewMgr::SetViewBoundary(sf::FloatRect viewBound, sf::Vector2f isoTileSize,
 	viewBoundary.width *= isoScale.x;
 	viewBoundary.top *= isoScale.y;
 	viewBoundary.height *= isoScale.y;
-}
-
-void ViewMgr::ResetViewCheckRect()
-{
-	auto uvSize = worldView.getSize();
-	auto uvCenterPos = viewPos;
-	viewCheckRect.setSize({ uvSize.x, uvSize.y});
-	viewCheckRect.setOutlineColor(sf::Color::Magenta);
-	viewCheckRect.setFillColor(sf::Color::Transparent);
-	viewCheckRect.setOutlineThickness(10.f);
-	viewCheckRect.setPosition(uvCenterPos);
-	Utils::SetOrigin(viewCheckRect, Origins::MC);
 }
 

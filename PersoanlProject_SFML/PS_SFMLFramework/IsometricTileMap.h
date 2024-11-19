@@ -7,6 +7,7 @@ protected:
 	sf::VertexArray vaTile;
 	sf::VertexArray vaLineToBR;
 	sf::VertexArray vaLineToBL;
+	sf::Sprite selectedTile;
 
 	sf::RenderStates vaTileRS;
 	sf::RenderStates BRLineRS;
@@ -34,6 +35,8 @@ public:
 	sf::Vector2i GetTileCnt() { return tileCnt; }
 
 	sf::Vector2f GetIsoTileSize() { return tileSize; }
+
+	void IndicateSelectedTile();
 
 	void SetLoadedTileType(std::unordered_map<int, std::vector<int>>& tileMap);
 	

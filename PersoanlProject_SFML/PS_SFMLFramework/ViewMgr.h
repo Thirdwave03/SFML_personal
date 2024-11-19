@@ -29,13 +29,13 @@ protected:
 	sf::Vector2f mPosWorld;
 	sf::Vector2i mPosScreen;
 	sf::Vector2i mPosIso;
+	sf::Vector2f mPosIsoToWorld;
 
 	sf::View currentView;
 
 	ViewTypes currentViewType = ViewTypes::WorldView;
 
-	// for UiView test only
-	sf::RectangleShape viewCheckRect;
+	
 	
 public:
 	void Init();
@@ -52,7 +52,8 @@ public:
 	sf::Vector2i WorldToScreen(sf::Vector2f worldPos);
 
 	sf::Vector2i WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale);
-	sf::Vector2f IsoToWorld(sf::Vector2i isoMouseCoord);
+	sf::Vector2f IsoToWorld(sf::Vector2i mPosIso, sf::Vector2f tileSize, sf::Vector2f tileScale);
+	sf::Vector2f IsoToWorldTest();
 
 	sf::Vector2f GetWorldMousePos() { return mPosWorld; }
 	sf::Vector2i GetScreenMousePos() { return mPosScreen; }
@@ -64,6 +65,8 @@ public:
 	
 	int GetXindex() { return xIndex; }
 	int GetYindex() { return yIndex; }
+
+	sf::Vector2f GetMouseOnIsoTilePos() { return mPosIsoToWorld; }
 	
 
 	void SetScreenMousePos(sf::Vector2i mPosScreen);
@@ -72,9 +75,6 @@ public:
 
 	void SetViewBoundary(sf::FloatRect viewBound, sf::Vector2f isoTileSize, sf::Vector2f isoScale);
 
-	// for UiView test only
-	void ResetViewCheckRect();
-	sf::RectangleShape& GetViewCheckRect() { return viewCheckRect; }
 };
 
 #define VIEW_MGR (Singleton<ViewMgr>::Instance())
