@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ViewMgr.h"
 #include "SceneDev1.h"
+#include "IsometricTileMap.h"
 
 void ViewMgr::Init()
 {
@@ -76,6 +77,12 @@ sf::Vector2f ViewMgr::ScreenToWorld(sf::Vector2i screenPos)
 	SceneDev1* tempScene = (SceneDev1*)(SCENE_MGR.GetCurrentScene());
 	tempMPos.x -= tempScene->GetIsoTileSize().x/2 * tempScene->GetIsoTileScale().x;
 	tempMPos.y -= tempScene->GetIsoTileSize().y/2 * tempScene->GetIsoTileScale().y;
+	return tempMPos;
+}
+
+sf::Vector2f ViewMgr::ScreenToWorldNonModification(sf::Vector2i screenPos)
+{
+	auto tempMPos = FRAMEWORK.GetWindow().mapPixelToCoords(screenPos, GetWorldView());
 	return tempMPos;
 }
 
@@ -163,7 +170,6 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	}
 	
 
-
 	//if (((int)(mPosWorld.y + tileSize.y/2) / (int)(tileSize.y / 2.f * tileScale.y)) % 2 == 0)
 	//isoCoord.x = mPosWorld.x / (tileSize.x * tileScale.x);
 	//else
@@ -173,7 +179,6 @@ sf::Vector2i ViewMgr::WorldToIso(sf::Vector2f tileSize, sf::Vector2f tileScale)
 	//isoCoord.y = mPosWorld.y / (tileSize.y / 2.f * tileScale.y);
 	//else
 	//isoCoord.y = mPosWorld.y / (tileSize.y / 2.f * tileScale.y) + 1;	
-
 
 	return mPosIso;
 }
@@ -204,11 +209,59 @@ sf::Vector2f ViewMgr::IsoToWorld(sf::Vector2i mPosIso, sf::Vector2f tileSize, sf
 	return worldPos;
 }
 
+sf::Vector2f ViewMgr::NonModifiedIsoWorldPos(sf::Vector2i isoCoord)
+{
+	if (isoTile == nullptr)
+	{
+		return sf::Vector2f(-1.f, -1.f);
+	}
+
+	return sf::Vector2f(IsoToWorld(isoCoord).x + isoTile->GetIsoTileSize().x * isoTile->GetScale().x/2,
+		IsoToWorld(isoCoord).y + isoTile->GetIsoTileSize().y * isoTile->GetScale().y/2);
+}
+
+sf::Vector2f ViewMgr::IsoToWorld()
+{
+	sf::Vector2f worldPos;
+
+	// 기본 타일 크기
+	float tileWidth = isoTile->GetIsoTileSize().x * isoTile->GetScale().x;
+	float tileHeight = isoTile->GetIsoTileSize().y * isoTile->GetScale().y;
+
+	// 타일의 기본 위치 계산 (중심 좌표)
+	float centerX = mPosIso.x * tileWidth + tileWidth / 2;
+	float centerY = mPosIso.y * (tileHeight / 2.f) + tileHeight / 2;
+
+	// 행 홀짝 확인
+	if (mPosIso.y % 2 != 0) // 홀수 x 좌표
+	{
+		centerX += tileWidth / 2.f;
+	}
+
+	worldPos.x = centerX;
+	worldPos.y = centerY;
+
+	mPosIsoToWorld = worldPos;
+
+	return worldPos;
+}
+
 sf::Vector2f ViewMgr::IsoToWorldTest()
 {
 	SceneDev1* tempScene = (SceneDev1*)(SCENE_MGR.GetCurrentScene());
 
 	return IsoToWorld(mPosIso, tempScene->GetIsoTileSize(), tempScene->GetIsoTileScale());
+}
+
+sf::Vector2i ViewMgr::GetIsoMousePos()
+{
+	mPosIso = WorldToIso();
+	return mPosIso;
+}
+
+bool ViewMgr::Build()
+{
+	return false;
 }
 
 void ViewMgr::SetScreenMousePos(sf::Vector2i mPosScreen)
@@ -235,6 +288,11 @@ void ViewMgr::SetViewType(ViewTypes viewType)
 		break;
 	}
 	FRAMEWORK.GetWindow().setView(currentView);
+}
+
+void ViewMgr::AllignIsoTile(IsometricTileMap& isoTile)
+{
+	this->isoTile = &isoTile;
 }
 
 void ViewMgr::SetViewBoundary(sf::FloatRect viewBound, sf::Vector2f isoTileSize, sf::Vector2f isoScale)

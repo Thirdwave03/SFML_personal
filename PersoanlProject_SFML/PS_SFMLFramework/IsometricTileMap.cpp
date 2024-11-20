@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "IsometricTileMap.h"
+#include "UiHud.h"
 
 IsometricTileMap::IsometricTileMap()
 {
@@ -157,29 +158,71 @@ void IsometricTileMap::SetTileCnt(sf::Vector2i tileCnt)
 
 void IsometricTileMap::IndicateSelectedTile()
 {
-	selectedTile.setScale({ 3.f,3.f });
-	selectedTile.setPosition(VIEW_MGR.GetMouseOnIsoTilePos() + (tileSize)*3.f/2.f);
-	Utils::SetOrigin(selectedTile, Origins::MC);
+	if (uiHud != nullptr)
+		isMouseOnUi = uiHud->IfMouseOnUi();
+	
+	if (!isMouseOnUi)
+	{
+		VIEW_MGR.IsoToWorld();
+		selectedTile.setScale({ 3.f,3.f });
+		selectedTile.setPosition(VIEW_MGR.GetMouseOnIsoTilePos() + (tileSize) * 3.f / 2.f);
+		Utils::SetOrigin(selectedTile, Origins::MC);
+		sf::Vector2i index = VIEW_MGR.GetIsoMousePos();
+
+		if (index.y % 2 != 0)
+		{
+			index.x += 1;
+		}
+		index.y += 1;
+
+		index.x = Utils::Clamp(index.x, 0, tileCnt.x - 1);
+		index.y = Utils::Clamp(index.y, 0, tileCnt.y - 1);
+
+		if (tileTypeMap[index.y][index.x] < 3)
+		{
+			selectedTile.setColor({ 255, 255, 255, 160 });
+			isSelectable = true;
+		}
+		else
+		{
+			selectedTile.setColor({ 255, 255, 255, 0 });
+			isSelectable = false;
+		}
+	}
+}
+
+bool IsometricTileMap::TryBuild()
+{	
 	sf::Vector2i index = VIEW_MGR.GetIsoMousePos();
-		
+
 	if (index.y % 2 != 0)
 	{
 		index.x += 1;
 	}
 	index.y += 1;
-	
+
 	index.x = Utils::Clamp(index.x, 0, tileCnt.x - 1);
 	index.y = Utils::Clamp(index.y, 0, tileCnt.y - 1);
 
-	if (tileTypeMap[index.y][index.x] < 3)
-		selectedTile.setColor({ 255, 255, 255, 160 });
+	if(tileTypeMap[index.y][index.x] < 3)
+	{
+		tileTypeMap[index.y][index.x] = 14;
+		return true;
+	}
 	else
-		selectedTile.setColor({ 255, 255, 255, 0 });
+	{
+		return false;
+	}	
 }
 
 void IsometricTileMap::SetLoadedTileType(std::unordered_map<int, std::vector<int>>& tileMap)
 {
 	this->tileTypeMap = tileMap;
+}
+
+void IsometricTileMap::TurnDebugMode()
+{
+	isDebugMode = !isDebugMode;
 }
 
 void IsometricTileMap::Init()
@@ -210,10 +253,19 @@ void IsometricTileMap::Draw(sf::RenderWindow& window)
 	sf::RenderStates rs;
 	rs.texture = this->texture;
 	//rs.transform.scale({ 2.f,2.f });
-	window.draw(vaTile, vaTileRS);
-	//window.draw(vaLineToBL);
-	//window.draw(vaLineToBR);
-	window.draw(selectedTile);
+	if (!debugTemp)
+	{
+		window.draw(vaTile, vaTileRS);
+	}
+	if (isDebugMode)
+	{
+		window.draw(vaLineToBL);
+		window.draw(vaLineToBR);
+	}
+	if (!isMouseOnUi)
+	{
+		window.draw(selectedTile);
+	}
 }
 
 sf::FloatRect IsometricTileMap::GetTileRect()

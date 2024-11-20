@@ -7,12 +7,12 @@ private:
 
 protected:
 	std::string name;
-	
+
 	bool active = true;
 
 	sf::Vector2f position;
 	float rotation = 0.f;
-	sf::Vector2f scale;
+	sf::Vector2f scale = { 1,1 };
 
 	Origins originPreset;
 	sf::Vector2f origin;
@@ -76,7 +76,9 @@ struct DrawOrderComparer
 	{
 		if (a->sortingLayer != b->sortingLayer)
 			return a->sortingLayer > b->sortingLayer;
-		return a->sortingOrder > b->sortingOrder;
+		if (a->sortingOrder != b->sortingOrder)
+			return a->sortingOrder > b->sortingOrder;
+		return a->GetPosition().y > b->GetPosition().y;
 	}
 };
 

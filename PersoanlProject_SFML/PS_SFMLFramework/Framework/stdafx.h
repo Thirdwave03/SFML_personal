@@ -40,3 +40,4 @@
 #include "SoundMgr.h"
 #include "SaveMgr.h"
 #include "ViewMgr.h"
+#include "GameMgr.h"

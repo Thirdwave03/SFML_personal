@@ -1,8 +1,18 @@
 #pragma once
 
+
+enum class TowerTypes
+{
+	None = -1,
+	ElectricRocquet,
+	SprayF,
+	SprayR,
+	MosquitoRepellent,
+};
+
 enum class Stages
 {
-	None,
+	None = -1,
 	Default,
 	Stage1,
 	Stage2,

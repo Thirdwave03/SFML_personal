@@ -24,7 +24,6 @@ struct AxisInfo
 	}
 };
 
-
 class InputMgr
 {
 private:

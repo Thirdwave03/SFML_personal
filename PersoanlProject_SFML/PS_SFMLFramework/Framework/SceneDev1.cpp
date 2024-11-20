@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "SceneDev1.h"
 #include "UiHud.h"
+#include "TowerBuildMgr.h"
+#include "Towers.h"
 
 SceneDev1::SceneDev1() : Scene(SceneIds::Dev1)
 {
@@ -9,20 +11,22 @@ SceneDev1::SceneDev1() : Scene(SceneIds::Dev1)
 void SceneDev1::Init()
 {
     auto text = AddGo(new TextGo("fonts/DS-DIGI.ttf", "Scene Name"));
-    isoTile = AddGo(new IsometricTileMap());    
+    isoTile = AddGo(new IsometricTileMap());
 
+    towerBuildMgr = AddGo(new TowerBuildMgr());
+    
     //const int tileType[] =
     //{
     //    0, 1, 
     //    2, 0,
     //};
 
-
     isoTile->SetIsoTile(TILE_TABLE->GetTileMapTable(), TILE_TABLE->GetTileMapCount(), { 3.f,3.f });
     isoTile->SetIsoLine();
     isoTile->GetScale();
     isoTile->GetIsoTileSize();
     VIEW_MGR.SetViewBoundary(isoTile->GetTileRect(), isoTile->GetIsoTileSize(), isoTile->GetScale());
+    VIEW_MGR.AllignIsoTile(*isoTile);
     //isoTile->SetIsoTileTest();
 
     text->sortingLayer = SortingLayers::UI;
@@ -30,6 +34,9 @@ void SceneDev1::Init()
     text->SetString("Dev 1");
 
     uiHud = AddGo(new UiHud("UiHud"));
+    uiHud->Reset();
+
+    isoTile->GetUiHud(*uiHud);
     Scene::Init();
 }
 
@@ -46,6 +53,13 @@ void SceneDev1::Enter()
 
 void SceneDev1::Exit()
 {
+    for (auto tower : towers)
+    {
+        RemoveGo(tower);
+        towerPool.Return(tower);
+    }
+    towers.clear();
+
     Scene::Exit();
 }
 
@@ -54,23 +68,15 @@ void SceneDev1::Update(float dt)
     Scene::Update(dt);
 
     VIEW_MGR.WorldToIso(isoTile->GetIsoTileSize(), isoTile->GetScale());
-
+    
     sf::Vector2f mPos = ScreenToWorld(InputMgr::GetMousePosition());
     if (InputMgr::GetMouseButton(sf::Mouse::Left))
     {
-        rect2.setPosition(mPos);
+       
     }
-
     if (InputMgr::GetMouseButton(sf::Mouse::Right))
     {
-        if (Utils::PointInTransformBounds(rect1, rect1.getLocalBounds(), mPos))
-        { 
-            rect1.setFillColor(sf::Color::Blue); 
-        }
-        else
-        {
-            rect1.setFillColor(sf::Color::Red);
-        }
+     
     }
 
     if (Utils::CheckCollision(rect1, rect2))
@@ -82,9 +88,18 @@ void SceneDev1::Update(float dt)
         rect2.setFillColor(sf::Color::Green);
     }
 
-    if (InputMgr::GetKeyDown(sf::Keyboard::Space))
+    if (InputMgr::GetKeyDown(sf::Keyboard::F2))
     {
         SCENE_MGR.ChangeScene(SceneIds::Dev2);
+    }
+    if (InputMgr::GetKeyDown(sf::Keyboard::F9))
+    {
+        uiHud->TurnDebugMode();
+        isoTile->TurnDebugMode();
+    }
+    if (InputMgr::GetKeyDown(sf::Keyboard::F8))
+    {
+        isoTile->TurnDebugTemp();
     }
 }
 
@@ -105,4 +120,14 @@ sf::Vector2f SceneDev1::GetIsoTileSize()
 sf::Vector2f SceneDev1::GetIsoTileScale()
 {
     return isoTile->GetScale();
+}
+
+void SceneDev1::BuildTower()
+{
+    Towers* tower = towerPool.Take();
+    towers.push_back(tower);
+
+    tower->SetType(uiHud->GetBuildingTower());
+    tower->SetIsoTileCoords(VIEW_MGR.GetIsoMousePos());
+    AddGo(tower);
 }

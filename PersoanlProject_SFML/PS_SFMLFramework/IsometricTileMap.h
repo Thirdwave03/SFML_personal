@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class UiHud;
+
 class IsometricTileMap : public GameObject
 {
 protected:
@@ -18,8 +20,17 @@ protected:
 	sf::Vector2f tileSize = { 64.f,32.f };
 	sf::Texture* texture = nullptr;
 	sf::Vector2i tileCnt;
+
+	UiHud* uiHud;
 	
 	std::unordered_map<int, std::vector<int>> tileTypeMap;
+
+	bool isSelectable = false;
+	bool isDebugMode = true;
+
+	bool isMouseOnUi = false;
+
+	bool debugTemp = false;
 
 public:
 	IsometricTileMap();
@@ -37,8 +48,13 @@ public:
 	sf::Vector2f GetIsoTileSize() { return tileSize; }
 
 	void IndicateSelectedTile();
+	bool TryBuild();
 
 	void SetLoadedTileType(std::unordered_map<int, std::vector<int>>& tileMap);
+	bool GetSelectable() { return isSelectable; }
+	void TurnDebugMode();
+
+	void GetUiHud(UiHud& uiHud) { this->uiHud = &uiHud; }
 	
 	void Init() override;
 	void Release() override;
@@ -46,4 +62,6 @@ public:
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 	sf::FloatRect GetTileRect();
+
+	void TurnDebugTemp() { debugTemp = !debugTemp; }
 };

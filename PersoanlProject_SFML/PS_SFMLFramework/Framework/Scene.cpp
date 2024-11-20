@@ -73,8 +73,8 @@ void Scene::OnPreDraw()
 
 void Scene::Draw(sf::RenderWindow& window)
 {
-	std::priority_queue<GameObject*, std::vector<GameObject*>> drawQueue;
-	std::priority_queue<GameObject*, std::vector<GameObject*>> drawUiQueue;
+	std::priority_queue<GameObject*, std::vector<GameObject*>, DrawOrderComparer> drawQueue;
+	std::priority_queue<GameObject*, std::vector<GameObject*>, DrawOrderComparer> drawUiQueue;
 
 	for (auto obj : gameObjects)
 	{
@@ -100,6 +100,8 @@ void Scene::Draw(sf::RenderWindow& window)
 		obj->Draw(window);
 		drawQueue.pop();
 	}
+
+	/*TOWERBUILD_MGR*/
 
 	window.setView(VIEW_MGR.GetUiView());
 	window.draw(TIME_MGR.GetFrameText());

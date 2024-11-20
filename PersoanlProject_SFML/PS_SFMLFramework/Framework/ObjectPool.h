@@ -37,6 +37,7 @@ public:
 			auto obj = new T();
 			obj->Init();
 			obj->Reset();
+			obj->SetActive(true);
 			used.push_back(obj);
 			return obj;
 		}
