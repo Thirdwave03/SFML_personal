@@ -204,7 +204,7 @@ bool IsometricTileMap::TryBuild()
 	index.x = Utils::Clamp(index.x, 0, tileCnt.x - 1);
 	index.y = Utils::Clamp(index.y, 0, tileCnt.y - 1);
 
-	if(tileTypeMap[index.y][index.x] < 3)
+	if(tileTypeMap[index.y][index.x] < 3) // GameMgr 골드 조건 추가
 	{
 		tileTypeMap[index.y][index.x] = 14;
 		return true;

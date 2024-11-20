@@ -35,6 +35,7 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 	void OnClickLeft();
+	void OnClickRight();
 
 	sf::Vector2f GetIsoTileSize();
 	sf::Vector2f GetIsoTileScale();

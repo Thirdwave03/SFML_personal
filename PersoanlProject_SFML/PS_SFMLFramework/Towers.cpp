@@ -25,28 +25,25 @@ void Towers::OnConsturction()
 
 void Towers::SetType(Types type)
 {
-	towerType = type;
-
-	switch ((int)type)
-	{
-	case 0:
-		towerSprite.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"),true);
-
-		break;
-	case 1:
-		towerSprite.setTexture(TEXTURE_MGR.Get("graphics/SprayF.png"), true);
-
-		break;
-	case 2:
-		towerSprite.setTexture(TEXTURE_MGR.Get("graphics/SprayR.png"), true);
-
-		break;
-	case 3:
-		towerSprite.setTexture(TEXTURE_MGR.Get("graphics/mosquitoRepellent.png"), true);
-
-		break;
-	}
 	
+	this->towerType = type;
+	auto tData = TOWER_TABLE->Get(type);
+	towerType = tData.towerType;
+	textureId = tData.textureId;
+	towerName = tData.towerName;
+	damage = tData.damage;
+	attackDuration = tData.attackDuration;
+	range = tData.range;
+	isAreaAttack = tData.isAreaAttack;
+	price = tData.price;
+	priceOnSell = tData.priceOnSell;
+	isUpgradable = tData.isUpgradable;
+	attackType = tData.attackType;
+	bonusType = tData.bonusType;
+	description = tData.description;		
+
+	towerSprite.setTexture(TEXTURE_MGR.Get(textureId), true); 		
+
 	Reset();
 }
 

@@ -74,7 +74,7 @@ void SceneDev1::Update(float dt)
     }
     if (InputMgr::GetMouseButton(sf::Mouse::Right))
     {
-     
+        OnClickRight();
     }
 
     if (Utils::CheckCollision(rect1, rect2))
@@ -118,6 +118,11 @@ void SceneDev1::Draw(sf::RenderWindow& window)
 
 void SceneDev1::OnClickLeft()
 {
+    if (selectedTower != nullptr)
+    {
+        selectedTower->SetSelected(false);
+        selectedTower = nullptr;
+    }
     if (!uiHud->IfMouseOnUi() && !uiHud->IfBuilding())
     {
         for (auto obj : gameObjects)
@@ -126,18 +131,21 @@ void SceneDev1::OnClickLeft()
             {
                 if (VIEW_MGR.GetIsoMousePos() == dynamic_cast<Towers*>(obj)->GetIsoTileCoords())
                 {
-                    if (selectedTower != nullptr)
-                    {
-                        selectedTower->SetSelected(false);
-                        selectedTower = nullptr;
-                    }
                     selectedTower = dynamic_cast<Towers*>(obj);
                     selectedTower->SetSelected(true);
                 }
             }
         }        
-    }      
+    }   
+}
 
+void SceneDev1::OnClickRight()
+{
+    if (selectedTower != nullptr)
+    {
+        selectedTower->SetSelected(false);
+        selectedTower = nullptr;
+    }
 }
 
 sf::Vector2f SceneDev1::GetIsoTileSize()
@@ -155,7 +163,7 @@ void SceneDev1::BuildTower()
     Towers* tower = towerPool.Take();
     towers.push_back(tower);
 
-    tower->SetType(uiHud->GetBuildingTower());
     tower->SetIsoTileCoords(VIEW_MGR.GetIsoMousePos());
+    tower->SetType(uiHud->GetBuildingTower());
     AddGo(tower);
 }

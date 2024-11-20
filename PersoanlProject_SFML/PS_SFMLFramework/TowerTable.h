@@ -4,18 +4,24 @@
 
 struct DataTower
 {
-	int damage;
-	float attackDuration;
-	float range;
-	bool isAreaAttack;
+	Towers::Types towerType;				//  0
+	std::string textureId;					//  1
+	std::string towerName;					//  2
 
-	int price;
+	int damage;								//  3
+	float attackDuration;					//  4
+	float range;							//  5
+	bool isAreaAttack;						//  6
 
-	bool isConstructable;
+	int price;								//  7
+	int priceOnSell;						//  8
 
-	Towers::AttackTypes attackType;
-	Towers::AttackBonusTypes bonusType;
+	bool isUpgradable;						//  9
 
+	Towers::AttackTypes attackType;			// 10
+	Towers::AttackBonusTypes bonusType;		// 11
+
+	std::string description;				// 12
 };
 
 class TowerTable : public DataTable

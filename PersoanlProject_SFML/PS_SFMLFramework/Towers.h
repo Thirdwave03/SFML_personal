@@ -35,26 +35,29 @@ public:
 
 protected:
 	sf::Sprite towerSprite;
-
-	float damage;
-	float attackDuration;
-	int price;
-
-	float range;
+	
+	Types towerType;			//  0 
+	std::string textureId;		//  1
+	std::string towerName;		//  2
+	
+	int damage;					//  3
+	float attackDuration;		//  4
+	float range;				//  5
 	sf::CircleShape rangeCircle;
+	bool isAreaAttack;			//  6
+		
+	int price;					//  7
+	int priceOnSell;			//  8
 
-	bool isAreaAttack;
+	bool isUpgradable;			//  9
+
+	AttackTypes attackType;		// 10
+	AttackBonusTypes bonusType;	// 11
+
+	std::string description;	// 12
+
 	int targetNumbers;
-
-	bool isConstructable;
-	bool isUpgradable;
 	bool isSelected = false;
-
-	Types towerType;
-
-	AttackTypes attackType;
-
-	std::string description;
 
 	std::vector<Enemy*> target;
 

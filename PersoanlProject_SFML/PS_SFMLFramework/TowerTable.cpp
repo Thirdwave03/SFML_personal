@@ -18,11 +18,20 @@ bool TowerTable::Load()
 			std::cout << "tower table key exists already" << std::endl;
 			return false;
 		}
-
-		/*table[id].
-		*/
+		table[id].towerType = (Towers::Types)std::stoi(row[0]);
+		table[id].textureId = row[1];
+		table[id].towerName = row[2];
+		table[id].damage = std::stoi(row[3]);
+		table[id].attackDuration = std::stof(row[4]);
+		table[id].range = std::stof(row[5]);
+		table[id].isAreaAttack = (bool)std::stoi(row[6]);
+		table[id].price = std::stoi(row[7]);
+		table[id].priceOnSell = std::stoi(row[8]);
+		table[id].isUpgradable = (bool)std::stoi(row[9]);
+		table[id].attackType = (Towers::AttackTypes)std::stoi(row[10]);
+		table[id].bonusType = (Towers::AttackBonusTypes)std::stoi(row[11]);
+		table[id].description = row[12];		
 	}
-
 	return true;
 }
 
