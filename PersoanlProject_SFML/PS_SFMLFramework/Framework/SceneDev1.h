@@ -20,7 +20,7 @@ protected:
 	std::list<Towers*> towers;
 	ObjectPool<Towers> towerPool;
 
-	TowerBuildMgr* towerBuildMgr;
+	Towers* selectedTower;
 
 public:
 	SceneDev1();
@@ -31,7 +31,10 @@ public:
 	void Exit() override;
 
 	void Update(float dt) override;
+	void FixedUpdate(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+
+	void OnClickLeft();
 
 	sf::Vector2f GetIsoTileSize();
 	sf::Vector2f GetIsoTileScale();

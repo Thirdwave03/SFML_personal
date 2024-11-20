@@ -7,6 +7,8 @@ public:
 	{
 		String,
 		TileMap,
+		Tower,
+		Bug,
 	};
 	
 	static const int noOfTypes = 1;

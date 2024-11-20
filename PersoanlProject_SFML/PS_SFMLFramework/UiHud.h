@@ -12,6 +12,9 @@ protected:
 	sf::Sprite buildButton;
 	sf::CircleShape buildBoxCloseButton;
 
+	sf::RectangleShape towerBox;
+	sf::CircleShape towerBoxCloseButton;
+
 	sf::Sprite coinSprite;
 	sf::Text coinText;
 
@@ -26,7 +29,7 @@ protected:
 
 	sf::Sprite clickedTower;
 	
-	TowerTypes buildingTower = TowerTypes::None;
+	Towers::Types buildingTower = Towers::Types::None;
 
 	sf::Vector2f buildingIconScale = { 2.f,2.f };
 	
@@ -61,7 +64,7 @@ public:
 	void OnBuilding();
 	bool Build();
 
-	TowerTypes GetBuildingTower() { return buildingTower; }
+	Towers::Types GetBuildingTower() { return buildingTower; }
 
 	void Init() override;
 	void Release() override;

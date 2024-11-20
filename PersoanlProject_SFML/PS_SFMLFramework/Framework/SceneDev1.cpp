@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "SceneDev1.h"
 #include "UiHud.h"
-#include "TowerBuildMgr.h"
 #include "Towers.h"
 
 SceneDev1::SceneDev1() : Scene(SceneIds::Dev1)
@@ -13,7 +12,6 @@ void SceneDev1::Init()
     auto text = AddGo(new TextGo("fonts/DS-DIGI.ttf", "Scene Name"));
     isoTile = AddGo(new IsometricTileMap());
 
-    towerBuildMgr = AddGo(new TowerBuildMgr());
     
     //const int tileType[] =
     //{
@@ -72,7 +70,7 @@ void SceneDev1::Update(float dt)
     sf::Vector2f mPos = ScreenToWorld(InputMgr::GetMousePosition());
     if (InputMgr::GetMouseButton(sf::Mouse::Left))
     {
-       
+        OnClickLeft();
     }
     if (InputMgr::GetMouseButton(sf::Mouse::Right))
     {
@@ -99,8 +97,14 @@ void SceneDev1::Update(float dt)
     }
     if (InputMgr::GetKeyDown(sf::Keyboard::F8))
     {
-        isoTile->TurnDebugTemp();
+        isoTile->TurnTileVisible();
     }
+}
+
+void SceneDev1::FixedUpdate(float dt)
+{
+
+    Scene::FixedUpdate(dt);
 }
 
 void SceneDev1::Draw(sf::RenderWindow& window)
@@ -110,6 +114,30 @@ void SceneDev1::Draw(sf::RenderWindow& window)
     window.setView(VIEW_MGR.GetWorldView());
     VIEW_MGR.Draw(window);
     window.setView(saveView);
+}
+
+void SceneDev1::OnClickLeft()
+{
+    if (!uiHud->IfMouseOnUi() && !uiHud->IfBuilding())
+    {
+        for (auto obj : gameObjects)
+        {
+            if (obj->GetName() == "Tower")
+            {
+                if (VIEW_MGR.GetIsoMousePos() == dynamic_cast<Towers*>(obj)->GetIsoTileCoords())
+                {
+                    if (selectedTower != nullptr)
+                    {
+                        selectedTower->SetSelected(false);
+                        selectedTower = nullptr;
+                    }
+                    selectedTower = dynamic_cast<Towers*>(obj);
+                    selectedTower->SetSelected(true);
+                }
+            }
+        }        
+    }      
+
 }
 
 sf::Vector2f SceneDev1::GetIsoTileSize()

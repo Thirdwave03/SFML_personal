@@ -253,7 +253,7 @@ void IsometricTileMap::Draw(sf::RenderWindow& window)
 	sf::RenderStates rs;
 	rs.texture = this->texture;
 	//rs.transform.scale({ 2.f,2.f });
-	if (!debugTemp)
+	if (!isTileVisible)
 	{
 		window.draw(vaTile, vaTileRS);
 	}

@@ -23,8 +23,10 @@ void Towers::OnConsturction()
 
 }
 
-void Towers::SetType(TowerTypes type)
+void Towers::SetType(Types type)
 {
+	towerType = type;
+
 	switch ((int)type)
 	{
 	case 0:
@@ -44,10 +46,8 @@ void Towers::SetType(TowerTypes type)
 
 		break;
 	}
-	sortingLayer = SortingLayers::Foreground;
-	sortingOrder = 0;
-	SetScale({ 3.f,3.f });
-	SetOrigin(Origins::BC);
+	
+	Reset();
 }
 
 void Towers::Fire()
@@ -68,6 +68,7 @@ void Towers::SetPosition(const sf::Vector2f& pos)
 {
 	position = pos;
 	towerSprite.setPosition(position);
+	rangeCircle.setPosition(position);
 }
 
 void Towers::SetRotation(float angle)
@@ -79,6 +80,15 @@ void Towers::SetScale(const sf::Vector2f& scale)
 	this->scale = scale;
 	towerSprite.setScale(scale);
 	
+}
+
+void Towers::SetRangeCircle()
+{
+	rangeCircle.setRadius(200);
+	rangeCircle.setPosition(position);
+	rangeCircle.setFillColor({ 0,0,255,60 });
+	rangeCircle.setScale({ 2.f,1.f });
+	Utils::SetOrigin(rangeCircle, Origins::MC);
 }
 
 void Towers::SetOrigin(Origins preset)
@@ -106,14 +116,25 @@ void Towers::Release()
 
 void Towers::Reset()
 {
+	sortingOrder = 0;
+	sortingLayer = SortingLayers::Foreground;
+	originPreset = Origins::BC;
+	SetOrigin(originPreset);
+	SetScale({ 3.f,3.f });
+	name = "Tower";
+	SetRangeCircle();
 }
 
 void Towers::Update(float dt)
 {
-	//SetOrigin(originPreset);
+
 }
 
 void Towers::Draw(sf::RenderWindow& window)
 {
+	if (isSelected)
+	{
+		window.draw(rangeCircle);
+	}
 	window.draw(towerSprite);
 }

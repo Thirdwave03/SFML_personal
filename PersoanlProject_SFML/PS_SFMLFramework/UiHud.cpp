@@ -111,7 +111,7 @@ void UiHud::UiMouseCheck()
 		if (electricRocquet.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
 			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
-			buildingTower = TowerTypes::ElectricRocquet;
+			buildingTower = Towers::Types::ElectricRocquet;
 			isBuilding = true;
 			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
 			clickedTower.setScale({ 3.f,3.f });
@@ -123,7 +123,7 @@ void UiHud::UiMouseCheck()
 		if (sprayF.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
 			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
-			buildingTower = TowerTypes::SprayF;
+			buildingTower = Towers::Types::SprayF;
 			isBuilding = true;
 			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/sprayF.png"));
 			clickedTower.setScale({ 3.f,3.f });
@@ -135,7 +135,7 @@ void UiHud::UiMouseCheck()
 		if (sprayR.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
 			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
-			buildingTower = TowerTypes::SprayR;
+			buildingTower = Towers::Types::SprayR;
 			isBuilding = true;
 			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/sprayR.png"));
 			clickedTower.setScale({ 3.f,3.f });
@@ -147,7 +147,7 @@ void UiHud::UiMouseCheck()
 		if (MosquitoRepellent.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
 			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
-			buildingTower = TowerTypes::MosquitoRepellent;
+			buildingTower = Towers::Types::MosquitoRepellent;
 			isBuilding = true;
 			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent.png"));
 			clickedTower.setScale({ 3.f,3.f });
@@ -163,7 +163,7 @@ void UiHud::OnBuilding()
 {
 	clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
 	Utils::SetOrigin(clickedTower, Origins::BC);
-	if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+	if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left) && !isMouseOnUi)
 	{
 		if (VIEW_MGR.GetIsoTileMap().TryBuild())
 		{

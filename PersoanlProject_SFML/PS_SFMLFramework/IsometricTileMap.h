@@ -30,7 +30,7 @@ protected:
 
 	bool isMouseOnUi = false;
 
-	bool debugTemp = false;
+	bool isTileVisible = false;
 
 public:
 	IsometricTileMap();
@@ -63,5 +63,5 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 	sf::FloatRect GetTileRect();
 
-	void TurnDebugTemp() { debugTemp = !debugTemp; }
+	void TurnTileVisible() { isTileVisible = !isTileVisible; }
 };
