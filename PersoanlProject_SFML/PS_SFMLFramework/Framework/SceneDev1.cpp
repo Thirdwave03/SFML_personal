@@ -122,6 +122,7 @@ void SceneDev1::OnClickLeft()
     {
         selectedTower->SetSelected(false);
         selectedTower = nullptr;
+        uiHud->SetNullSelectedTower();
     }
     if (!uiHud->IfMouseOnUi() && !uiHud->IfBuilding())
     {
@@ -129,10 +130,12 @@ void SceneDev1::OnClickLeft()
         {
             if (obj->GetName() == "Tower")
             {
-                if (VIEW_MGR.GetIsoMousePos() == dynamic_cast<Towers*>(obj)->GetIsoTileCoords())
+                Towers* towerObj = dynamic_cast<Towers*>(obj);
+                if (VIEW_MGR.GetIsoMousePos() == towerObj->GetIsoTileCoords())
                 {
-                    selectedTower = dynamic_cast<Towers*>(obj);
+                    selectedTower = towerObj;
                     selectedTower->SetSelected(true);
+                    uiHud->SetSelectedTower(towerObj);
                 }
             }
         }        
@@ -145,6 +148,7 @@ void SceneDev1::OnClickRight()
     {
         selectedTower->SetSelected(false);
         selectedTower = nullptr;
+        uiHud->SetNullSelectedTower();
     }
 }
 

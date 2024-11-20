@@ -40,7 +40,9 @@ void Towers::SetType(Types type)
 	isUpgradable = tData.isUpgradable;
 	attackType = tData.attackType;
 	bonusType = tData.bonusType;
-	description = tData.description;		
+	description = tData.description;
+	description2 = tData.description2;
+	description3 = tData.description3;
 
 	towerSprite.setTexture(TEXTURE_MGR.Get(textureId), true); 		
 
@@ -81,7 +83,7 @@ void Towers::SetScale(const sf::Vector2f& scale)
 
 void Towers::SetRangeCircle()
 {
-	rangeCircle.setRadius(200);
+	rangeCircle.setRadius(96.f*range);
 	rangeCircle.setPosition(position);
 	rangeCircle.setFillColor({ 0,0,255,60 });
 	rangeCircle.setScale({ 2.f,1.f });

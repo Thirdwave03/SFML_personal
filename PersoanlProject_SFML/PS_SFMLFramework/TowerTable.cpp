@@ -8,6 +8,8 @@ bool TowerTable::Load()
 {
 	Release();
 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+
 	rapidcsv::Document doc(filePath, rapidcsv::LabelParams(0, -1));
 	for (int i = 0; i < doc.GetRowCount(); i++)
 	{
@@ -30,7 +32,10 @@ bool TowerTable::Load()
 		table[id].isUpgradable = (bool)std::stoi(row[9]);
 		table[id].attackType = (Towers::AttackTypes)std::stoi(row[10]);
 		table[id].bonusType = (Towers::AttackBonusTypes)std::stoi(row[11]);
-		table[id].description = row[12];		
+		table[id].description = converter.from_bytes(row[12]);
+		table[id].description2 = converter.from_bytes(row[13]);
+		table[id].description3 = converter.from_bytes(row[14]);
+		
 	}
 	return true;
 }

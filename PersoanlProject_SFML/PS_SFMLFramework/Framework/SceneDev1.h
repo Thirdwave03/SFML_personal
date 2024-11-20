@@ -39,7 +39,7 @@ public:
 
 	sf::Vector2f GetIsoTileSize();
 	sf::Vector2f GetIsoTileScale();
-
+	
 	void BuildTower();
 };
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class Towers;
+
 class UiHud : public GameObject
 {
 protected:
@@ -14,6 +16,10 @@ protected:
 
 	sf::RectangleShape towerBox;
 	sf::CircleShape towerBoxCloseButton;
+	sf::Text towerDescription;
+	sf::Text towerDescription2;
+	sf::Text towerDescription3;
+	sf::Text textPageIndicator;
 
 	sf::Sprite coinSprite;
 	sf::Text coinText;
@@ -28,6 +34,7 @@ protected:
 	sf::Sprite MosquitoRepellent;
 
 	sf::Sprite clickedTower;
+	Towers* selectedTower;
 	
 	Towers::Types buildingTower = Towers::Types::None;
 
@@ -39,6 +46,11 @@ protected:
 	bool isBuildBoxOpen = false;
 	bool isMouseOnUi = false;
 	bool isBuilding = false;
+	bool isTowerSelected = false;
+	bool isTowerDescriptionOpen = false;
+
+	int towerDescriptionPage = 0;
+	const int maxPage = 2; // 1 less number of actual pages
 
 	bool escPreventer = false;
 
@@ -63,6 +75,12 @@ public:
 	
 	void OnBuilding();
 	bool Build();
+
+	void SetSelectedTower(Towers* tower);
+	void SetNullSelectedTower();
+
+	void OnTowerSelect();
+	void UpdateTowerDescription();
 
 	Towers::Types GetBuildingTower() { return buildingTower; }
 

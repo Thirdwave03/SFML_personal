@@ -54,7 +54,9 @@ protected:
 	AttackTypes attackType;		// 10
 	AttackBonusTypes bonusType;	// 11
 
-	std::string description;	// 12
+	std::wstring description;	// 12
+	std::wstring description2;	// 13
+	std::wstring description3;	// 14
 
 	int targetNumbers;
 	bool isSelected = false;
@@ -84,6 +86,14 @@ public:
 	void SetOrigin(Origins preset) override;
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
 	void SetSelected(bool selected) { isSelected = selected; }
+
+	std::wstring GetTowerDescription() { return description; }
+	std::wstring GetTowerDescription2() { return description2; }
+	std::wstring GetTowerDescription3() { return description3; }
+
+	int GetTowerDamage() { return damage; }
+	float GetTowerRange() { return range; }
+	int GetTowerPriceOnSell() { return priceOnSell; }
 
 	void Init() override;
 	void Release() override;

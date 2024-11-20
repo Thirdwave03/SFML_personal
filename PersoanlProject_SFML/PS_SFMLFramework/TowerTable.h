@@ -21,7 +21,9 @@ struct DataTower
 	Towers::AttackTypes attackType;			// 10
 	Towers::AttackBonusTypes bonusType;		// 11
 
-	std::string description;				// 12
+	std::wstring description;				// 12
+	std::wstring description2;				// 13
+	std::wstring description3;				// 14
 };
 
 class TowerTable : public DataTable

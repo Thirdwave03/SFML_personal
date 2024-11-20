@@ -2,6 +2,7 @@
 #include "UiHud.h"
 #include "IsometricTileMap.h"
 #include "SceneDev1.h"
+#include "Towers.h"
 
 UiHud::UiHud(const std::string& name)
 	: GameObject(name)
@@ -190,6 +191,118 @@ bool UiHud::Build()
 	return false;
 }
 
+void UiHud::SetSelectedTower(Towers* tower)
+{
+	selectedTower = tower;	
+	isTowerSelected = true;
+	isTowerDescriptionOpen = true;
+}
+
+void UiHud::SetNullSelectedTower()
+{
+	selectedTower = nullptr;
+	isTowerSelected = false;
+	isTowerDescriptionOpen = false;
+}
+
+void UiHud::OnTowerSelect()
+{
+	isTowerSelected = false;
+	towerDescriptionPage = 0;
+	if (selectedTower == nullptr)
+		return;
+		
+	towerBox.setSize({ 400.f,200.f });
+
+	isTowerDescriptionOpen = true;
+}
+
+void UiHud::UpdateTowerDescription()
+{
+	if (InputMgr::GetKeyDown(sf::Keyboard::Q))
+	{
+		towerDescriptionPage--;
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::E))
+	{
+		towerDescriptionPage++;
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::Escape))
+	{
+		isTowerDescriptionOpen = false;
+		escPreventer = true;
+	}
+	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
+
+	if (towerDescriptionPage == 0)
+	{
+		towerDescription.setString(selectedTower->GetTowerDescription());
+		towerDescription2.setString(selectedTower->GetTowerDescription2());
+		towerDescription3.setString(selectedTower->GetTowerDescription3());
+	}
+	else if (towerDescriptionPage == 1)
+	{
+		towerDescription.setString("DAMAGE : " + std::to_string(selectedTower->GetTowerDamage()));
+		towerDescription2.setString("RANGE : " + to_string_with_precision(selectedTower->GetTowerRange(),1));
+		towerDescription3.setString("SELL AT: " + std::to_string(selectedTower->GetTowerPriceOnSell()));
+	}
+	else if (towerDescriptionPage == 2)
+	{
+		towerDescription.setString("!TO BE UPDATED!");
+		towerDescription2.setString("!TO BE UPDATED!");
+		towerDescription3.setString("!TO BE UPDATED!");
+	}
+			
+	auto towerScreenPos = VIEW_MGR.WorldToScreen(VIEW_MGR.NonModifiedIsoWorldPos(selectedTower->GetIsoTileCoords()));
+	auto vSize = VIEW_MGR.GetUiView().getSize();
+
+	towerBox.setPosition((sf::Vector2f)towerScreenPos);
+
+
+	Origins tempOrigin;
+	if (towerScreenPos.x > vSize.x / 2)
+	{
+		if (towerScreenPos.y > vSize.y / 2)
+		{
+			tempOrigin = Origins::BR;
+		}
+		else
+		{
+			tempOrigin = Origins::TR;
+		}
+	}
+	else
+	{
+		if (towerScreenPos.y > vSize.y / 2)
+		{
+			tempOrigin = Origins::BL;
+		}
+		else
+		{
+			tempOrigin = Origins::TL;
+		}
+	}
+	Utils::SetOrigin(towerBox, tempOrigin);
+
+	auto a = towerBox.getGlobalBounds();
+
+	towerBoxCloseButton.setPosition({ a.left + a.width - 15.f, a.top + 5.f });
+	Utils::SetOrigin(towerBoxCloseButton, Origins::MC);
+
+	towerDescription.setPosition({ a.left + 15.f, a.top + 15.f });
+	Utils::SetOrigin(towerDescription, Origins::TL);
+
+	towerDescription2.setPosition({ a.left + 15.f, a.top + 75.f });
+	Utils::SetOrigin(towerDescription2, Origins::TL);
+
+	towerDescription3.setPosition({ a.left + 15.f, a.top + 135.f });
+	Utils::SetOrigin(towerDescription3, Origins::TL);
+
+	textPageIndicator.setString("<<Q              " +std::to_string(towerDescriptionPage+1) + "/" + std::to_string(maxPage + 1) +  "              E>>");
+	textPageIndicator.setPosition({ a.left + a.width / 2.f,a.top + a.height - 20.f });
+	Utils::SetOrigin(textPageIndicator, Origins::BC);
+}
+
 void UiHud::Init()
 {
 	sortingLayer = SortingLayers::UI;
@@ -226,6 +339,31 @@ void UiHud::Reset()
 	buildBoxCloseButton.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
 	Utils::SetOrigin(buildBoxCloseButton, Origins::MC);
 
+	towerBox.setFillColor({ 255, 255, 255, 180 });
+	towerBox.setOutlineThickness(10.f);
+	towerBox.setOutlineColor(sf::Color::White);
+
+	towerBoxCloseButton.setFillColor(sf::Color::Red);
+	towerBoxCloseButton.setRadius(10.f);
+	towerBoxCloseButton.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
+	Utils::SetOrigin(towerBoxCloseButton, Origins::MC);
+
+	towerDescription.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	towerDescription.setCharacterSize(30.f);
+	towerDescription.setFillColor(sf::Color::Black);
+
+	towerDescription2.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	towerDescription2.setCharacterSize(30.f);
+	towerDescription2.setFillColor(sf::Color::Black);
+
+	towerDescription3.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	towerDescription3.setCharacterSize(30.f);
+	towerDescription3.setFillColor(sf::Color::Black);
+
+	textPageIndicator.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	textPageIndicator.setCharacterSize(30.f);
+	textPageIndicator.setFillColor(sf::Color::Black);
+
 	electricRocquet.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
 	electricRocquet.setScale(buildingIconScale);
 	Utils::SetOrigin(electricRocquet, Origins::BC);
@@ -241,8 +379,6 @@ void UiHud::Reset()
 	MosquitoRepellent.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent.png"));
 	MosquitoRepellent.setScale(buildingIconScale);
 	Utils::SetOrigin(MosquitoRepellent, Origins::BC);
-
-
 	
 	coinSprite.setTexture(TEXTURE_MGR.Get("graphics/Coin.png"));
 	coinSprite.setPosition(leftX, topY);
@@ -310,9 +446,17 @@ void UiHud::Update(float dt)
 	lifeText.setString(std::to_string(GAME_MGR.GetLife()));
 	Utils::SetOrigin(lifeText, Origins::TL);
 
+	if (isTowerDescriptionOpen)
+	{
+		UpdateTowerDescription();
+	}
 	if (isBuilding)
 	{
 		OnBuilding();
+	}
+	if (isTowerSelected)
+	{
+		OnTowerSelect();
 	}
 }
 
@@ -321,7 +465,7 @@ void UiHud::FixedUpdate(float dt)
 	auto mPos = VIEW_MGR.GetScreenMousePos();
 	if (mPos.x > 1700.f && mPos.y < 200.f)
 	{
-
+		
 	}
 	UiMouseCheck();
 }
@@ -388,6 +532,15 @@ void UiHud::Draw(sf::RenderWindow& window)
 	if (isBuilding)
 	{
 		window.draw(clickedTower);
+	}
+	if (isTowerDescriptionOpen)
+	{
+		window.draw(towerBox);
+		window.draw(towerBoxCloseButton);
+		window.draw(towerDescription);
+		window.draw(towerDescription2);
+		window.draw(towerDescription3);
+		window.draw(textPageIndicator);
 	}
 
 	window.draw(buildButton);
