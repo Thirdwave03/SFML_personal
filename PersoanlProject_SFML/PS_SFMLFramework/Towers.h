@@ -61,7 +61,7 @@ protected:
 	int targetNumbers;
 	bool isSelected = false;
 
-	std::vector<Enemy*> target;
+	Enemy* target;
 
 	sf::Vector2i isoTileCoords = { 0,0 };
 

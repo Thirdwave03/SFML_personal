@@ -5,20 +5,20 @@
 class UiHud;
 class TowerBuildMgr;
 class Towers;
+class Bug;
 
 class SceneDev1 : public Scene
 {
 protected:
-	sf::RectangleShape rect1;
-	sf::RectangleShape rect2;
-
-	sf::FloatRect uiViewBorder;
 
 	UiHud* uiHud;
 	IsometricTileMap* isoTile;
 
 	std::list<Towers*> towers;
 	ObjectPool<Towers> towerPool;
+
+	std::list<Bug*> bugs;
+	ObjectPool<Bug> bugPool;
 
 	Towers* selectedTower;
 
@@ -41,5 +41,7 @@ public:
 	sf::Vector2f GetIsoTileScale();
 	
 	void BuildTower();
+
+	void SpawnBugTest(int cnt, int num = 1, float duration = 1.f);
 };
 

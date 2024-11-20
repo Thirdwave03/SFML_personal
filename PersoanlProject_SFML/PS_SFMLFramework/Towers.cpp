@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Towers.h"
-#include "Enemy.h"
+#include "Bug.h"
 
 Towers::Towers(const std::string& name)
 	:GameObject(name)

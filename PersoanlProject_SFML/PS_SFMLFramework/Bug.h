@@ -1,6 +1,6 @@
 #pragma once
 
-class Enemy : public GameObject
+class Bug : public GameObject
 {	
 	enum class BugTypes
 	{
@@ -11,9 +11,21 @@ class Enemy : public GameObject
 	};
 	
 protected:
+	float maxHp;
 	float hp;
 	float speed;
+	float speedMultiplier = 1.f;
 	int gold;
+
+	sf::Sprite body;	
+	sf::IntRect animationTarget;
+
+	std::string textureId = "graphics/Cockroach_Sheet.png";
+
+	float animationDuration;
+	float accumTime;
+	bool animationFlagH = false;
+	bool animationFlagV = false;
 
 	sf::Vector2f direction;
 	sf::Vector2i destinationTile;
@@ -26,11 +38,16 @@ protected:
 	bool isSlowed;
 
 	float timerStun;
-	bool isStunned;	
+	bool isStunned;
+
+	bool isDead = false;
+	float deadTimer = 3.f;
+
+	float tempTimer = 5.f;
 
 public:
-	Enemy(const std::string& name = "");
-	~Enemy() = default;
+	Bug(const std::string& name = "");
+	~Bug() = default;
 
 	void SetDestination(sf::Vector2i tile);
 	void OnHit();
@@ -43,9 +60,13 @@ public:
 	void SetOrigin(Origins preset) override;
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
 
+	void SetDestinationTile(sf::Vector2i destination) { destinationTile = destination; }
+
 	void Init() override;
 	void Release() override;
 	void Reset() override;
 	void Update(float dt) override;
+	void UpdateDirection(float dt);
+	void UpdateAnimation(float dt);
 	void Draw(sf::RenderWindow& window) override;
 };

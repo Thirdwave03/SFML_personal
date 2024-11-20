@@ -2,6 +2,7 @@
 #include "SceneDev1.h"
 #include "UiHud.h"
 #include "Towers.h"
+#include "Bug.h"
 
 SceneDev1::SceneDev1() : Scene(SceneIds::Dev1)
 {
@@ -58,6 +59,13 @@ void SceneDev1::Exit()
     }
     towers.clear();
 
+    for (auto bug : bugs)
+    {
+        RemoveGo(bug);
+        bugPool.Return(bug);
+    }
+    bugs.clear();
+
     Scene::Exit();
 }
 
@@ -76,16 +84,6 @@ void SceneDev1::Update(float dt)
     {
         OnClickRight();
     }
-
-    if (Utils::CheckCollision(rect1, rect2))
-    {
-        rect2.setFillColor(sf::Color::Red);
-    }
-    else
-    {
-        rect2.setFillColor(sf::Color::Green);
-    }
-
     if (InputMgr::GetKeyDown(sf::Keyboard::F2))
     {
         SCENE_MGR.ChangeScene(SceneIds::Dev2);
@@ -99,6 +97,11 @@ void SceneDev1::Update(float dt)
     {
         isoTile->TurnTileVisible();
     }
+    if (InputMgr::GetKeyDown(sf::Keyboard::F7))
+    {
+        SpawnBugTest(10);
+    }
+
 }
 
 void SceneDev1::FixedUpdate(float dt)
@@ -171,3 +174,15 @@ void SceneDev1::BuildTower()
     tower->SetType(uiHud->GetBuildingTower());
     AddGo(tower);
 }
+
+void SceneDev1::SpawnBugTest(int cnt, int num, float duration)
+{
+    Bug* bug = bugPool.Take();
+    bugs.push_back(bug);
+
+    bug->SetActive(true);
+    bug->SetPosition(VIEW_MGR.IsoToWorld({ 1,6 }));
+    bug->SetDestinationTile({ 6,16 });
+    AddGo(bug);
+}
+
