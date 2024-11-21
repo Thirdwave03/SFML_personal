@@ -48,6 +48,7 @@ public:
 	static void Normalize(sf::Vector2f& vec);
 	static sf::Vector2f GetNormal(const sf::Vector2f& vec);
 	static float Distance(const sf::Vector2f& p1, const sf::Vector2f& p2);
+	static float DistanceWithIsoTileRatio(const sf::Vector2f& p1, const sf::Vector2f& p2);
 
 	static float RadianToDegree(float radian);
 	static float DegreeToRadian(float degree);

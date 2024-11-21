@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class Enemy;
+class Bug;
 
 class Towers : public GameObject
 {
@@ -62,7 +62,7 @@ protected:
 	int targetNumbers;
 	bool isSelected = false;
 
-	Enemy* target;
+	Bug* target;
 
 	sf::Vector2i isoTileCoords = { 0,0 };
 

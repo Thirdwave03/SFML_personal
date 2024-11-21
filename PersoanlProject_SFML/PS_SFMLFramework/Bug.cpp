@@ -76,6 +76,9 @@ void Bug::Reset()
 
 	waypointIndex = 1;
 
+	bugType = BugType::Cockroach;
+	layerType = BugLayerType::Ground;
+
 	UpdateAnimation(0.f);
 	SetScale({ 2.f,2.f });
 	origin = Utils::SetOrigin5SQ(body, Origin5SQ::o23);

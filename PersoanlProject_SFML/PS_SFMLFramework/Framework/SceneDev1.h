@@ -40,6 +40,8 @@ public:
 	sf::Vector2f GetIsoTileSize();
 	sf::Vector2f GetIsoTileScale();
 	
+	const std::list<Bug*>& GetBugList() { return bugs; }
+	
 	void BuildTower();
 
 	void SpawnBugTest(int cnt, int num = 1, float duration = 1.f);

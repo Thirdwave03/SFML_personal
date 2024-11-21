@@ -209,6 +209,12 @@ float Utils::Distance(const sf::Vector2f& p1, const sf::Vector2f& p2)
     return Magnitude(p2 - p1);
 }
 
+float Utils::DistanceWithIsoTileRatio(const sf::Vector2f& p1, const sf::Vector2f& p2)
+{
+    auto temp = p1 - p2;
+    return Magnitude({ temp.x, temp.y / 2 });
+}
+
 float Utils::RadianToDegree(float radian)
 {
     return radian * (180.f / PI);

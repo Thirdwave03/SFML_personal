@@ -2,12 +2,19 @@
 
 class Bug : public GameObject
 {	
-	enum class BugTypes
+public:
+	enum class BugType
 	{
 		Cockroach,
 		Spider,
 		Mosquito,
 		Fly,
+	};
+
+	enum class BugLayerType
+	{
+		Ground,
+		Air,
 	};
 	
 protected:
@@ -21,6 +28,9 @@ protected:
 	sf::IntRect animationTarget;
 
 	std::string textureId = "graphics/Cockroach_Sheet.png";
+
+	BugType bugType;
+	BugLayerType layerType;
 
 	float animationDuration;
 	float accumTime;
@@ -48,12 +58,15 @@ protected:
 	int waypointIndex = 1;
 
 public:
-	Bug(const std::string& name = "");
+	Bug(const std::string& name = "Bug");
 	~Bug() = default;
 
 	void SetDestination(sf::Vector2i tile);
 	void OnHit();
 	void OnDie();
+
+	BugType GetBugType() { return bugType; }
+	BugLayerType GetBugLayerType() { return layerType; }
 
 	void SetPosition(const sf::Vector2f& pos) override;
 	void SetRotation(float angle) override;

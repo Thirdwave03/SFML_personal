@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Towers.h"
 #include "Bug.h"
+#include "SceneDev1.h"
 
 Towers::Towers(const std::string& name)
 	:GameObject(name)
@@ -51,12 +52,62 @@ void Towers::SetType(Types type)
 
 void Towers::Fire()
 {
+	switch ((int)towerType)
+	{
+	case 0:
 
+		break;
+	case 1:
 
+		break;
+	case 2:
+
+		break;
+	case 3:
+
+		break;
+	}
+	attackTimer = 0;
 }
 
 void Towers::SetTarget()
 {
+	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+	for (auto bug : bList)
+	{
+		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		{
+			switch ((int)towerType)
+			{
+			case 0:
+				target = bug;
+				return;
+				break;
+			case 1:
+				if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
+				{
+					target = bug;
+					return;
+				}
+				else
+					continue;
+				break;
+			case 2:
+				if (bug->GetBugLayerType() == Bug::BugLayerType::Ground)
+				{
+					target = bug;
+					return;
+				}
+				else
+					continue;
+				break;
+			case 3:
+				target = bug;
+				return;
+				break;
+			}					
+		}
+	}
 }
 
 void Towers::SetIsoTileCoords(sf::Vector2i isoCoord)
@@ -130,10 +181,32 @@ void Towers::Reset()
 void Towers::Update(float dt)
 {
 	attackTimer += dt;
-	if (attackTimer > attackDuration)
+	if (target != nullptr)
 	{
-		attackTimer -= attackDuration;
-		Fire();
+		if (attackTimer > attackDuration)
+		{
+			attackTimer = 0;
+			Fire();
+		}
+		if (Utils::DistanceWithIsoTileRatio(position, target->GetPosition()) > 192.f * range)
+		{
+			target == nullptr;
+		}
+	}
+	if (target == nullptr)
+	{
+		SetTarget();
+	}
+
+	if (attackTimer < 0.3)
+	{
+		sf::Color a = towerSprite.getColor();
+		towerSprite.setColor({ a.r, a.g, a.b, 120 });
+	}
+	else
+	{
+		sf::Color a = towerSprite.getColor();
+		towerSprite.setColor({ a.r, a.g, a.b, 255 });
 	}
 }
 
