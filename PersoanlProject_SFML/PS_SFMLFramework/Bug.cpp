@@ -84,6 +84,18 @@ void Bug::Reset()
 	bugType = BugType::Cockroach;
 	layerType = BugLayerType::Ground;
 
+	hpBar.setSize({ 100.f,20.f });
+	hpBar.setFillColor(sf::Color(255, 0, 0, 180));
+	hpBar.setOutlineColor(sf::Color(120,120,120,120));
+	hpBar.setOutlineThickness(2.5f);
+	Utils::SetOrigin(hpBar, Origins::ML);
+
+	maxhpBar.setSize({ 100.f,20.f });
+	maxhpBar.setFillColor(sf::Color(60, 60, 60, 80));
+	maxhpBar.setOutlineColor(sf::Color::Transparent);
+	maxhpBar.setOutlineThickness(2.5f);
+	Utils::SetOrigin(maxhpBar, Origins::ML);
+
 	UpdateAnimation(0.f);
 	SetScale({ 2.f,2.f });
 	origin = Utils::SetOrigin5SQ(body, Origin5SQ::o23);
@@ -96,6 +108,7 @@ void Bug::Update(float dt)
 		UpdateAnimation(dt);
 		UpdateDirection(dt);
 		SetPosition(position + direction * speed * speedMultiplier * dt);
+		UpdateHealthBar(dt);
 	}
 	
 	if (hp <= 0)
@@ -155,7 +168,19 @@ void Bug::UpdateAnimation(float dt)
 	body.setScale({ 2.f * scaleflag,2.f});
 }
 
+void Bug::UpdateHealthBar(float dt)
+{
+	auto a = maxhpBar.getSize();
+	float hpPercent = hp / maxHp;
+	hpBar.setPosition(position.x-50.f, position.y + 60.f);
+	maxhpBar.setPosition(position.x-50.f, position.y + 60.f);
+	hpBar.setSize({ a.x * hpPercent, a.y });
+	Utils::SetOrigin(hpBar, Origins::ML);
+}
+
 void Bug::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
+	window.draw(hpBar);
+	window.draw(maxhpBar);
 }

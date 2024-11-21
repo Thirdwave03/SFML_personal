@@ -39,8 +39,8 @@ protected:
 
 	sf::Vector2f direction;
 	sf::Vector2i destinationTile;
-	sf::FloatRect hpBar;
-	sf::FloatRect maxhpBar;
+	sf::RectangleShape hpBar;
+	sf::RectangleShape maxhpBar;
 	
 	std::string description;
 
@@ -87,5 +87,6 @@ public:
 	void Update(float dt) override;
 	void UpdateDirection(float dt);
 	void UpdateAnimation(float dt);
+	void UpdateHealthBar(float dt);
 	void Draw(sf::RenderWindow& window) override;
 };

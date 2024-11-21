@@ -31,8 +31,6 @@ public:
 		FlyBonus,
 	};
 
-
-
 protected:
 	sf::Sprite towerSprite;
 	
@@ -101,4 +99,9 @@ public:
 	void Reset() override;
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+
+	void Fire_ElectricRocquet();
+	void Fire_SprayF();
+	void Fire_SprayR();
+	void Fire_MosquitoRepellent();
 };

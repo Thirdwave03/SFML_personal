@@ -55,16 +55,16 @@ void Towers::Fire()
 	switch ((int)towerType)
 	{
 	case 0:
-
+		Fire_ElectricRocquet();
 		break;
 	case 1:
-
+		Fire_SprayF();
 		break;
 	case 2:
-
+		Fire_SprayR();
 		break;
 	case 3:
-
+		Fire_ElectricRocquet();
 		break;
 	}
 	attackTimer = 0;
@@ -77,22 +77,13 @@ void Towers::SetTarget()
 	{
 		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
 		{
-			switch ((int)towerType)
+			switch ((int)attackType)
 			{
 			case 0:
 				target = bug;
 				return;
 				break;
 			case 1:
-				if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
-				{
-					target = bug;
-					return;
-				}
-				else
-					continue;
-				break;
-			case 2:
 				if (bug->GetBugLayerType() == Bug::BugLayerType::Ground)
 				{
 					target = bug;
@@ -101,12 +92,17 @@ void Towers::SetTarget()
 				else
 					continue;
 				break;
-			case 3:
-				target = bug;
-				return;
+			case 2:
+				if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
+				{
+					target = bug;
+					return;
+				}
+				else
+					continue;
 				break;
-			}					
-		}
+			} // switch
+		} // if (distance < range)
 	}
 }
 
@@ -188,13 +184,16 @@ void Towers::Update(float dt)
 			attackTimer = 0;
 			Fire();
 		}
-		if (Utils::DistanceWithIsoTileRatio(position, target->GetPosition()) > 192.f * range)
+		if (Utils::DistanceWithIsoTileRatio(target->GetPosition(), position) > 192.f * range)
 		{
-			target == nullptr;
+			target = nullptr;
 		}
-		if (!target->GetActive())
+		if (target != nullptr)
 		{
-			target == nullptr;
+			if (!target->GetActive())
+			{
+				target = nullptr;
+			}
 		}
 	}
 	if (target == nullptr)
@@ -221,4 +220,28 @@ void Towers::Draw(sf::RenderWindow& window)
 		window.draw(rangeCircle);
 	}
 	window.draw(towerSprite);
+}
+
+void Towers::Fire_ElectricRocquet()
+{
+}
+
+void Towers::Fire_SprayF()
+{
+}
+
+void Towers::Fire_SprayR()
+{
+}
+
+void Towers::Fire_MosquitoRepellent()
+{
+	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+	for (auto bug : bList)
+	{
+		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		{
+			
+		}
+	}
 }
