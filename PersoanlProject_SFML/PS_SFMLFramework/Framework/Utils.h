@@ -22,6 +22,17 @@ public:
 	static sf::Vector2f SetOrigin(sf::Shape& obj, Origins preset);
 	static sf::Vector2f SetOrigin(sf::Text& obj, Origins preset);
 	static sf::Vector2f SetOrigin(sf::Sprite& obj, Origins preset);
+	static sf::Vector2f SetOrigin5SQ(sf::Transformable& obj, Origin5SQ preset, const sf::FloatRect bound);
+	static sf::Vector2f SetOrigin5SQ(sf::Shape& obj, Origin5SQ preset);
+	static sf::Vector2f SetOrigin5SQ(sf::Text& obj, Origin5SQ preset);
+	static sf::Vector2f SetOrigin5SQ(sf::Sprite& obj, Origin5SQ preset);
+
+	static sf::Vector2f SetOrigin5SQOutBound(sf::Transformable& obj, Origin5SQ preset, const sf::FloatRect bound);
+	static sf::Vector2f SetOrigin5SQOutBound(sf::Shape& obj, Origin5SQ preset);
+	static sf::Vector2f SetOrigin5SQOutBound(sf::Text& obj, Origin5SQ preset);
+	static sf::Vector2f SetOrigin5SQOutBound(sf::Sprite& obj, Origin5SQ preset);
+
+	static sf::Vector2f SetOriginBelowBC(sf::Sprite& obj);
 
 	// Math
 	static float Clamp(float value, float min, float max);

@@ -51,6 +51,8 @@ void Towers::SetType(Types type)
 
 void Towers::Fire()
 {
+
+
 }
 
 void Towers::SetTarget()
@@ -118,6 +120,7 @@ void Towers::Reset()
 	sortingOrder = 0;
 	sortingLayer = SortingLayers::Foreground;
 	originPreset = Origins::BC;
+	attackTimer = 0;
 	SetOrigin(originPreset);
 	SetScale({ 3.f,3.f });
 	name = "Tower";
@@ -126,7 +129,12 @@ void Towers::Reset()
 
 void Towers::Update(float dt)
 {
-
+	attackTimer += dt;
+	if (attackTimer > attackDuration)
+	{
+		attackTimer -= attackDuration;
+		Fire();
+	}
 }
 
 void Towers::Draw(sf::RenderWindow& window)

@@ -45,6 +45,8 @@ protected:
 
 	float tempTimer = 5.f;
 
+	int waypointIndex = 1;
+
 public:
 	Bug(const std::string& name = "");
 	~Bug() = default;
@@ -61,6 +63,8 @@ public:
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
 
 	void SetDestinationTile(sf::Vector2i destination) { destinationTile = destination; }
+
+	void OnArrival();
 
 	void Init() override;
 	void Release() override;

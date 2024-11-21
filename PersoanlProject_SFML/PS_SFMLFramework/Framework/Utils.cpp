@@ -50,9 +50,9 @@ sf::Color Utils::RandomColor(bool opaque)
     return sf::Color(r, g, b, a);
 }
 
-sf::Vector2f Utils::SetOrigin(sf::Transformable& obj, Origins preset, const sf::FloatRect rect)
+sf::Vector2f Utils::SetOrigin(sf::Transformable& obj, Origins preset, const sf::FloatRect bound)
 {
-    sf::Vector2f newOrigin(rect.width, rect.height);
+    sf::Vector2f newOrigin(bound.width, bound.height);
     newOrigin.x *= ((int)preset % 3) * 0.5f;
     newOrigin.y *= ((int)preset / 3) * 0.5f;
     obj.setOrigin(newOrigin);
@@ -72,6 +72,63 @@ sf::Vector2f Utils::SetOrigin(sf::Text& obj, Origins preset)
 sf::Vector2f Utils::SetOrigin(sf::Sprite& obj, Origins preset)
 {
     return SetOrigin(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOrigin5SQ(sf::Transformable& obj, Origin5SQ preset, const sf::FloatRect bound)
+{
+    sf::Vector2f newOrigin(bound.width, bound.height);
+    newOrigin.x *= ((int)preset % 5) * 0.25f;
+    newOrigin.y *= ((int)preset / 5) * 0.25f;
+    obj.setOrigin(newOrigin);
+    return newOrigin;
+}
+
+sf::Vector2f Utils::SetOrigin5SQ(sf::Shape& obj, Origin5SQ preset)
+{
+    return SetOrigin5SQ(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOrigin5SQ(sf::Text& obj, Origin5SQ preset)
+{
+    return SetOrigin5SQ(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOrigin5SQ(sf::Sprite& obj, Origin5SQ preset)
+{
+    return SetOrigin5SQ(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOrigin5SQOutBound(sf::Transformable& obj, Origin5SQ preset, const sf::FloatRect bound)
+{
+    sf::Vector2f newOrigin(bound.width, bound.height);
+    newOrigin.x *= ((int)preset % 3) * 0.5f - 0.5f;
+    newOrigin.y *= ((int)preset / 3) * 0.5f - 0.5f;
+    obj.setOrigin(newOrigin);
+    return newOrigin;
+}
+
+sf::Vector2f Utils::SetOrigin5SQOutBound(sf::Shape& obj, Origin5SQ preset)
+{
+    return SetOrigin5SQ(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOrigin5SQOutBound(sf::Text& obj, Origin5SQ preset)
+{
+    return SetOrigin5SQ(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOrigin5SQOutBound(sf::Sprite& obj, Origin5SQ preset)
+{
+    return SetOrigin5SQ(obj, preset, obj.getLocalBounds());
+}
+
+sf::Vector2f Utils::SetOriginBelowBC(sf::Sprite& obj)
+{
+    sf::Vector2f customOrigin(obj.getLocalBounds().width, obj.getLocalBounds().height);
+    customOrigin.x *= 0.5f;
+    customOrigin.y *= 1.5f;
+    obj.setOrigin(customOrigin);
+    return customOrigin;
 }
 
 float Utils::Clamp(float value, float min, float max)

@@ -12,7 +12,7 @@ protected:
 	int life;
 	int coin;
 
-	
+	std::unordered_map<int, sf::Vector2i> waypointMap;
 
 public:
 	int GetLife() { return life; }
@@ -24,6 +24,9 @@ public:
 	void Init();
 	void Reset();
 	
+	void SetWaypointMap();
+	sf::Vector2i GetWaypointMap(int index);
+	int GetWaypointCnt() { return waypointMap.size(); }
 };
 
 #define GAME_MGR (GameMgr::Instance())

@@ -99,7 +99,7 @@ void SceneDev1::Update(float dt)
     }
     if (InputMgr::GetKeyDown(sf::Keyboard::F7))
     {
-        SpawnBugTest(10);
+        SpawnBugTest(1);
     }
 
 }
@@ -181,7 +181,7 @@ void SceneDev1::SpawnBugTest(int cnt, int num, float duration)
     bugs.push_back(bug);
 
     bug->SetActive(true);
-    bug->SetPosition(VIEW_MGR.IsoToWorld({ 1,6 }));
+    bug->SetPosition({ VIEW_MGR.NonModifiedIsoWorldPos({ 1,6 }).x, VIEW_MGR.NonModifiedIsoWorldPos({ 1,6 }).y});
     bug->SetDestinationTile({ 6,16 });
     AddGo(bug);
 }

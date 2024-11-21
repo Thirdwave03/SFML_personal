@@ -6,9 +6,6 @@ Bug::Bug(const std::string& name)
 {
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
-	originPreset = Origins::BC;
-	SetScale({ 3.f,3.f });
-	SetOrigin(originPreset);
 }
 
 void Bug::SetPosition(const sf::Vector2f& pos)
@@ -34,7 +31,7 @@ void Bug::SetOrigin(Origins preset)
 	originPreset = preset;
 	if (originPreset != Origins::Custom)
 	{
-		Utils::SetOrigin(body, originPreset);
+		origin = Utils::SetOrigin(body, originPreset);
 	}
 }
 
@@ -43,6 +40,12 @@ void Bug::SetOrigin(const sf::Vector2f& newOrigin)
 	originPreset = Origins::Custom;
 	origin = newOrigin;
 	body.setOrigin(origin);
+}
+
+void Bug::OnArrival()
+{
+	GAME_MGR.SetLife(GAME_MGR.GetLife() -1);
+	SetActive(false);
 }
 
 void Bug::Init()
@@ -58,9 +61,9 @@ void Bug::Release()
 void Bug::Reset()
 {
 	SetActive(true);
-	speedMultiplier = 1.f;
 
 	//for test only
+	speedMultiplier = 1.f;
 	body.setTexture(TEXTURE_MGR.Get(textureId));
 	maxHp = 20;
 	hp = maxHp;
@@ -69,7 +72,13 @@ void Bug::Reset()
 	deadTimer = 3.f;
 
 	accumTime = 0;
-	animationDuration = 0.3;
+	animationDuration = 0.2;
+
+	waypointIndex = 1;
+
+	UpdateAnimation(0.f);
+	SetScale({ 2.f,2.f });
+	origin = Utils::SetOrigin5SQ(body, Origin5SQ::o23);
 }
 
 void Bug::Update(float dt)
@@ -101,7 +110,14 @@ void Bug::Update(float dt)
 
 void Bug::UpdateDirection(float dt)
 {
-	direction = Utils::GetNormal(VIEW_MGR.IsoToWorld(destinationTile) - position);
+	direction = Utils::GetNormal(VIEW_MGR.NonModifiedIsoWorldPos(destinationTile) - position);
+	if (Utils::Distance(VIEW_MGR.NonModifiedIsoWorldPos(destinationTile), position) < 2.f)
+	{
+		SetDestinationTile(GAME_MGR.GetWaypointMap(waypointIndex));
+		waypointIndex++;
+		if (waypointIndex > GAME_MGR.GetWaypointCnt())
+			OnArrival();
+	}
 }
 
 void Bug::UpdateAnimation(float dt)
@@ -111,7 +127,12 @@ void Bug::UpdateAnimation(float dt)
 	{
 		accumTime -= animationDuration;
 		animationFlagH = !animationFlagH;
-	}	
+	}
+	int scaleflag = 1;
+	if (direction.x < 0)
+	{
+		scaleflag = -1;
+	}
 	if (direction.y < 0)
 	{
 		animationFlagV = true;
@@ -123,12 +144,7 @@ void Bug::UpdateAnimation(float dt)
 
 	animationTarget = { 64 * animationFlagH, 64 * animationFlagV, 64,  64 };
 	body.setTextureRect(animationTarget);
-
-
-	// test
-	tempTimer -= dt;
-	if (tempTimer < 0)
-		isDead = true;
+	body.setScale({ 2.f * scaleflag,2.f});
 }
 
 void Bug::Draw(sf::RenderWindow& window)

@@ -42,6 +42,7 @@ protected:
 	
 	int damage;					//  3
 	float attackDuration;		//  4
+	float attackTimer;
 	float range;				//  5
 	sf::CircleShape rangeCircle;
 	bool isAreaAttack;			//  6
