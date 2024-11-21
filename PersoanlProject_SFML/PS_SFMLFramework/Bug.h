@@ -18,8 +18,8 @@ public:
 	};
 	
 protected:
-	float maxHp;
-	float hp;
+	int maxHp;
+	int hp;
 	float speed;
 	float speedMultiplier = 1.f;
 	int gold;
@@ -76,6 +76,9 @@ public:
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
 
 	void SetDestinationTile(sf::Vector2i destination) { destinationTile = destination; }
+
+	void OnDamage(int damage);
+	int GetHp() { return hp; }
 
 	void OnArrival();
 

@@ -140,6 +140,15 @@ float Utils::Clamp(float value, float min, float max)
     return value;
 }
 
+int Utils::Clamp(int value, int min, int max)
+{
+    if (value < min)
+        return min;
+    if (value > max)
+        return max;
+    return value;
+}
+
 float Utils::Clamp01(float value)
 {
     return Clamp(value, 0.f, 1.f);

@@ -102,6 +102,20 @@ void SceneDev1::Update(float dt)
         SpawnBugTest(1);
     }
 
+    auto it = bugs.begin();
+    while (it != bugs.end())
+    {
+        if (!(*it)->IsActive())
+        {
+            bugPool.Return(*it);
+            RemoveGo(*it);
+            it = bugs.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
 }
 
 void SceneDev1::FixedUpdate(float dt)

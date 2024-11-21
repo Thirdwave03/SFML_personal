@@ -36,6 +36,7 @@ public:
 
 	// Math
 	static float Clamp(float value, float min, float max);
+	static int Clamp(int value, int min, int max);
 	static float Clamp01(float value);
 
 	static float Lerp(float min, float max, float t, bool clamp = true);

@@ -42,6 +42,12 @@ void Bug::SetOrigin(const sf::Vector2f& newOrigin)
 	body.setOrigin(origin);
 }
 
+void Bug::OnDamage(int damage)
+{
+	hp -= damage;
+	hp = Utils::Clamp(hp, 0, maxHp);
+}
+
 void Bug::OnArrival()
 {
 	GAME_MGR.SetLife(GAME_MGR.GetLife() -1);
@@ -171,10 +177,10 @@ void Bug::UpdateAnimation(float dt)
 void Bug::UpdateHealthBar(float dt)
 {
 	auto a = maxhpBar.getSize();
-	float hpPercent = hp / maxHp;
-	hpBar.setPosition(position.x-50.f, position.y + 60.f);
-	maxhpBar.setPosition(position.x-50.f, position.y + 60.f);
-	hpBar.setSize({ a.x * hpPercent, a.y });
+	float hpPercent = (float)hp / (float)maxHp * 100.f;
+	hpBar.setPosition(position.x-45.f, position.y + 60.f);
+	maxhpBar.setPosition(position.x-45.f, position.y + 60.f);
+	hpBar.setSize({ a.x * hpPercent / 100, a.y });
 	Utils::SetOrigin(hpBar, Origins::ML);
 }
 

@@ -64,7 +64,7 @@ void Towers::Fire()
 		Fire_SprayR();
 		break;
 	case 3:
-		Fire_ElectricRocquet();
+		Fire_MosquitoRepellent();
 		break;
 	}
 	attackTimer = 0;
@@ -75,33 +75,36 @@ void Towers::SetTarget()
 	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
 	for (auto bug : bList)
 	{
-		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		if(bug->GetHp() > 0)
 		{
-			switch ((int)attackType)
+			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
 			{
-			case 0:
-				target = bug;
-				return;
-				break;
-			case 1:
-				if (bug->GetBugLayerType() == Bug::BugLayerType::Ground)
+				switch ((int)attackType)
 				{
+				case 0:
 					target = bug;
 					return;
+					break;
+				case 1:
+					if (bug->GetBugLayerType() == Bug::BugLayerType::Ground)
+					{
+						target = bug;
+						return;
+					}
+					else
+						continue;
+					break;
+				case 2:
+					if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
+					{
+						target = bug;
+						return;
+					}
+					else
+						continue;
+					break;
 				}
-				else
-					continue;
-				break;
-			case 2:
-				if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
-				{
-					target = bug;
-					return;
-				}
-				else
-					continue;
-				break;
-			} // switch
+			}// switch
 		} // if (distance < range)
 	}
 }
@@ -167,7 +170,7 @@ void Towers::Reset()
 	sortingOrder = 0;
 	sortingLayer = SortingLayers::Foreground;
 	originPreset = Origins::BC;
-	attackTimer = 0;
+	attackTimer = 5;
 	SetOrigin(originPreset);
 	SetScale({ 3.f,3.f });
 	name = "Tower";
@@ -188,28 +191,36 @@ void Towers::Update(float dt)
 		{
 			target = nullptr;
 		}
-		if (target != nullptr)
+	}
+	if (target != nullptr)
+	{
+		if (!target->GetActive())
 		{
-			if (!target->GetActive())
-			{
-				target = nullptr;
-			}
+			target = nullptr;
 		}
 	}
+	if (target != nullptr)
+	{
+		if (target->GetHp() <= 0)
+		{
+			target = nullptr;
+		}
+	}
+
 	if (target == nullptr)
 	{
 		SetTarget();
 	}
 
-	if (attackTimer < 0.3)
+	if (attackDuration - attackTimer < 0.5)
 	{
 		sf::Color a = towerSprite.getColor();
-		towerSprite.setColor({ a.r, a.g, a.b, 120 });
+		towerSprite.setColor({ a.r, a.g, a.b, 255 });
 	}
 	else
 	{
 		sf::Color a = towerSprite.getColor();
-		towerSprite.setColor({ a.r, a.g, a.b, 255 });
+		towerSprite.setColor({ a.r, a.g, a.b, 120 });
 	}
 }
 
@@ -224,24 +235,27 @@ void Towers::Draw(sf::RenderWindow& window)
 
 void Towers::Fire_ElectricRocquet()
 {
+	target->OnDamage(damage);
 }
 
 void Towers::Fire_SprayF()
 {
+	target->OnDamage(damage);
 }
 
 void Towers::Fire_SprayR()
 {
+	target->OnDamage(damage);
 }
 
 void Towers::Fire_MosquitoRepellent()
 {
 	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
-	for (auto bug : bList)
+	for (auto& bug : bList)
 	{
 		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
 		{
-			
+			bug->OnDamage(damage);
 		}
 	}
 }
