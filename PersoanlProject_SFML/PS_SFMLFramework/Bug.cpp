@@ -46,6 +46,14 @@ void Bug::OnDamage(int damage)
 {
 	hp -= damage;
 	hp = Utils::Clamp(hp, 0, maxHp);
+	if (hp == 0)
+		OnDie();
+}
+
+void Bug::OnDie()
+{
+	isDead = true;
+	GAME_MGR.AddCoin(gold);
 }
 
 void Bug::SetType(int bugTypeId)
@@ -95,6 +103,8 @@ void Bug::Reset()
 {
 	SetActive(true);
 	isDead = false;
+	auto a = bugSprite.getColor();
+	bugSprite.setColor({ a.r,a.g,a.b,255 });
 
 	speedMultiplier = 1.f;
 	hp = maxHp;
@@ -129,17 +139,15 @@ void Bug::Update(float dt)
 		UpdateDirection(dt);
 		SetPosition(position + direction * speed * speedMultiplier * dt);
 		UpdateHealthBar(dt);
-	}
+	}	
 	
-	if (hp <= 0)
-	{
-		isDead = true;
-	}
-
 	if (isDead)
 	{
 		animationTarget = { 0, 128, 64, 64 };
 		bugSprite.setTextureRect(animationTarget);
+		auto a = bugSprite.getColor();
+		sf::Uint8 temp = 255 / 3 * deadTimer;
+		bugSprite.setColor({ a.r,a.g,a.b, temp });
 		deadTimer -= dt;
 	}
 

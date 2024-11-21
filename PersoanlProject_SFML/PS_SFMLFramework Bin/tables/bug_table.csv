@@ -1,5 +1,5 @@
 ﻿ID,TEXTUREID,bugName,maxHp,speed(f),damage,gold,animationduration(f),layerType(0: ground 1: air),description,description2,description3
 0,graphics/Cockroach_sheet.png,Cockroach,30,300,1,2,0.2,0,바선생,빠르다,TO BE UPDATED
-1,graphics/Spider_sheet.png,Spider,40,150,1,1,0.3,0,거미,단단하다,TO BE UPDATED
-2,graphics/Fly_sheet.png,Fly,20,250,1,2,0.2,1,파리,난다,TO BE UPDATED
-3,graphics/Mosquito_sheet.png,Mosquito,10,200,1,1,0.2,1,모기,많다,TO BE UPDATED
+1,graphics/Spider_sheet.png,Spider,20,150,1,1,0.3,0,거미,단단하다,TO BE UPDATED
+2,graphics/Fly_sheet.png,Fly,30,250,1,2,0.2,1,파리,난다,TO BE UPDATED
+3,graphics/Mosquito_sheet.png,Mosquito,15,200,1,1,0.2,1,모기,많다,TO BE UPDATED

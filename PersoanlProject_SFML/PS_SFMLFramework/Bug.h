@@ -66,7 +66,6 @@ public:
 
 	void SetDestination(sf::Vector2i tile);
 	void OnHit();
-	void OnDie();
 
 	BugTypes GetBugType() { return bugType; }
 	BugLayerType GetBugLayerType() { return layerType; }
@@ -81,6 +80,8 @@ public:
 	void SetDestinationTile(sf::Vector2i destination) { destinationTile = destination; }
 
 	void OnDamage(int damage);
+	void OnDie();
+
 	int GetHp() { return hp; }
 
 	void SetType(int bugTypeId);
@@ -88,6 +89,7 @@ public:
 	void OnArrival();
 
 	bool GetActive();
+
 
 	void Init() override;
 	void Release() override;

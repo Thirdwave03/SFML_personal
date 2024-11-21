@@ -12,7 +12,16 @@ protected:
 	sf::Text worldFloat;
 
 	sf::Sprite buildButton;
+	sf::RectangleShape buildingMenu;
 	sf::CircleShape buildBoxCloseButton;
+
+	sf::Sprite electricRocquet;
+	sf::Sprite sprayF;
+	sf::Sprite sprayR;
+	sf::Sprite MosquitoRepellent;
+	
+	sf::RectangleShape towerPurchaseGuideBox;
+	sf::Text towerPurchaseGuideText;
 
 	sf::RectangleShape towerBox;
 	sf::CircleShape towerBoxCloseButton;
@@ -27,12 +36,12 @@ protected:
 	sf::Sprite lifeSprite;
 	sf::Text lifeText;
 
-	sf::RectangleShape buildingMenu;
-	sf::Sprite electricRocquet;
-	sf::Sprite sprayF;
-	sf::Sprite sprayR;
-	sf::Sprite MosquitoRepellent;
+	bool isGameOver = false;
+	sf::RectangleShape gameoverFadeOut;
+	float gameoverFadeOutTimer = 4;
+	sf::Text gameoverText;
 
+	Towers::Types clickedTowerType;
 	sf::Sprite clickedTower;
 	Towers* selectedTower;
 	

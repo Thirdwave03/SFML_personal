@@ -29,7 +29,7 @@ bool TowerTable::Load()
 		table[id].isAreaAttack = (bool)std::stoi(row[6]);
 		table[id].price = std::stoi(row[7]);
 		table[id].priceOnSell = std::stoi(row[8]);
-		table[id].isUpgradable = (bool)std::stoi(row[9]);
+		table[id].upgradableTowers = std::stoi(row[9]);
 		table[id].attackType = (Towers::AttackTypes)std::stoi(row[10]);
 		table[id].bonusType = (Towers::AttackBonusTypes)std::stoi(row[11]);
 		table[id].description = converter.from_bytes(row[12]);

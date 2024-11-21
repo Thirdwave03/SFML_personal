@@ -25,7 +25,8 @@ public:
 
 	int GetCoin() { return coin; }
 	void SetCoin(int coin) { this->coin = coin; }
-
+	void SpendCoin(int spendCoin) { this->coin -= spendCoin; }
+	void AddCoin(int addCoin);
 	void Init();
 	void Reset();
 	
@@ -33,6 +34,7 @@ public:
 	void SetStageDataMap();
 
 	int GetCurrentStage() { return currentStage; }
+	void SetCurrentStage(int stage) { currentStage = stage; }
 
 	void SetStage0(); // for debug
 	void SetStage1();

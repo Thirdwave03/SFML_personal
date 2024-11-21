@@ -38,7 +38,7 @@ void Towers::SetType(Types type)
 	isAreaAttack = tData.isAreaAttack;
 	price = tData.price;
 	priceOnSell = tData.priceOnSell;
-	isUpgradable = tData.isUpgradable;
+	upgradableTowers = tData.upgradableTowers;
 	attackType = tData.attackType;
 	bonusType = tData.bonusType;
 	description = tData.description;

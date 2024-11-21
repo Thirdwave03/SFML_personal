@@ -19,7 +19,7 @@ void SceneDev1::Init()
     //    0, 1, 
     //    2, 0,
     //};
-
+    SOUND_MGR.PlayBgm("sound/mandarin-calmly-music-2965.mp3" , true);
     isoTile->SetIsoTile(TILE_TABLE->GetTileMapTable(), TILE_TABLE->GetTileMapCount(), { 3.f,3.f });
     isoTile->SetIsoLine();
     isoTile->GetScale();
@@ -76,11 +76,11 @@ void SceneDev1::Update(float dt)
     VIEW_MGR.WorldToIso(isoTile->GetIsoTileSize(), isoTile->GetScale());
     
     sf::Vector2f mPos = ScreenToWorld(InputMgr::GetMousePosition());
-    if (InputMgr::GetMouseButton(sf::Mouse::Left))
+    if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
     {
         OnClickLeft();
     }
-    if (InputMgr::GetMouseButton(sf::Mouse::Right))
+    if (InputMgr::GetMouseButtonDown(sf::Mouse::Right))
     {
         OnClickRight();
     }
@@ -103,7 +103,10 @@ void SceneDev1::Update(float dt)
     }
     if (InputMgr::GetKeyDown(sf::Keyboard::Space))
     {
-        SetWaveSpawnQueue();
+        if (GAME_MGR.GetCurrentStage() <= 5)
+            SetWaveSpawnQueue();
+        else
+            GAME_MGR.SetLife(0);
     }
 
     if (isSpawning)
@@ -241,5 +244,6 @@ void SceneDev1::SetWaveSpawnQueue()
     {
         spawnQueue.push(GAME_MGR.GetStageData(GAME_MGR.GetCurrentStage())[i]);
     }
+    GAME_MGR.SetCurrentStage(GAME_MGR.GetCurrentStage() + 1);
 }
 

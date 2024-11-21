@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "GameMgr.h"
 
+void GameMgr::AddCoin(int addCoin)
+{
+	this->coin += addCoin;
+	SOUND_MGR.PlaySfx("sound/getCoin.wav");
+}
+
+
 void GameMgr::Init()
 {
 	Reset();
@@ -12,7 +19,7 @@ void GameMgr::Reset()
 {
 	life = 10;
 	coin = 30;
-	currentStage = 0;
+	currentStage = 1;
 }
 
 void GameMgr::SetWaypointMap()
@@ -32,6 +39,10 @@ void GameMgr::SetStageDataMap()
 {
 	SetStage0();
 	SetStage1();
+	SetStage2();
+	SetStage3();
+	SetStage4();
+	SetStage5();
 }
 
 void GameMgr::SetStage0()
@@ -55,7 +66,7 @@ void GameMgr::SetStage0()
 
 void GameMgr::SetStage1()
 {
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		stageDataMap[1].push_back(1);
 	}
@@ -63,22 +74,49 @@ void GameMgr::SetStage1()
 
 void GameMgr::SetStage2()
 {
-
+	for (int i = 0; i < 4; i++)
+	{
+		stageDataMap[2].push_back(1);
+		stageDataMap[2].push_back(1);
+		stageDataMap[2].push_back(1);
+		stageDataMap[2].push_back(1);
+		stageDataMap[2].push_back(0);
+	}
 }
 
 void GameMgr::SetStage3()
 {
-
+	for (int i = 0; i < 5; i++)
+	{
+		stageDataMap[3].push_back(1);
+		stageDataMap[3].push_back(1);
+		stageDataMap[3].push_back(0);
+		stageDataMap[3].push_back(3);
+	}
 }
 
 void GameMgr::SetStage4()
 {
-
+	for (int i = 0; i < 4; i++)
+	{
+		stageDataMap[4].push_back(0);
+		stageDataMap[4].push_back(1);
+		stageDataMap[4].push_back(0);
+		stageDataMap[4].push_back(3);
+		stageDataMap[4].push_back(2);
+	}
 }
 
 void GameMgr::SetStage5()
 {
-
+	for (int i = 0; i < 4; i++)
+	{
+		stageDataMap[4].push_back(2);
+		stageDataMap[4].push_back(2);
+		stageDataMap[4].push_back(2);
+		stageDataMap[4].push_back(2);
+		stageDataMap[4].push_back(2);
+	}
 }
 
 sf::Vector2i GameMgr::GetWaypointMap(int index)

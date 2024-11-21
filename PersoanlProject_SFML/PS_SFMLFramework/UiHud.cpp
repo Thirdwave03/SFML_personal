@@ -66,6 +66,18 @@ void UiHud::UiMouseCheck()
 		buildingMenu.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 	{
 		isMouseOnUi = true;
+		/*if (buildingMenu.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
+		{
+			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
+			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
+			towerPurchaseGuideText.setFillColor(sf::Color::Black);
+		}
+		else
+		{
+			towerPurchaseGuideBox.setFillColor(sf::Color::Transparent);
+			towerPurchaseGuideBox.setOutlineColor(sf::Color::Transparent);
+			towerPurchaseGuideText.setFillColor(sf::Color::Transparent);
+		}*/
 	}
 	else
 	{
@@ -93,6 +105,7 @@ void UiHud::UiMouseCheck()
 		Utils::SetOrigin(MosquitoRepellent, Origins::BC);
 
 		isBuildBoxOpen = true;
+		SOUND_MGR.PlaySfx("sound/click2.wav");
 	}
 	if (isBuildBoxOpen && !isBuilding)
 	{		
@@ -100,62 +113,143 @@ void UiHud::UiMouseCheck()
 		{
 			isBuildBoxOpen = false;
 			escPreventer = true;
+			SOUND_MGR.PlaySfx("sound/click.mp3");
 		}
-
 
 		if (Utils::Distance(buildBoxCloseButton.getPosition(), (sf::Vector2f)InputMgr::GetMousePosition()) < buildBoxCloseButton.getRadius()
 			&& InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
 			isBuildBoxOpen = false;
+			SOUND_MGR.PlaySfx("sound/click.mp3");
 		}
 
-		if (electricRocquet.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
-			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+		towerPurchaseGuideBox.setFillColor(sf::Color::Transparent);
+		towerPurchaseGuideBox.setOutlineColor(sf::Color::Transparent);
+		towerPurchaseGuideText.setFillColor(sf::Color::Transparent);
+		if (electricRocquet.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 		{
-			buildingTower = Towers::Types::ElectricRocquet;
-			isBuilding = true;
-			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
-			clickedTower.setScale({ 3.f,3.f });
-			clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
-			auto a = clickedTower.getColor();
-			clickedTower.setColor({a.r,a.g, a.b, 150});
-			Utils::SetOrigin(clickedTower, Origins::BC);
+			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
+			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
+			towerPurchaseGuideText.setFillColor(sf::Color::Black);
+			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
+				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).description
+				+ L"\n공격타입 : 전체\n사거리 : 짧음  공격력 : " + 
+				std::to_wstring(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).damage) + 
+				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).price));
+			Utils::SetOrigin(towerPurchaseGuideText, Origins::MC);
+			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+			{
+				if(GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::ElectricRocquet).price)
+				{
+					buildingTower = Towers::Types::ElectricRocquet;
+					isBuilding = true;
+					clickedTower.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
+					clickedTower.setScale({ 3.f,3.f });
+					clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
+					auto a = clickedTower.getColor();
+					clickedTower.setColor({ a.r,a.g, a.b, 150 });
+					Utils::SetOrigin(clickedTower, Origins::BC);
+					SOUND_MGR.PlaySfx("sound/click2.wav");
+				}
+				else
+				{
+					SOUND_MGR.PlaySfx("sound/fail.wav");
+				}
+			}
 		}
-		if (sprayF.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
-			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+		if (sprayF.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 		{
-			buildingTower = Towers::Types::SprayF;
-			isBuilding = true;
-			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/sprayF.png"));
-			clickedTower.setScale({ 3.f,3.f });
-			clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
-			auto a = clickedTower.getColor();
-			clickedTower.setColor({ a.r,a.g, a.b, 150 });
-			Utils::SetOrigin(clickedTower, Origins::BC);
+			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
+			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
+			towerPurchaseGuideText.setFillColor(sf::Color::Black);
+			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
+				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::SprayF).description
+				+ L"\n공격타입 : 공중\n사거리 : 보통  공격력 : " +
+				std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayF).damage) +
+				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayF).price));
+			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+			{
+				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::SprayF).price)
+				{
+					buildingTower = Towers::Types::SprayF;
+					isBuilding = true;
+					clickedTower.setTexture(TEXTURE_MGR.Get("graphics/sprayF.png"));
+					clickedTower.setScale({ 3.f,3.f });
+					clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
+					auto a = clickedTower.getColor();
+					clickedTower.setColor({ a.r,a.g, a.b, 150 });
+					Utils::SetOrigin(clickedTower, Origins::BC);
+					SOUND_MGR.PlaySfx("sound/click2.wav");
+				}
+				else
+				{
+					SOUND_MGR.PlaySfx("sound/fail.wav");
+				}
+			}
 		}
-		if (sprayR.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
-			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+		if (sprayR.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 		{
-			buildingTower = Towers::Types::SprayR;
-			isBuilding = true;
-			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/sprayR.png"));
-			clickedTower.setScale({ 3.f,3.f });
-			clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
-			auto a = clickedTower.getColor();
-			clickedTower.setColor({ a.r,a.g, a.b, 150 });
-			Utils::SetOrigin(clickedTower, Origins::BC);
+			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
+			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
+			towerPurchaseGuideText.setFillColor(sf::Color::Black);
+			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
+				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::SprayR).description
+				+ L"\n공격타입 : 지상\n사거리 : 보통  공격력 : " +
+				std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayR).damage) +
+				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayR).price));
+			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+			{
+				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::SprayR).price)
+				{
+					buildingTower = Towers::Types::SprayR;
+					isBuilding = true;
+					clickedTower.setTexture(TEXTURE_MGR.Get("graphics/sprayR.png"));
+					clickedTower.setScale({ 3.f,3.f });
+					clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
+					auto a = clickedTower.getColor();
+					clickedTower.setColor({ a.r,a.g, a.b, 150 });
+					Utils::SetOrigin(clickedTower, Origins::BC);
+					SOUND_MGR.PlaySfx("sound/click2.wav");
+				}
+				else
+				{
+					SOUND_MGR.PlaySfx("sound/fail.wav");
+				}
+			}
 		}
-		if (MosquitoRepellent.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
-			InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+		if (MosquitoRepellent.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 		{
-			buildingTower = Towers::Types::MosquitoRepellent;
-			isBuilding = true;
-			clickedTower.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent.png"));
-			clickedTower.setScale({ 3.f,3.f });
-			clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
-			auto a = clickedTower.getColor();
-			clickedTower.setColor({ a.r,a.g, a.b, 150 });
-			Utils::SetOrigin(clickedTower, Origins::BC);
+			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
+			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
+			towerPurchaseGuideText.setFillColor(sf::Color::Black);
+			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
+				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).description
+				+ L"\n공격타입 : 전체(범위)\n사거리 : 조금 짧음  공격력 : " +
+				std::to_wstring(TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).damage) +
+				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).price));
+			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+			{
+				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).price)
+				{
+					buildingTower = Towers::Types::MosquitoRepellent;
+					isBuilding = true;
+					clickedTower.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent.png"));
+					clickedTower.setScale({ 3.f,3.f });
+					clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
+					auto a = clickedTower.getColor();
+					clickedTower.setColor({ a.r,a.g, a.b, 150 });
+					Utils::SetOrigin(clickedTower, Origins::BC);
+					SOUND_MGR.PlaySfx("sound/click2.wav");
+				}
+				else
+				{
+					SOUND_MGR.PlaySfx("sound/fail.wav");
+				}
+			}
 		}
 	}
 }
@@ -164,18 +258,22 @@ void UiHud::OnBuilding()
 {
 	clickedTower.setPosition((sf::Vector2f)InputMgr::GetMousePosition());
 	Utils::SetOrigin(clickedTower, Origins::BC);
+	auto currentTowerPrice = TOWER_TABLE->Get(buildingTower).price;
 	if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left) && !isMouseOnUi)
 	{
-		if (VIEW_MGR.GetIsoTileMap().TryBuild())
+		if (GAME_MGR.GetCoin() >= currentTowerPrice && VIEW_MGR.GetIsoTileMap().TryBuild())
 		{
+			GAME_MGR.SpendCoin(currentTowerPrice);
 			auto t = (SceneDev1*)SCENE_MGR.GetCurrentScene();
 			t->BuildTower();
 			isBuilding = false;
+			SOUND_MGR.PlaySfx("sound/built.wav");
 		}
 		else
 		{
 			// 실패 사운드 재생
 			isBuilding = false;
+			SOUND_MGR.PlaySfx("sound/fail.wav");
 		}
 	}
 	if (!escPreventer && (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Right) ||
@@ -183,6 +281,7 @@ void UiHud::OnBuilding()
 	{
 		isBuilding = false;
 		escPreventer = true;
+		SOUND_MGR.PlaySfx("sound/click.mp3");
 	}
 }
 
@@ -193,9 +292,11 @@ bool UiHud::Build()
 
 void UiHud::SetSelectedTower(Towers* tower)
 {
+	/*if(!isTowerSelected)*/
 	selectedTower = tower;	
 	isTowerSelected = true;
 	isTowerDescriptionOpen = true;
+	SOUND_MGR.PlaySfx("sound/click2.wav");
 }
 
 void UiHud::SetNullSelectedTower()
@@ -203,6 +304,7 @@ void UiHud::SetNullSelectedTower()
 	selectedTower = nullptr;
 	isTowerSelected = false;
 	isTowerDescriptionOpen = false;
+	SOUND_MGR.PlaySfx("sound/click.mp3");
 }
 
 void UiHud::OnTowerSelect()
@@ -222,15 +324,18 @@ void UiHud::UpdateTowerDescription()
 	if (InputMgr::GetKeyDown(sf::Keyboard::Q))
 	{
 		towerDescriptionPage--;
+		SOUND_MGR.PlaySfx("sound/click.mp3");
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::E))
 	{
 		towerDescriptionPage++;
+		SOUND_MGR.PlaySfx("sound/click.mp3");
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::Escape))
 	{
 		isTowerDescriptionOpen = false;
 		escPreventer = true;
+		SOUND_MGR.PlaySfx("sound/click.mp3");
 	}
 	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
 
@@ -334,6 +439,17 @@ void UiHud::Reset()
 	buildingMenu.setPosition(rightX, topY + 100.f);
 	Utils::SetOrigin(buildingMenu, Origins::TR);
 
+	towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
+	towerPurchaseGuideBox.setOutlineThickness(10.f);
+	towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
+	towerPurchaseGuideBox.setPosition(rightX, topY + 380.f);
+	towerPurchaseGuideBox.setSize({ 400.f,200.f });
+	Utils::SetOrigin(towerPurchaseGuideBox, Origins::TR);
+
+	towerPurchaseGuideText.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	towerPurchaseGuideText.setCharacterSize(30.f);
+	towerPurchaseGuideText.setFillColor(sf::Color::Black);
+
 	buildBoxCloseButton.setFillColor(sf::Color::Red);
 	buildBoxCloseButton.setRadius(10.f);
 	buildBoxCloseButton.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
@@ -403,6 +519,18 @@ void UiHud::Reset()
 	lifeText.setFillColor(sf::Color::White);
 	lifeText.setPosition(leftX + 80.f, bottomY);
 	Utils::SetOrigin(lifeText, Origins::TL);
+
+	gameoverFadeOut.setFillColor({ 0, 0, 0, 0 });
+	gameoverFadeOut.setPosition(FRAMEWORK.GetWindowSizeF()/2.f);
+	gameoverFadeOut.setSize({1920.f,1080.f });
+	Utils::SetOrigin(gameoverFadeOut, Origins::MC);
+
+	gameoverText.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	gameoverText.setCharacterSize(200.f);
+	gameoverText.setFillColor(sf::Color::White);
+	gameoverText.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
+	gameoverText.setString("Game Over.... \n Thank you for playing");
+	Utils::SetOrigin(gameoverText, Origins::MC);
 }
 
 void UiHud::ResetDebugObjects()
@@ -446,6 +574,28 @@ void UiHud::Update(float dt)
 	lifeText.setString(std::to_string(GAME_MGR.GetLife()));
 	Utils::SetOrigin(lifeText, Origins::TL);
 
+	if (GAME_MGR.GetLife() <= 0)
+	{
+		isGameOver = true;
+	}
+
+
+	if (isGameOver)
+	{
+		if (gameoverFadeOutTimer > 0)
+		{
+			gameoverFadeOutTimer -= dt;
+			gameoverText.setFillColor(sf::Color::Transparent);
+		}
+		else
+		{
+			gameoverFadeOutTimer = Utils::Clamp(gameoverFadeOutTimer, 0.f, 5.f);
+			gameoverText.setFillColor(sf::Color::White);
+		}
+		sf::Uint8 temp = 255/5 * (5.f-gameoverFadeOutTimer);
+		gameoverFadeOut.setFillColor({ 0,0,0,temp });
+		TIME_MGR.SetTimeScale(0.5);
+	}
 	if (isTowerDescriptionOpen)
 	{
 		UpdateTowerDescription();
@@ -528,6 +678,11 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(sprayF);
 		window.draw(sprayR);
 		window.draw(MosquitoRepellent);
+		if (isMouseOnUi && !isBuilding)
+		{
+			window.draw(towerPurchaseGuideBox);
+			window.draw(towerPurchaseGuideText);
+		}
 	}
 	if (isBuilding)
 	{
@@ -548,4 +703,9 @@ void UiHud::Draw(sf::RenderWindow& window)
 	window.draw(coinText);
 	window.draw(lifeSprite);
 	window.draw(lifeText);
+	if (isGameOver)
+	{
+		window.draw(gameoverFadeOut);
+		window.draw(gameoverText);
+	}
 }

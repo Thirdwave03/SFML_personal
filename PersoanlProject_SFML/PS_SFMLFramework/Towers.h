@@ -48,7 +48,7 @@ protected:
 	int price;					//  7
 	int priceOnSell;			//  8
 
-	bool isUpgradable;			//  9
+	int upgradableTowers;		//  9
 
 	AttackTypes attackType;		// 10
 	AttackBonusTypes bonusType;	// 11
@@ -93,6 +93,7 @@ public:
 	int GetTowerDamage() { return damage; }
 	float GetTowerRange() { return range; }
 	int GetTowerPriceOnSell() { return priceOnSell; }
+	int GetPrice() { return price; }
 
 	void Init() override;
 	void Release() override;
