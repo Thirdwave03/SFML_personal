@@ -48,6 +48,11 @@ void Bug::OnArrival()
 	SetActive(false);
 }
 
+bool Bug::GetActive()
+{
+	return active;
+}
+
 void Bug::Init()
 {
 	Reset();

@@ -192,6 +192,10 @@ void Towers::Update(float dt)
 		{
 			target == nullptr;
 		}
+		if (!target->GetActive())
+		{
+			target == nullptr;
+		}
 	}
 	if (target == nullptr)
 	{

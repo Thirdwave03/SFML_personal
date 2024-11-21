@@ -79,6 +79,8 @@ public:
 
 	void OnArrival();
 
+	bool GetActive();
+
 	void Init() override;
 	void Release() override;
 	void Reset() override;
