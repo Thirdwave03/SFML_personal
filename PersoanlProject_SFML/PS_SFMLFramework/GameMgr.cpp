@@ -5,12 +5,14 @@ void GameMgr::Init()
 {
 	Reset();
 	SetWaypointMap();
+	SetStageDataMap();
 }
 
 void GameMgr::Reset()
 {
 	life = 10;
 	coin = 30;
+	currentStage = 0;
 }
 
 void GameMgr::SetWaypointMap()
@@ -26,7 +28,65 @@ void GameMgr::SetWaypointMap()
 	waypointMap.insert({ 8,{2,1} });
 }
 
+void GameMgr::SetStageDataMap()
+{
+	SetStage0();
+	SetStage1();
+}
+
+void GameMgr::SetStage0()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		stageDataMap[0].push_back(0);
+		stageDataMap[0].push_back(1);
+		stageDataMap[0].push_back(2);
+		stageDataMap[0].push_back(3);
+	}
+	stageDataMap[0].push_back(0);
+	stageDataMap[0].push_back(0);
+	stageDataMap[0].push_back(1);
+	stageDataMap[0].push_back(1);
+	stageDataMap[0].push_back(2);
+	stageDataMap[0].push_back(2);
+	stageDataMap[0].push_back(3);
+	stageDataMap[0].push_back(3);
+}
+
+void GameMgr::SetStage1()
+{
+	for (int i = 0; i < 15; i++)
+	{
+		stageDataMap[1].push_back(1);
+	}
+}
+
+void GameMgr::SetStage2()
+{
+
+}
+
+void GameMgr::SetStage3()
+{
+
+}
+
+void GameMgr::SetStage4()
+{
+
+}
+
+void GameMgr::SetStage5()
+{
+
+}
+
 sf::Vector2i GameMgr::GetWaypointMap(int index)
 {	
 	return waypointMap[index];
+}
+
+std::vector<int> GameMgr::GetStageData(int index)
+{
+	return stageDataMap[index];
 }

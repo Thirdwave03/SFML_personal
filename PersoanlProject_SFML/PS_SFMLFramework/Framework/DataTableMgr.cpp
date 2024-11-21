@@ -12,6 +12,7 @@ void DataTableMgr::Init()
 	tables.insert({ DataTable::Types::String, new StringTable() });
 	tables.insert({ DataTable::Types::TileMap, new TileTable() });
 	tables.insert({ DataTable::Types::Tower, new TowerTable() });
+	tables.insert({ DataTable::Types::Bug, new BugTable() });
 
 	for (auto t : tables)
 	{

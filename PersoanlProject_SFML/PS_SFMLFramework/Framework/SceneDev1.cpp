@@ -101,6 +101,27 @@ void SceneDev1::Update(float dt)
     {
         SpawnBugTest(1);
     }
+    if (InputMgr::GetKeyDown(sf::Keyboard::Space))
+    {
+        SetWaveSpawnQueue();
+    }
+
+    if (isSpawning)
+    {
+        spawnTimer += dt;
+        if (spawnTimer > spawnDuration)
+        {
+            spawnTimer = 0;
+            SpawnBug(spawnQueue.front());
+            spawnQueue.pop();
+            spawnCnt--;
+        }
+    }
+    if (spawnCnt <= 0)
+    {
+        isSpawning = false;
+    }
+
 
     auto it = bugs.begin();
     while (it != bugs.end())
@@ -198,5 +219,27 @@ void SceneDev1::SpawnBugTest(int cnt, int num, float duration)
     bug->SetPosition({ VIEW_MGR.NonModifiedIsoWorldPos({ 1,6 }).x, VIEW_MGR.NonModifiedIsoWorldPos({ 1,6 }).y});
     bug->SetDestinationTile({ 6,16 });
     AddGo(bug);
+}
+
+void SceneDev1::SpawnBug(int bugTypeId)
+{
+    Bug* bug = bugPool.Take();
+    bugs.push_back(bug);
+
+    bug->SetType(bugTypeId);
+    bug->SetPosition({ VIEW_MGR.NonModifiedIsoWorldPos({ 1,6 }).x, VIEW_MGR.NonModifiedIsoWorldPos({ 1,6 }).y });
+    bug->SetDestinationTile({ 6,16 });
+    AddGo(bug);
+}
+
+void SceneDev1::SetWaveSpawnQueue()
+{
+    spawnTimer = 0;
+    spawnCnt = GAME_MGR.GetStageData(GAME_MGR.GetCurrentStage()).size();
+    isSpawning = true;
+    for (int i = 0; i < spawnCnt; i++)
+    {
+        spawnQueue.push(GAME_MGR.GetStageData(GAME_MGR.GetCurrentStage())[i]);
+    }
 }
 

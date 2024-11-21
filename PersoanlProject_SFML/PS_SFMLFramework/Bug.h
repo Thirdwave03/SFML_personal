@@ -3,7 +3,7 @@
 class Bug : public GameObject
 {	
 public:
-	enum class BugType
+	enum class BugTypes
 	{
 		Cockroach,
 		Spider,
@@ -18,21 +18,26 @@ public:
 	};
 	
 protected:
-	int maxHp;
-	int hp;
-	float speed;
-	float speedMultiplier = 1.f;
-	int gold;
+	Bug::BugTypes bugType;					//  0
+	std::string textureId;					//  1
+	std::string bugName;					//  2
 
-	sf::Sprite body;	
+	int maxHp;								//  3
+	int hp;
+	float speed;							//  4
+	float speedMultiplier;
+	int damage;								//  5
+	int gold;								//  6
+	float animationDuration;				//  7
+	Bug::BugLayerType layerType;			//  8
+
+	std::wstring description;				//  9
+	std::wstring description2;				// 10
+	std::wstring description3;				// 11
+
+	sf::Sprite bugSprite;
 	sf::IntRect animationTarget;
 
-	std::string textureId = "graphics/Cockroach_Sheet.png";
-
-	BugType bugType;
-	BugLayerType layerType;
-
-	float animationDuration;
 	float accumTime;
 	bool animationFlagH = false;
 	bool animationFlagV = false;
@@ -41,10 +46,8 @@ protected:
 	sf::Vector2i destinationTile;
 	sf::RectangleShape hpBar;
 	sf::RectangleShape maxhpBar;
-	
-	std::string description;
 
-	float timerSlow;
+	float timerSlow = 0;
 	bool isSlowed;
 
 	float timerStun;
@@ -65,7 +68,7 @@ public:
 	void OnHit();
 	void OnDie();
 
-	BugType GetBugType() { return bugType; }
+	BugTypes GetBugType() { return bugType; }
 	BugLayerType GetBugLayerType() { return layerType; }
 
 	void SetPosition(const sf::Vector2f& pos) override;
@@ -79,6 +82,8 @@ public:
 
 	void OnDamage(int damage);
 	int GetHp() { return hp; }
+
+	void SetType(int bugTypeId);
 
 	void OnArrival();
 

@@ -27,6 +27,7 @@
 #include "StringTable.h"
 #include "TileTable.h"
 #include "TowerTable.h"
+#include "BugTable.h"
 #include "DataTableMgr.h"
 #include "Framework.h"
 #include "InputMgr.h"

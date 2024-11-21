@@ -1,4 +1,5 @@
 #pragma once
+
 class GameMgr : public Singleton<GameMgr>
 {
 	friend Singleton<GameMgr>;
@@ -11,8 +12,12 @@ protected:
 	
 	int life;
 	int coin;
+	int currentStage;
+
+	bool isSpawning;
 
 	std::unordered_map<int, sf::Vector2i> waypointMap;
+	std::unordered_map<int, std::vector<int>> stageDataMap;	
 
 public:
 	int GetLife() { return life; }
@@ -25,8 +30,19 @@ public:
 	void Reset();
 	
 	void SetWaypointMap();
+	void SetStageDataMap();
+
+	int GetCurrentStage() { return currentStage; }
+
+	void SetStage0(); // for debug
+	void SetStage1();
+	void SetStage2();
+	void SetStage3();
+	void SetStage4();
+	void SetStage5();
 	sf::Vector2i GetWaypointMap(int index);
 	int GetWaypointCnt() { return waypointMap.size(); }
+	std::vector<int> GetStageData(int index);
 };
 
 #define GAME_MGR (GameMgr::Instance())

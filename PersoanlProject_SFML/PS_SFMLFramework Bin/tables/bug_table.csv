@@ -1,5 +1,5 @@
-﻿ID,TEXTUREID,name,damage,attack duration,range,isMultitarget,price,onSell,isUpgradable,"AttackTypes(0: default, 1: GroundOnly, 2: AirOnly)",AttackBonusTypes,Description,dcrtn2,dcrtn3
-0,graphics/electricRocquet.png,electricRocquet,15,1,1,0,30,20,1,0,4,전기파리채,공격속도 : 빠름,지상 및 공중 단일공격
-1,graphics/SprayF.png,SprayF,15,2.4,2,0,15,10,1,1,2,에프킬라,공격속도 : 느림,공중 단일공격
-2,graphics/SprayR.png,SprayR,10,1.6,2,0,15,10,1,2,1,레이드,공격속도 : 보통,지상 단일공격
-3,graphics/mosquitoRepellent.png,MosquitoRepellent,5,4,1.5,1,30,20,1,0,2,모기향,공격속도 : 매우느림,지상 및 공중 범위공격
+﻿ID,TEXTUREID,bugName,maxHp,speed(f),damage,gold,animationduration(f),layerType(0: ground 1: air),description,description2,description3
+0,graphics/Cockroach_sheet.png,Cockroach,30,300,1,2,0.2,0,바선생,빠르다,TO BE UPDATED
+1,graphics/Spider_sheet.png,Spider,40,150,1,1,0.3,0,거미,단단하다,TO BE UPDATED
+2,graphics/Fly_sheet.png,Fly,20,250,1,2,0.2,1,파리,난다,TO BE UPDATED
+3,graphics/Mosquito_sheet.png,Mosquito,10,200,1,1,0.2,1,모기,많다,TO BE UPDATED

@@ -22,6 +22,13 @@ protected:
 
 	Towers* selectedTower;
 
+	std::queue<int> spawnQueue;
+
+	bool isSpawning;
+	int spawnCnt;
+	const float spawnDuration = 0.6;
+	float spawnTimer;
+
 public:
 	SceneDev1();
 	~SceneDev1() = default;
@@ -45,5 +52,9 @@ public:
 	void BuildTower();
 
 	void SpawnBugTest(int cnt, int num = 1, float duration = 1.f);
+	void SpawnBug(int bugTypeId);
+
+	void SetWaveSpawnQueue();
+	
 };
 
