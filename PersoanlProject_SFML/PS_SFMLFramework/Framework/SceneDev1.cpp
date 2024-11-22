@@ -10,7 +10,6 @@ SceneDev1::SceneDev1() : Scene(SceneIds::Dev1)
 
 void SceneDev1::Init()
 {
-    auto text = AddGo(new TextGo("fonts/DS-DIGI.ttf", "Scene Name"));
     isoTile = AddGo(new IsometricTileMap());
 
     
@@ -27,10 +26,6 @@ void SceneDev1::Init()
     VIEW_MGR.SetViewBoundary(isoTile->GetTileRect(), isoTile->GetIsoTileSize(), isoTile->GetScale());
     VIEW_MGR.AllignIsoTile(*isoTile);
     //isoTile->SetIsoTileTest();
-
-    text->sortingLayer = SortingLayers::UI;
-    text->Set(25, sf::Color::White);
-    text->SetString("Dev 1");
 
     uiHud = AddGo(new UiHud("UiHud"));
     uiHud->Reset();
@@ -103,10 +98,18 @@ void SceneDev1::Update(float dt)
     }
     if (InputMgr::GetKeyDown(sf::Keyboard::Space))
     {
-        if (GAME_MGR.GetCurrentStage() <= 5)
+        if (GAME_MGR.GetCurrentStage() <= GAME_MGR.GetTotalStage())
             SetWaveSpawnQueue();
         else
             GAME_MGR.SetLife(0);
+    }
+    if (InputMgr::GetKeyDown(sf::Keyboard::F5))
+    {
+        SOUND_MGR.PlayBgm("sound/mandarin-calmly-music-2965.mp3");
+    }
+    if (InputMgr::GetKeyDown(sf::Keyboard::F6))
+    {
+        SOUND_MGR.StopBgm();
     }
 
     if (isSpawning)
@@ -237,6 +240,8 @@ void SceneDev1::SpawnBug(int bugTypeId)
 
 void SceneDev1::SetWaveSpawnQueue()
 {
+    if (isSpawning)
+        return;
     spawnTimer = 0;
     spawnCnt = GAME_MGR.GetStageData(GAME_MGR.GetCurrentStage()).size();
     isSpawning = true;

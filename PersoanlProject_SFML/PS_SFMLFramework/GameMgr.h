@@ -45,6 +45,7 @@ public:
 	sf::Vector2i GetWaypointMap(int index);
 	int GetWaypointCnt() { return waypointMap.size(); }
 	std::vector<int> GetStageData(int index);
+	int GetTotalStage() { return stageDataMap.size(); }
 };
 
 #define GAME_MGR (GameMgr::Instance())

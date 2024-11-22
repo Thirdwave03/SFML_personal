@@ -44,6 +44,7 @@ void Bug::SetOrigin(const sf::Vector2f& newOrigin)
 
 void Bug::OnDamage(int damage)
 {
+	onHitTimer = 0.5f;
 	hp -= damage;
 	hp = Utils::Clamp(hp, 0, maxHp);
 	if (hp == 0)
@@ -53,7 +54,11 @@ void Bug::OnDamage(int damage)
 void Bug::OnDie()
 {
 	isDead = true;
-	GAME_MGR.AddCoin(gold);
+	if (!isGoldRewarded)
+	{
+		GAME_MGR.AddCoin(gold);
+		isGoldRewarded = true;
+	}
 }
 
 void Bug::SetType(int bugTypeId)
@@ -103,12 +108,12 @@ void Bug::Reset()
 {
 	SetActive(true);
 	isDead = false;
+	isGoldRewarded = false;
 	auto a = bugSprite.getColor();
 	bugSprite.setColor({ a.r,a.g,a.b,255 });
 
 	speedMultiplier = 1.f;
 	hp = maxHp;
-	gold = 2;
 	deadTimer = 3.f;
 
 	accumTime = 0;
@@ -133,12 +138,22 @@ void Bug::Reset()
 
 void Bug::Update(float dt)
 {
+	bugSprite.setColor({ 255,255,255,255 });
+	if (onHitTimer > 0)
+	{
+		onHitTimer -= dt;
+		if ((int)(onHitTimer * 6) % 2 == 0)
+		{
+			bugSprite.setColor({ 255,0,0,255 });			
+		}
+	}
+	UpdateHealthBar(dt);
+
 	if (!isDead)
 	{
 		UpdateAnimation(dt);
 		UpdateDirection(dt);
 		SetPosition(position + direction * speed * speedMultiplier * dt);
-		UpdateHealthBar(dt);
 	}	
 	
 	if (isDead)

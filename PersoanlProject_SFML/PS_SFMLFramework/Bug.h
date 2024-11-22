@@ -53,19 +53,18 @@ protected:
 	float timerStun;
 	bool isStunned;
 
+	bool isGoldRewarded = false;
 	bool isDead = false;
 	float deadTimer = 3.f;
 
-	float tempTimer = 5.f;
+	float onHitTimer = 0.f;
+	
 
 	int waypointIndex = 1;
 
 public:
 	Bug(const std::string& name = "Bug");
 	~Bug() = default;
-
-	void SetDestination(sf::Vector2i tile);
-	void OnHit();
 
 	BugTypes GetBugType() { return bugType; }
 	BugLayerType GetBugLayerType() { return layerType; }

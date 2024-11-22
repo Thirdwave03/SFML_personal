@@ -120,6 +120,7 @@ void Towers::SetPosition(const sf::Vector2f& pos)
 	position = pos;
 	towerSprite.setPosition(position);
 	rangeCircle.setPosition(position);
+	sprayStraw.setPosition(position.x, position.y - 130.f);
 }
 
 void Towers::SetRotation(float angle)
@@ -174,6 +175,9 @@ void Towers::Reset()
 	SetOrigin(originPreset);
 	SetScale({ 3.f,3.f });
 	name = "Tower";
+	sprayStraw.setTexture(TEXTURE_MGR.Get("graphics/SprayStraw.png"));
+	sprayStraw.setScale({ 3.f,3.f });
+	Utils::SetOrigin(sprayStraw, Origins::ML);
 	SetRangeCircle();
 }
 
@@ -206,10 +210,15 @@ void Towers::Update(float dt)
 			target = nullptr;
 		}
 	}
-
+	
 	if (target == nullptr)
 	{
 		SetTarget();
+	}
+
+	if ((int)towerType == 1 || (int)towerType == 2)
+	{
+		UpdateSprayStraw(dt);
 	}
 
 	if (attackDuration - attackTimer < 0.5)
@@ -224,6 +233,14 @@ void Towers::Update(float dt)
 	}
 }
 
+void Towers::UpdateSprayStraw(float dt)
+{
+	if (target != nullptr)
+	{
+		sprayStraw.setRotation(Utils::Angle(Utils::GetNormal(target->GetPosition() - sprayStraw.getPosition())));
+	}	
+}
+
 void Towers::Draw(sf::RenderWindow& window)
 {
 	if (isSelected)
@@ -231,6 +248,11 @@ void Towers::Draw(sf::RenderWindow& window)
 		window.draw(rangeCircle);
 	}
 	window.draw(towerSprite);
+	if ((int)towerType == 1 || (int)towerType == 2)
+	{
+		if(target!=nullptr)
+		window.draw(sprayStraw);
+	}
 }
 
 void Towers::Fire_ElectricRocquet()
@@ -241,11 +263,13 @@ void Towers::Fire_ElectricRocquet()
 void Towers::Fire_SprayF()
 {
 	target->OnDamage(damage);
+	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
 void Towers::Fire_SprayR()
 {
 	target->OnDamage(damage);
+	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
 void Towers::Fire_MosquitoRepellent()
@@ -253,6 +277,7 @@ void Towers::Fire_MosquitoRepellent()
 	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
 	for (auto& bug : bList)
 	{
+		if(bug->GetBugLayerType() == Bug::BugLayerType::Air)
 		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
 		{
 			bug->OnDamage(damage);

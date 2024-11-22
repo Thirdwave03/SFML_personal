@@ -26,7 +26,7 @@ protected:
 	std::unordered_map<int, std::vector<int>> tileTypeMap;
 
 	bool isSelectable = false;
-	bool isDebugMode = true;
+	bool isDebugMode = false;
 
 	bool isMouseOnUi = false;
 

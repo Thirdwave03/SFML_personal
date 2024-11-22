@@ -104,7 +104,6 @@ void Scene::Draw(sf::RenderWindow& window)
 	/*TOWERBUILD_MGR*/
 
 	window.setView(VIEW_MGR.GetUiView());
-	window.draw(TIME_MGR.GetFrameText());
 	while (!drawUiQueue.empty())
 	{
 		GameObject* obj = drawUiQueue.top();

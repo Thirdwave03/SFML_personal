@@ -4,7 +4,7 @@
 void TimeMgr::Init()
 {
     frameText.setFont(FONT_MGR.Get("fonts/DS-DIGI.ttf"));
-    frameText.setPosition({ 50.f,50.f });
+    frameText.setPosition({ 0.f,0.f });
 }
 
 void TimeMgr::FrameCheck()
@@ -23,7 +23,7 @@ void TimeMgr::FrameDisplay(bool active)
 {
     if (active)
     {
-        frameText.setPosition({ 50.f,50.f });
+        frameText.setPosition({ 0.f,0.f });
         frameText.setFillColor(sf::Color::White);
     }
     else

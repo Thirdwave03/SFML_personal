@@ -36,6 +36,11 @@ protected:
 	sf::Sprite lifeSprite;
 	sf::Text lifeText;
 
+	sf::Sprite stageInfoButton;
+	sf::RectangleShape stageInfoBox;
+	sf::CircleShape stageInfoBoxCloseButton;
+	sf::Text stageInfo;
+
 	bool isGameOver = false;
 	sf::RectangleShape gameoverFadeOut;
 	float gameoverFadeOutTimer = 4;

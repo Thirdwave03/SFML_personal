@@ -131,13 +131,16 @@ void UiHud::UiMouseCheck()
 			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
 			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
 			towerPurchaseGuideText.setFillColor(sf::Color::Black);
-			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
-				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setPosition({
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().x + 25.f,
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().y + 
+				towerPurchaseGuideBox.getGlobalBounds().getSize().y / 2.f
+				});
 			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).description
-				+ L"\n공격타입 : 전체\n사거리 : 짧음  공격력 : " + 
-				std::to_wstring(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).damage) + 
+				+ L"\n공격타입 : " + TOWER_TABLE->Get(Towers::Types::ElectricRocquet).description3 + L"\n사거리 : 짧음       공격력 : " +
+				std::to_wstring(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).damage) +
 				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::ElectricRocquet).price));
-			Utils::SetOrigin(towerPurchaseGuideText, Origins::MC);
+			Utils::SetOrigin(towerPurchaseGuideText, Origins::ML);
 			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 			{
 				if(GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::ElectricRocquet).price)
@@ -163,12 +166,16 @@ void UiHud::UiMouseCheck()
 			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
 			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
 			towerPurchaseGuideText.setFillColor(sf::Color::Black);
-			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
-				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setPosition({
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().x + 25.f,
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().y +
+				towerPurchaseGuideBox.getGlobalBounds().getSize().y / 2.f
+				});
 			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::SprayF).description
-				+ L"\n공격타입 : 공중\n사거리 : 보통  공격력 : " +
+				+ L"\n공격타입 : " + TOWER_TABLE->Get(Towers::Types::SprayF).description3 + L"\n사거리 : 보통       공격력 : " +
 				std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayF).damage) +
 				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayF).price));
+			Utils::SetOrigin(towerPurchaseGuideText, Origins::ML);
 			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 			{
 				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::SprayF).price)
@@ -194,12 +201,16 @@ void UiHud::UiMouseCheck()
 			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
 			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
 			towerPurchaseGuideText.setFillColor(sf::Color::Black);
-			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
-				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setPosition({
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().x + 25.f,
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().y +
+				towerPurchaseGuideBox.getGlobalBounds().getSize().y / 2.f
+				});
 			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::SprayR).description
-				+ L"\n공격타입 : 지상\n사거리 : 보통  공격력 : " +
+				+ L"\n공격타입 : " + TOWER_TABLE->Get(Towers::Types::SprayR).description3 + L"\n사거리 : 보통       공격력 : " +
 				std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayR).damage) +
 				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::SprayR).price));
+			Utils::SetOrigin(towerPurchaseGuideText, Origins::ML);
 			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 			{
 				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::SprayR).price)
@@ -225,12 +236,16 @@ void UiHud::UiMouseCheck()
 			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
 			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
 			towerPurchaseGuideText.setFillColor(sf::Color::Black);
-			towerPurchaseGuideText.setPosition(towerPurchaseGuideBox.getGlobalBounds().getPosition() +
-				towerPurchaseGuideBox.getGlobalBounds().getSize() / 2.f);
+			towerPurchaseGuideText.setPosition({
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().x + 25.f,
+				towerPurchaseGuideBox.getGlobalBounds().getPosition().y +
+				towerPurchaseGuideBox.getGlobalBounds().getSize().y / 2.f
+				});
 			towerPurchaseGuideText.setString(TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).description
-				+ L"\n공격타입 : 전체(범위)\n사거리 : 조금 짧음  공격력 : " +
+				+ L"\n공격타입 : " + TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).description3 + L"\n사거리 : 조금 짧음  공격력 : " +
 				std::to_wstring(TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).damage) +
 				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).price));
+			Utils::SetOrigin(towerPurchaseGuideText, Origins::ML);
 			if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 			{
 				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get(Towers::Types::MosquitoRepellent).price)
@@ -421,6 +436,7 @@ void UiHud::Release()
 void UiHud::Reset()
 {
 	ResetDebugObjects();
+	isDebugMode = false;
 	
 	float textSize = 50.f;
 	auto uiViewSize = VIEW_MGR.GetUiView().getSize();
@@ -531,6 +547,28 @@ void UiHud::Reset()
 	gameoverText.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
 	gameoverText.setString("Game Over.... \n Thank you for playing");
 	Utils::SetOrigin(gameoverText, Origins::MC);
+
+	stageInfoButton.setTexture(TEXTURE_MGR.Get("graphics/Info.png"));
+	stageInfoButton.setPosition(rightX - 84.f, topY);
+	Utils::SetOrigin(stageInfoButton, Origins::TR);
+
+	stageInfoBox.setFillColor({ 255, 255, 255, 180 });
+	stageInfoBox.setOutlineThickness(10.f);
+	stageInfoBox.setOutlineColor(sf::Color::White);
+	stageInfoBox.setPosition(rightX, topY + 380.f);
+	stageInfoBox.setSize({ 400.f,200.f });
+	Utils::SetOrigin(stageInfoBox, Origins::TR);
+
+	stageInfoBoxCloseButton.setFillColor(sf::Color::Red);
+	stageInfoBoxCloseButton.setRadius(10.f);
+	stageInfoBoxCloseButton.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
+	Utils::SetOrigin(stageInfoBoxCloseButton, Origins::MC);
+
+	stageInfo.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	stageInfo.setCharacterSize(textSize);
+	stageInfo.setFillColor(sf::Color::White);
+	stageInfo.setPosition(leftX + 80.f, topY);
+	Utils::SetOrigin(stageInfo, Origins::TL);
 }
 
 void UiHud::ResetDebugObjects()
@@ -540,25 +578,25 @@ void UiHud::ResetDebugObjects()
 	mCoordsWorld.setFont(font);
 	mCoordsWorld.setCharacterSize(textSize);
 	mCoordsWorld.setFillColor(sf::Color::White);
-	mCoordsWorld.setPosition({ 50.f, 50.f });
+	mCoordsWorld.setPosition({ 50.f, 100.f });
 	Utils::SetOrigin(mCoordsWorld, Origins::TL);
 
 	mCoordsScreen.setFont(font);
 	mCoordsScreen.setCharacterSize(textSize);
 	mCoordsScreen.setFillColor(sf::Color::Yellow);
-	mCoordsScreen.setPosition({ 50.f, 200.f });
+	mCoordsScreen.setPosition({ 50.f, 250.f });
 	Utils::SetOrigin(mCoordsScreen, Origins::TL);
 
 	mCoordsIso.setFont(font);
 	mCoordsIso.setCharacterSize(textSize);
 	mCoordsIso.setFillColor(sf::Color::Red);
-	mCoordsIso.setPosition({ 50.f, 300.f });
+	mCoordsIso.setPosition({ 50.f, 350.f });
 	Utils::SetOrigin(mCoordsIso, Origins::TL);
 
 	worldFloat.setFont(font);
 	worldFloat.setCharacterSize(textSize);
 	worldFloat.setFillColor(sf::Color::Magenta);
-	worldFloat.setPosition({ 50.f, 450.f });
+	worldFloat.setPosition({ 50.f, 500.f });
 	Utils::SetOrigin(worldFloat, Origins::TL);
 }
 
@@ -592,7 +630,7 @@ void UiHud::Update(float dt)
 			gameoverFadeOutTimer = Utils::Clamp(gameoverFadeOutTimer, 0.f, 5.f);
 			gameoverText.setFillColor(sf::Color::White);
 		}
-		sf::Uint8 temp = 255/5 * (5.f-gameoverFadeOutTimer);
+		sf::Uint8 temp = 255/4 * (4.f-gameoverFadeOutTimer);
 		gameoverFadeOut.setFillColor({ 0,0,0,temp });
 		TIME_MGR.SetTimeScale(0.5);
 	}
@@ -663,13 +701,6 @@ void UiHud::UpdateDebugObjects(float dt)
 
 void UiHud::Draw(sf::RenderWindow& window)
 {
-	if (isDebugMode)
-	{
-		window.draw(mCoordsWorld);
-		window.draw(mCoordsScreen);
-		window.draw(mCoordsIso);
-		window.draw(worldFloat);
-	}
 	if (isBuildBoxOpen)
 	{
 		window.draw(buildingMenu);
@@ -699,6 +730,7 @@ void UiHud::Draw(sf::RenderWindow& window)
 	}
 
 	window.draw(buildButton);
+	window.draw(stageInfoButton);
 	window.draw(coinSprite);
 	window.draw(coinText);
 	window.draw(lifeSprite);
@@ -707,5 +739,13 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(gameoverFadeOut);
 		window.draw(gameoverText);
+	}
+	if (isDebugMode)
+	{
+		window.draw(mCoordsWorld);
+		window.draw(mCoordsScreen);
+		window.draw(mCoordsIso);
+		window.draw(worldFloat);
+		window.draw(TIME_MGR.GetFrameText());
 	}
 }

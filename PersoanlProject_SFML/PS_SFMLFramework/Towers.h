@@ -33,6 +33,7 @@ public:
 
 protected:
 	sf::Sprite towerSprite;
+	sf::Sprite sprayStraw;
 	
 	Types towerType;			//  0 
 	std::string textureId;		//  1
@@ -99,7 +100,9 @@ public:
 	void Release() override;
 	void Reset() override;
 	void Update(float dt) override;
+	void UpdateSprayStraw(float dt);
 	void Draw(sf::RenderWindow& window) override;
+
 
 	void Fire_ElectricRocquet();
 	void Fire_SprayF();
