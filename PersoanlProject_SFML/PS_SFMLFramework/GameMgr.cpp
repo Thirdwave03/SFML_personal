@@ -66,7 +66,7 @@ void GameMgr::SetStage0()
 
 void GameMgr::SetStage1()
 {
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 20; i++) // 0 20 0 0 
 	{
 		stageDataMap[1].push_back(1);
 	}
@@ -74,7 +74,7 @@ void GameMgr::SetStage1()
 
 void GameMgr::SetStage2()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) // 4 16 0 0
 	{
 		stageDataMap[2].push_back(1);
 		stageDataMap[2].push_back(1);
@@ -86,7 +86,7 @@ void GameMgr::SetStage2()
 
 void GameMgr::SetStage3()
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++) // 5 10 0 5
 	{
 		stageDataMap[3].push_back(1);
 		stageDataMap[3].push_back(1);
@@ -97,7 +97,7 @@ void GameMgr::SetStage3()
 
 void GameMgr::SetStage4()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) // 10 5 5 5
 	{
 		stageDataMap[4].push_back(0);
 		stageDataMap[4].push_back(1);
@@ -109,13 +109,13 @@ void GameMgr::SetStage4()
 
 void GameMgr::SetStage5()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) // 0 0 20 0
 	{
-		stageDataMap[4].push_back(2);
-		stageDataMap[4].push_back(2);
-		stageDataMap[4].push_back(2);
-		stageDataMap[4].push_back(2);
-		stageDataMap[4].push_back(2);
+		stageDataMap[5].push_back(2);
+		stageDataMap[5].push_back(2);
+		stageDataMap[5].push_back(2);
+		stageDataMap[5].push_back(2);
+		stageDataMap[5].push_back(2);
 	}
 }
 

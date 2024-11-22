@@ -39,7 +39,12 @@ protected:
 	sf::Sprite stageInfoButton;
 	sf::RectangleShape stageInfoBox;
 	sf::CircleShape stageInfoBoxCloseButton;
-	sf::Text stageInfo;
+	sf::Text stageInfoText;
+
+	sf::Sprite cockroach;
+	sf::Sprite spider;
+	sf::Sprite fly;
+	sf::Sprite mosquito;
 
 	bool isGameOver = false;
 	sf::RectangleShape gameoverFadeOut;
@@ -58,6 +63,7 @@ protected:
 
 	bool isDebugMode = true;
 	bool isBuildBoxOpen = false;
+	bool isInfoBoxOpen = false;
 	bool isMouseOnUi = false;
 	bool isBuilding = false;
 	bool isTowerSelected = false;
@@ -86,6 +92,7 @@ public:
 	bool IfMouseOnUi() { return isMouseOnUi; }
 	bool IfBuilding() { return isBuilding; }
 	void UiMouseCheck();
+	void UiMouseCheckOnClick();
 	
 	void OnBuilding();
 	bool Build();

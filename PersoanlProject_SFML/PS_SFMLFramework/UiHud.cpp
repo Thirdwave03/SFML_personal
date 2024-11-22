@@ -62,51 +62,16 @@ int UiHud::GetBoolStatus()
 
 void UiHud::UiMouseCheck()
 {
+	isMouseOnUi = false;
 	if (buildButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
-		buildingMenu.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
+		buildingMenu.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
+		stageInfoButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
+		stageInfoBox.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())
+		)
 	{
 		isMouseOnUi = true;
-		/*if (buildingMenu.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
-		{
-			towerPurchaseGuideBox.setFillColor({ 255, 255, 255, 180 });
-			towerPurchaseGuideBox.setOutlineColor(sf::Color::White);
-			towerPurchaseGuideText.setFillColor(sf::Color::Black);
-		}
-		else
-		{
-			towerPurchaseGuideBox.setFillColor(sf::Color::Transparent);
-			towerPurchaseGuideBox.setOutlineColor(sf::Color::Transparent);
-			towerPurchaseGuideText.setFillColor(sf::Color::Transparent);
-		}*/
 	}
-	else
-	{
-		isMouseOnUi = false;
-	}
-	if (buildButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()) &&
-		InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
-	{
-		buildingMenu.setSize({600.f,250.f});
-		Utils::SetOrigin(buildingMenu, Origins::TR);
-		auto a = buildingMenu.getGlobalBounds();
-		buildBoxCloseButton.setPosition({ a.left + a.width - 15.f, a.top + 5.f });
-		
-		electricRocquet.setPosition({ a.left + 80, a.top + a.height - 100 });
-		electricRocquet.setScale(buildingIconScale);
-		Utils::SetOrigin(electricRocquet, Origins::BC);
-		sprayF.setPosition({ a.left + 200, a.top + a.height - 100 });
-		sprayF.setScale(buildingIconScale);
-		Utils::SetOrigin(sprayF, Origins::BC);
-		sprayR.setPosition({ a.left + 320, a.top + a.height - 100 });
-		sprayR.setScale(buildingIconScale);
-		Utils::SetOrigin(sprayR, Origins::BC);
-		MosquitoRepellent.setPosition({ a.left + 440, a.top + a.height - 100 });
-		MosquitoRepellent.setScale(buildingIconScale);
-		Utils::SetOrigin(MosquitoRepellent, Origins::BC);
-
-		isBuildBoxOpen = true;
-		SOUND_MGR.PlaySfx("sound/click2.wav");
-	}
+	
 	if (isBuildBoxOpen && !isBuilding)
 	{		
 		if (InputMgr::GetKeyDown(sf::Keyboard::Key::Escape) && !escPreventer)
@@ -267,6 +232,120 @@ void UiHud::UiMouseCheck()
 			}
 		}
 	}
+	if (isInfoBoxOpen)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Key::Escape) && !escPreventer)
+		{
+			isInfoBoxOpen = false;
+			escPreventer = true;
+			SOUND_MGR.PlaySfx("sound/click.mp3");
+		}
+
+		if (Utils::Distance(stageInfoBoxCloseButton.getPosition(), (sf::Vector2f)InputMgr::GetMousePosition()) < stageInfoBoxCloseButton.getRadius()
+			&& InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+		{
+			isInfoBoxOpen = false;
+			SOUND_MGR.PlaySfx("sound/click.mp3");
+		}
+
+		int idxCnt[4] = { 0 };
+		for (auto it : GAME_MGR.GetStageData(GAME_MGR.GetCurrentStage()))
+		{
+			if (it == 0)
+				idxCnt[0]++;
+			if (it == 1)
+				idxCnt[1]++;
+			if (it == 2)
+				idxCnt[2]++;
+			if (it == 3)
+				idxCnt[3]++;
+		}
+		
+		int bugSpriteDrawOrderIndex = 0;
+		
+		std::string str[_countof(idxCnt)] = { "0" };
+		cockroach.setColor(sf::Color::Transparent);
+		spider.setColor(sf::Color::Transparent);
+		fly.setColor(sf::Color::Transparent);
+		mosquito.setColor(sf::Color::Transparent);
+		for (int i = 0; i < _countof(idxCnt); i++)
+		{
+			str[i] = std::to_string(idxCnt[i]) + "      ";
+			if (idxCnt[i] < 10)
+				str[i] = " " + std::to_string(idxCnt[i]) + "      ";
+			if (idxCnt[i] == 0)
+			{
+				str[i] = "";
+				continue;
+			}
+			switch (i)
+			{
+			case 0:
+				cockroach.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				cockroach.setColor(sf::Color::White);
+				break;
+			case 1:
+				spider.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				spider.setColor(sf::Color::White);
+				break;
+			case 2:
+				fly.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				fly.setColor(sf::Color::White);
+				break;
+			case 3:
+				mosquito.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				mosquito.setColor(sf::Color::White);
+				break;
+			}
+			bugSpriteDrawOrderIndex++;
+		}
+		
+		stageInfoText.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f{10.f,10.f});
+		stageInfoText.setString("   " + str[0] + str[1] + str[2] + str[3]);
+		Utils::SetOrigin(stageInfoText, Origins::TL);
+	}
+
+}
+
+void UiHud::UiMouseCheckOnClick()
+{
+	if (buildButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
+	{
+		buildingMenu.setSize({ 600.f,250.f });
+		Utils::SetOrigin(buildingMenu, Origins::TR);
+		auto a = buildingMenu.getGlobalBounds();
+		buildBoxCloseButton.setPosition({ a.left + a.width - 15.f, a.top + 5.f });
+
+		electricRocquet.setPosition({ a.left + 80, a.top + a.height - 100 });
+		electricRocquet.setScale(buildingIconScale);
+		Utils::SetOrigin(electricRocquet, Origins::BC);
+		sprayF.setPosition({ a.left + 200, a.top + a.height - 100 });
+		sprayF.setScale(buildingIconScale);
+		Utils::SetOrigin(sprayF, Origins::BC);
+		sprayR.setPosition({ a.left + 320, a.top + a.height - 100 });
+		sprayR.setScale(buildingIconScale);
+		Utils::SetOrigin(sprayR, Origins::BC);
+		MosquitoRepellent.setPosition({ a.left + 440, a.top + a.height - 100 });
+		MosquitoRepellent.setScale(buildingIconScale);
+		Utils::SetOrigin(MosquitoRepellent, Origins::BC);
+
+		isBuildBoxOpen = true;
+		isInfoBoxOpen = false;
+		SOUND_MGR.PlaySfx("sound/click2.wav");
+	}
+	if (stageInfoButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
+	{
+		stageInfoBox.setSize({ 600.f,250.f });
+		Utils::SetOrigin(stageInfoBox, Origins::TR);
+		auto a = stageInfoBox.getGlobalBounds();
+		stageInfoBoxCloseButton.setPosition({ a.left + a.width - 15.f, a.top + 5.f });
+
+		isInfoBoxOpen = true;
+		isBuildBoxOpen = false;
+		SOUND_MGR.PlaySfx("sound/click2.wav");
+	}
+
+
 }
 
 void UiHud::OnBuilding()
@@ -511,6 +590,22 @@ void UiHud::Reset()
 	MosquitoRepellent.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent.png"));
 	MosquitoRepellent.setScale(buildingIconScale);
 	Utils::SetOrigin(MosquitoRepellent, Origins::BC);
+
+	cockroach.setTexture(TEXTURE_MGR.Get("graphics/CockroachDown1.png"));
+	cockroach.setScale(buildingIconScale);
+	Utils::SetOrigin(cockroach, Origins::TL);
+
+	spider.setTexture(TEXTURE_MGR.Get("graphics/SpiderDown1.png"));
+	spider.setScale(buildingIconScale);
+	Utils::SetOrigin(spider, Origins::TL);
+
+	fly.setTexture(TEXTURE_MGR.Get("graphics/FlyDown1.png"));
+	fly.setScale(buildingIconScale);
+	Utils::SetOrigin(fly, Origins::TL);
+
+	mosquito.setTexture(TEXTURE_MGR.Get("graphics/MosquitoDown1.png"));
+	mosquito.setScale(buildingIconScale);
+	Utils::SetOrigin(mosquito, Origins::TL);
 	
 	coinSprite.setTexture(TEXTURE_MGR.Get("graphics/Coin.png"));
 	coinSprite.setPosition(leftX, topY);
@@ -555,7 +650,7 @@ void UiHud::Reset()
 	stageInfoBox.setFillColor({ 255, 255, 255, 180 });
 	stageInfoBox.setOutlineThickness(10.f);
 	stageInfoBox.setOutlineColor(sf::Color::White);
-	stageInfoBox.setPosition(rightX, topY + 380.f);
+	stageInfoBox.setPosition(rightX, topY + 100.f);
 	stageInfoBox.setSize({ 400.f,200.f });
 	Utils::SetOrigin(stageInfoBox, Origins::TR);
 
@@ -564,11 +659,11 @@ void UiHud::Reset()
 	stageInfoBoxCloseButton.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
 	Utils::SetOrigin(stageInfoBoxCloseButton, Origins::MC);
 
-	stageInfo.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
-	stageInfo.setCharacterSize(textSize);
-	stageInfo.setFillColor(sf::Color::White);
-	stageInfo.setPosition(leftX + 80.f, topY);
-	Utils::SetOrigin(stageInfo, Origins::TL);
+	stageInfoText.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	stageInfoText.setCharacterSize(textSize);
+	stageInfoText.setFillColor(sf::Color::Black);
+	stageInfoText.setPosition(leftX + 80.f, topY);
+	Utils::SetOrigin(stageInfoText, Origins::TL);
 }
 
 void UiHud::ResetDebugObjects()
@@ -602,6 +697,11 @@ void UiHud::ResetDebugObjects()
 
 void UiHud::Update(float dt)
 {
+	if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
+	{
+		UiMouseCheckOnClick();
+	}
+
 	escPreventer = false;
 	if (isDebugMode)
 		UpdateDebugObjects(dt);
@@ -714,6 +814,16 @@ void UiHud::Draw(sf::RenderWindow& window)
 			window.draw(towerPurchaseGuideBox);
 			window.draw(towerPurchaseGuideText);
 		}
+	}
+	if (isInfoBoxOpen)
+	{
+		window.draw(stageInfoBox);
+		window.draw(stageInfoBoxCloseButton);
+		window.draw(stageInfoText);
+		window.draw(cockroach);
+		window.draw(spider);
+		window.draw(fly);
+		window.draw(mosquito);		
 	}
 	if (isBuilding)
 	{

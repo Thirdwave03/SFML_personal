@@ -206,7 +206,7 @@ bool IsometricTileMap::TryBuild()
 
 	if(tileTypeMap[index.y][index.x] < 3) // GameMgr 골드 조건 추가
 	{
-		tileTypeMap[index.y][index.x] = 14;
+		tileTypeMap[index.y][index.x] += 12;
 		return true;
 	}
 	else
