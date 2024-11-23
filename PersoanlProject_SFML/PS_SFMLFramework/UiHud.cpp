@@ -441,14 +441,19 @@ void UiHud::UpdateTowerDescription()
 	}
 	else if (towerDescriptionPage == 1)
 	{
+		std::wstring blank = L"";
+		if (selectedTower->GetTowerPriceOnSell() < 100);
+		{
+			blank = L" ";
+		}
 		towerDescription.setString(L"공격력 : " + std::to_wstring(selectedTower->GetTowerDamage()));
 		towerDescription2.setString(L"사거리 : " + converter.from_bytes(to_string_with_precision(selectedTower->GetTowerRange(),1)));
-		towerDescription3.setString(L"판매가 : " + std::to_wstring(selectedTower->GetTowerPriceOnSell()));
+		towerDescription3.setString(L"판매가 : " + blank + std::to_wstring(selectedTower->GetTowerPriceOnSell()) + L"         키로 타워 판매");
+		delKeySprite.setColor(sf::Color::White);
 	}
 	else if (towerDescriptionPage == 2)
 	{
-		delKeySprite.setColor(sf::Color::White);
-		towerDescription.setString(L"        키로 타워 판매");
+		towerDescription.setString(L"키로 타워 판매");
 		towerDescription2.setString("!TO BE UPDATED!");
 		towerDescription3.setString("!TO BE UPDATED!");
 	}
@@ -497,7 +502,7 @@ void UiHud::UpdateTowerDescription()
 	towerDescription3.setPosition({ a.left + 15.f, a.top + 135.f });
 	Utils::SetOrigin(towerDescription3, Origins::TL);
 
-	delKeySprite.setPosition(a.left + 15.f, a.top + 5.f);
+	delKeySprite.setPosition(a.left + 175.f, a.top + 130.f);
 	Utils::SetOrigin(delKeySprite, Origins::TL);
 
 	textPageIndicator.setString("<<Q              " +std::to_string(towerDescriptionPage+1) + "/" + std::to_string(maxPage + 1) +  "              E>>");
@@ -505,7 +510,7 @@ void UiHud::UpdateTowerDescription()
 	Utils::SetOrigin(textPageIndicator, Origins::BC);
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::Delete)||
-		(InputMgr::GetMouseButtonDown(sf::Mouse::Left)&&delKeySprite.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())))
+		(InputMgr::GetMouseButtonDown(sf::Mouse::Left)&&delKeySprite.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())&& towerDescriptionPage==1))
 	{
 		GAME_MGR.AddCoin(selectedTower->GetTowerPriceOnSell());
 		dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->OnTowerSold(selectedTower->GetIsoTileCoords());
@@ -591,7 +596,7 @@ void UiHud::Reset()
 	textPageIndicator.setFillColor(sf::Color::Black);
 
 	delKeySprite.setTexture(TEXTURE_MGR.Get("graphics/Del.png"));
-	delKeySprite.setScale(buildingIconScale);
+	delKeySprite.setScale(1.5f,1.5f);
 	Utils::SetOrigin(delKeySprite, Origins::TL);
 
 	electricRocquet.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));

@@ -2,4 +2,4 @@
 0,graphics/electricRocquet.png,Electric Rocquet,8,1.2,1,0,15,10,1,0,4,전기파리채,공격속도 : 빠름,지상 및 공중 단일공격
 1,graphics/SprayF.png,F-Killer,15,2.4,2,0,15,10,1,2,2,에프킬라,공격속도 : 느림,공중 단일공격
 2,graphics/SprayR.png,Raid,10,1.6,2,0,15,10,1,1,1,레이드,공격속도 : 보통,지상 단일공격
-3,graphics/mosquitoRepellent.png,Mosquito Repellent,15,4,1.5,1,30,100,1,2,2,모기향,공격속도 : 매우느림,공중 범위공격
+3,graphics/mosquitoRepellent.png,Mosquito Repellent,15,4,1.5,1,30,20,1,2,2,모기향,공격속도 : 매우느림,공중 범위공격

@@ -47,7 +47,20 @@ void GameMgr::SetStageDataMap()
 
 void GameMgr::SetUpgradableInfoMap()
 {
-
+	upgradableInfoMap[0].push_back(4);
+	upgradableInfoMap[0].push_back(5);
+	upgradableInfoMap[1].push_back(9);
+	upgradableInfoMap[2].push_back(12);
+	upgradableInfoMap[3].push_back(14);
+	upgradableInfoMap[4].push_back(6);
+	upgradableInfoMap[4].push_back(7);
+	upgradableInfoMap[5].push_back(8);
+	upgradableInfoMap[9].push_back(10);
+	upgradableInfoMap[10].push_back(11);
+	upgradableInfoMap[12].push_back(13);
+	upgradableInfoMap[14].push_back(15);
+	upgradableInfoMap[15].push_back(16);
+	upgradableInfoMap[16].push_back(17);
 }
 
 void GameMgr::SetStage0()

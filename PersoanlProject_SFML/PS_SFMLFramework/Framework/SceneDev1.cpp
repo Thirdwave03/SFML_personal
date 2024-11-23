@@ -201,12 +201,15 @@ void SceneDev1::OnClickLeft()
         {
             if (obj->GetName() == "Tower")
             {
-                Towers* towerObj = dynamic_cast<Towers*>(obj);
-                if (VIEW_MGR.GetIsoMousePos() == towerObj->GetIsoTileCoords())
+                if (obj->IsActive())
                 {
-                    selectedTower = towerObj;
-                    selectedTower->SetSelected(true);
-                    uiHud->SetSelectedTower(towerObj);
+                    Towers* towerObj = dynamic_cast<Towers*>(obj);
+                    if (VIEW_MGR.GetIsoMousePos() == towerObj->GetIsoTileCoords())
+                    {
+                        selectedTower = towerObj;
+                        selectedTower->SetSelected(true);
+                        uiHud->SetSelectedTower(towerObj);
+                    }
                 }
             }
         }        
