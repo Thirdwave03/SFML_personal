@@ -33,6 +33,9 @@ protected:
 	sf::Sprite upgradableSprite1;
 	sf::Sprite upgradableSprite2;
 	std::vector<std::string> towerTextureIds;
+	
+	sf::RectangleShape upgradableGuideBox;
+	sf::Text upgradableGuideText;
 
 	sf::Sprite coinSprite;
 	sf::Text coinText;

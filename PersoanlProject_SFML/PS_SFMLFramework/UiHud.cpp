@@ -464,7 +464,6 @@ void UiHud::UpdateTowerDescription()
 	{
 		upgradableSprite1.setTexture(TEXTURE_MGR.Get(towerTextureIds[upgradables[0]]));
 		upgradableSprite1.setColor(sf::Color::White);
-		blank = L"";
 		if (selectedTowerUpgradables == 2)
 		{
 			upgradableSprite2.setTexture(TEXTURE_MGR.Get(towerTextureIds[upgradables[1]]));
@@ -474,9 +473,87 @@ void UiHud::UpdateTowerDescription()
 		towerDescription2.setString(L"");
 		towerDescription3.setString(L"");
 
+		upgradableGuideBox.setFillColor(sf::Color::Transparent);
+		upgradableGuideBox.setOutlineColor(sf::Color::Transparent);
+		upgradableGuideText.setFillColor(sf::Color::Transparent);
+
 		if (upgradableSprite1.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 		{
-
+			std::wstring wstr1;
+			std::wstring wstr2;
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).attackType == 0)
+			{
+				wstr1 = L"지상 및 공중 ";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).attackType == 1)
+			{
+				wstr1 = L"지상 ";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).attackType == 2)
+			{
+				wstr1 = L"공중 ";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).isAreaAttack == 0)
+			{
+				wstr2 = L"단일 공격";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).isAreaAttack == 0)
+			{
+				wstr2 = L"범위 공격";
+			}
+			upgradableGuideBox.setFillColor({ 255, 255, 255, 180 });
+			upgradableGuideBox.setOutlineColor(sf::Color::White);
+			upgradableGuideText.setFillColor(sf::Color::Black);
+			upgradableGuideText.setPosition({
+				upgradableGuideBox.getGlobalBounds().getPosition().x + 25.f,
+				upgradableGuideBox.getGlobalBounds().getPosition().y +
+				upgradableGuideBox.getGlobalBounds().getSize().y / 2.f
+				});
+			upgradableGuideText.setString(TOWER_TABLE->Get((Towers::Types)upgradables[0]).description
+				+ L"\n공격타입 : " + wstr1 + wstr2 + L"\n사거리 : " + 
+				converter.from_bytes(to_string_with_precision(TOWER_TABLE->Get((Towers::Types)upgradables[0]).range, 1)) + 
+				L"공격력 : " +	std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[0]).damage) +
+				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[0]).price));
+			Utils::SetOrigin(upgradableGuideText, Origins::ML);
+		}
+		if (selectedTowerUpgradables == 2 && upgradableSprite2.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
+		{
+			std::wstring wstr1;
+			std::wstring wstr2;
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).attackType == 0)
+			{
+				wstr1 = L"지상 및 공중 ";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).attackType == 1)
+			{
+				wstr1 = L"지상 ";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).attackType == 2)
+			{
+				wstr1 = L"공중 ";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).isAreaAttack == 0)
+			{
+				wstr2 = L"단일 공격";
+			}
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).isAreaAttack == 0)
+			{
+				wstr2 = L"범위 공격";
+			}
+			upgradableGuideBox.setFillColor({ 255, 255, 255, 180 });
+			upgradableGuideBox.setOutlineColor(sf::Color::White);
+			upgradableGuideText.setFillColor(sf::Color::Black);
+			upgradableGuideText.setPosition({
+				upgradableGuideBox.getGlobalBounds().getPosition().x + 25.f,
+				upgradableGuideBox.getGlobalBounds().getPosition().y +
+				upgradableGuideBox.getGlobalBounds().getSize().y / 2.f
+				});
+			upgradableGuideText.setString(TOWER_TABLE->Get((Towers::Types)upgradables[1]).description
+				+ L"\n공격타입 : " + wstr1 + wstr2 + L"\n사거리 : " +
+				converter.from_bytes(to_string_with_precision(TOWER_TABLE->Get((Towers::Types)upgradables[1]).range, 1)) +
+				L"공격력 : " + std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[1]).damage) +
+				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[1]).price));
+			Utils::SetOrigin(upgradableGuideText, Origins::ML);
 		}
 	}
 			
@@ -633,6 +710,16 @@ void UiHud::Reset()
 	upgradableSprite2.setScale(buildingIconScale);
 	Utils::SetOrigin(upgradableSprite2, Origins::BC);
 
+	upgradableGuideBox.setFillColor(sf::Color::Transparent);
+	upgradableGuideBox.setOutlineThickness(10.f);
+	upgradableGuideBox.setOutlineColor(sf::Color::Transparent);
+	upgradableGuideBox.setPosition(rightX, topY + 380.f);
+	upgradableGuideBox.setSize({ 400.f,200.f });
+	Utils::SetOrigin(upgradableGuideBox, Origins::TR);
+
+	upgradableGuideText.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	upgradableGuideText.setCharacterSize(30.f);
+	upgradableGuideText.setFillColor(sf::Color::Transparent);
 
 	electricRocquet.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
 	electricRocquet.setScale(buildingIconScale);
@@ -905,8 +992,12 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(towerDescription3);
 		window.draw(textPageIndicator);
 		window.draw(delKeySprite);
-		if(selectedTowerUpgradables > 0)
+		if (selectedTowerUpgradables > 0)
+		{
 			window.draw(upgradableSprite1);
+			window.draw(upgradableGuideBox);
+			window.draw(upgradableGuideText);
+		}
 		if (selectedTowerUpgradables > 1)
 			window.draw(upgradableSprite2);
 		
