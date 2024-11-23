@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Bug.h"
+#include "SceneDev1.h"
 
 Bug::Bug(const std::string& name)
 	: GameObject(name)
@@ -59,6 +60,7 @@ void Bug::OnDie()
 		GAME_MGR.AddCoin(gold);
 		isGoldRewarded = true;
 	}
+	dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->CallBugDieEffect({ position.x, position.y - 20.f });
 }
 
 void Bug::SetType(int bugTypeId)

@@ -3,6 +3,7 @@
 #include "UiHud.h"
 #include "Towers.h"
 #include "Bug.h"
+#include "BugDieEffect.h"
 
 SceneDev1::SceneDev1() : Scene(SceneIds::Dev1)
 {
@@ -60,6 +61,12 @@ void SceneDev1::Exit()
         bugPool.Return(bug);
     }
     bugs.clear();
+
+    for (auto bugDieEffect : bugDieEffects)
+    {
+        RemoveGo(bugDieEffect);
+        bugDieEffectPool.Return(bugDieEffect);
+    }
 
     Scene::Exit();
 }
@@ -134,18 +141,33 @@ void SceneDev1::Update(float dt)
     }
 
 
-    auto it = bugs.begin();
-    while (it != bugs.end())
+    auto bug = bugs.begin();
+    while (bug != bugs.end())
     {
-        if (!(*it)->IsActive())
+        if (!(*bug)->IsActive())
         {
-            bugPool.Return(*it);
-            RemoveGo(*it);
-            it = bugs.erase(it);
+            bugPool.Return(*bug);
+            RemoveGo(*bug);
+            bug = bugs.erase(bug);
         }
         else
         {
-            it++;
+            bug++;
+        }
+    }
+
+    auto bugDieEffect = bugDieEffects.begin();
+    while (bugDieEffect != bugDieEffects.end())
+    {
+        if (!(*bugDieEffect)->IsActive())
+        {
+            bugDieEffectPool.Return(*bugDieEffect);
+            RemoveGo(*bugDieEffect);
+            bugDieEffect = bugDieEffects.erase(bugDieEffect);
+        }
+        else
+        {
+            bugDieEffect++;
         }
     }
 }
@@ -255,5 +277,15 @@ void SceneDev1::SetWaveSpawnQueue()
         spawnQueue.push(GAME_MGR.GetStageData(GAME_MGR.GetCurrentStage())[i]);
     }
     GAME_MGR.SetCurrentStage(GAME_MGR.GetCurrentStage() + 1);
+}
+
+void SceneDev1::CallBugDieEffect(sf::Vector2f pos)
+{
+    BugDieEffect* effect = bugDieEffectPool.Take();
+    bugDieEffects.push_back(effect);
+
+    effect->Reset();
+    effect->SetPosition(pos);
+    AddGo(effect);
 }
 

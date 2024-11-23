@@ -6,6 +6,7 @@ class UiHud;
 class TowerBuildMgr;
 class Towers;
 class Bug;
+class BugDieEffect;
 
 class SceneDev1 : public Scene
 {
@@ -19,6 +20,9 @@ protected:
 
 	std::list<Bug*> bugs;
 	ObjectPool<Bug> bugPool;
+
+	std::list<BugDieEffect*> bugDieEffects;
+	ObjectPool<BugDieEffect> bugDieEffectPool;
 
 	Towers* selectedTower;
 
@@ -55,6 +59,8 @@ public:
 	void SpawnBug(int bugTypeId);
 
 	void SetWaveSpawnQueue();
+
+	void CallBugDieEffect(sf::Vector2f pos);
 	
 };
 

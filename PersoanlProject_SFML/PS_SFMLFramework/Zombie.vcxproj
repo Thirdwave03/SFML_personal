@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bug.cpp" />
+    <ClCompile Include="BugDieEffect.cpp" />
     <ClCompile Include="BugTable.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
@@ -185,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bug.h" />
+    <ClInclude Include="BugDieEffect.h" />
     <ClInclude Include="BugTable.h" />
     <ClInclude Include="EffectMgr.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
