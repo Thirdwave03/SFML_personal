@@ -54,6 +54,7 @@ public:
 	const std::list<Bug*>& GetBugList() { return bugs; }
 	
 	void BuildTower();
+	void OnTowerSold(sf::Vector2i isoCoord);
 
 	void SpawnBugTest(int cnt, int num = 1, float duration = 1.f);
 	void SpawnBug(int bugTypeId);

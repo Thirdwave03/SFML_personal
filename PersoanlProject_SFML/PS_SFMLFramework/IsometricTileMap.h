@@ -49,6 +49,7 @@ public:
 
 	void IndicateSelectedTile();
 	bool TryBuild();
+	void OnTowerSold(sf::Vector2i isoCoord);
 
 	void SetLoadedTileType(std::unordered_map<int, std::vector<int>>& tileMap);
 	bool GetSelectable() { return isSelectable; }

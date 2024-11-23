@@ -215,6 +215,20 @@ bool IsometricTileMap::TryBuild()
 	}	
 }
 
+void IsometricTileMap::OnTowerSold(sf::Vector2i isoCoord)
+{
+	if (isoCoord.y % 2 != 0)
+	{
+		isoCoord.x += 1;
+	}
+	isoCoord.y += 1;
+
+	isoCoord.x = Utils::Clamp(isoCoord.x, 0, tileCnt.x - 1);
+	isoCoord.y = Utils::Clamp(isoCoord.y, 0, tileCnt.y - 1);
+
+	tileTypeMap[isoCoord.y][isoCoord.x] -= 12;
+}
+
 void IsometricTileMap::SetLoadedTileType(std::unordered_map<int, std::vector<int>>& tileMap)
 {
 	this->tileTypeMap = tileMap;

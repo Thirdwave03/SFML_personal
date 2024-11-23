@@ -243,6 +243,12 @@ void SceneDev1::BuildTower()
     AddGo(tower);
 }
 
+void SceneDev1::OnTowerSold(sf::Vector2i isoCoord)
+{
+    isoTile->OnTowerSold(isoCoord);
+    selectedTower = nullptr;
+}
+
 void SceneDev1::SpawnBugTest(int cnt, int num, float duration)
 {
     Bug* bug = bugPool.Take();

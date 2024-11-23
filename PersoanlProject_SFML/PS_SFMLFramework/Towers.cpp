@@ -17,6 +17,7 @@ void Towers::Set()
 
 void Towers::OnSell()
 {
+	SetActive(false);
 }
 
 void Towers::OnConsturction()
@@ -181,6 +182,7 @@ void Towers::Release()
 
 void Towers::Reset()
 {
+	SetActive(true);
 	sortingOrder = 0;
 	sortingLayer = SortingLayers::Foreground;
 	originPreset = Origins::BC;

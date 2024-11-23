@@ -427,10 +427,12 @@ void UiHud::UpdateTowerDescription()
 		escPreventer = true;
 		SOUND_MGR.PlaySfx("sound/click.mp3");
 	}
-	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
 
+	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
+	
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 
+	delKeySprite.setColor(sf::Color::Transparent);
 	if (towerDescriptionPage == 0)
 	{
 		towerDescription.setString(selectedTower->GetTowerDescription());
@@ -445,7 +447,8 @@ void UiHud::UpdateTowerDescription()
 	}
 	else if (towerDescriptionPage == 2)
 	{
-		towerDescription.setString("!TO BE UPDATED!");
+		delKeySprite.setColor(sf::Color::White);
+		towerDescription.setString(L"        키로 타워 판매");
 		towerDescription2.setString("!TO BE UPDATED!");
 		towerDescription3.setString("!TO BE UPDATED!");
 	}
@@ -494,9 +497,23 @@ void UiHud::UpdateTowerDescription()
 	towerDescription3.setPosition({ a.left + 15.f, a.top + 135.f });
 	Utils::SetOrigin(towerDescription3, Origins::TL);
 
+	delKeySprite.setPosition(a.left + 15.f, a.top + 5.f);
+	Utils::SetOrigin(delKeySprite, Origins::TL);
+
 	textPageIndicator.setString("<<Q              " +std::to_string(towerDescriptionPage+1) + "/" + std::to_string(maxPage + 1) +  "              E>>");
 	textPageIndicator.setPosition({ a.left + a.width / 2.f,a.top + a.height - 20.f });
 	Utils::SetOrigin(textPageIndicator, Origins::BC);
+
+	if (InputMgr::GetKeyDown(sf::Keyboard::Delete)||
+		(InputMgr::GetMouseButtonDown(sf::Mouse::Left)&&delKeySprite.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())))
+	{
+		GAME_MGR.AddCoin(selectedTower->GetTowerPriceOnSell());
+		dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->OnTowerSold(selectedTower->GetIsoTileCoords());
+		selectedTower->OnSell();
+		selectedTower = nullptr;
+		isTowerDescriptionOpen = false;
+		return;
+	}
 }
 
 void UiHud::Init()
@@ -572,6 +589,10 @@ void UiHud::Reset()
 	textPageIndicator.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
 	textPageIndicator.setCharacterSize(30.f);
 	textPageIndicator.setFillColor(sf::Color::Black);
+
+	delKeySprite.setTexture(TEXTURE_MGR.Get("graphics/Del.png"));
+	delKeySprite.setScale(buildingIconScale);
+	Utils::SetOrigin(delKeySprite, Origins::TL);
 
 	electricRocquet.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
 	electricRocquet.setScale(buildingIconScale);
@@ -731,7 +752,7 @@ void UiHud::Update(float dt)
 		sf::Uint8 temp = 255/4 * (4.f-gameoverFadeOutTimer);
 		gameoverFadeOut.setFillColor({ 0,0,0,temp });
 		TIME_MGR.SetTimeScale(0.5);
-	}
+	}	
 	if (isTowerDescriptionOpen)
 	{
 		UpdateTowerDescription();
@@ -835,6 +856,7 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(towerDescription2);
 		window.draw(towerDescription3);
 		window.draw(textPageIndicator);
+		window.draw(delKeySprite);
 	}
 
 	window.draw(buildButton);

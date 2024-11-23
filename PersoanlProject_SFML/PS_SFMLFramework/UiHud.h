@@ -29,6 +29,7 @@ protected:
 	sf::Text towerDescription2;
 	sf::Text towerDescription3;
 	sf::Text textPageIndicator;
+	sf::Sprite delKeySprite;
 
 	sf::Sprite coinSprite;
 	sf::Text coinText;
