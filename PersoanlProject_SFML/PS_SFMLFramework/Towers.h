@@ -9,10 +9,22 @@ public:
 	enum class Types
 	{
 		None = -1,
-		ElectricRocquet,
-		SprayF,
-		SprayR,
-		MosquitoRepellent,
+		ElectricRocquet,				//  0
+		SprayF,							//  1
+		SprayR,							//  2
+		MosquitoRepellent,				//  3
+		ElectricRocquetS,				//  4
+		UVRepellent,					//  5
+		ElectricRocquetU,				//  6
+		Lightning,						//  7
+		TeslaCoil,						//  8
+		SprayFS,						//  9
+		SprayFreeze,					// 10
+		Ice,							// 11
+		SprayTorch,						// 12
+		Fire,							// 13
+		HomeMat,						// 14
+		HomeMatS,						// 15
 	};
 
 	enum class AttackTypes
@@ -100,6 +112,9 @@ public:
 	int GetTowerPriceOnSell() { return priceOnSell; }
 	int GetPrice() { return price; }
 	float GetTowerAttackDuration() { return attackDuration; }
+	int GetTowerUpgradables() { return upgradableTowers; }
+	Types GetTowerType() { return towerType; }
+	std::string GetTextureId() { return textureId; }
 
 	void Init() override;
 	void Release() override;
@@ -113,7 +128,7 @@ public:
 
 
 	void Fire_ElectricRocquet();
-	void Fire_SprayF();
+	void Fire_Spray();
 	void Fire_SprayR();
 	void Fire_MosquitoRepellent();
 

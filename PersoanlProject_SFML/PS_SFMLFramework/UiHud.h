@@ -30,6 +30,9 @@ protected:
 	sf::Text towerDescription3;
 	sf::Text textPageIndicator;
 	sf::Sprite delKeySprite;
+	sf::Sprite upgradableSprite1;
+	sf::Sprite upgradableSprite2;
+	std::vector<std::string> towerTextureIds;
 
 	sf::Sprite coinSprite;
 	sf::Text coinText;
@@ -71,7 +74,8 @@ protected:
 	bool isTowerDescriptionOpen = false;
 
 	int towerDescriptionPage = 0;
-	const int maxPage = 2; // 1 less number of actual pages
+	int maxPage = 2; // 1 less number of actual pages
+	int selectedTowerUpgradables = 0;
 
 	bool escPreventer = false;
 
@@ -109,6 +113,7 @@ public:
 	void Init() override;
 	void Release() override;
 	void Reset() override;
+	void SetTowerTextureIds();
 	void ResetDebugObjects();
 	void Update(float dt) override;
 	void FixedUpdate(float dt) override;

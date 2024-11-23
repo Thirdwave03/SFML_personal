@@ -59,10 +59,10 @@ void Towers::Fire()
 		Fire_ElectricRocquet();
 		break;
 	case 1:
-		Fire_SprayF();
+		Fire_Spray();
 		break;
 	case 2:
-		Fire_SprayR();
+		Fire_Spray();
 		break;
 	case 3:
 		Fire_MosquitoRepellent();
@@ -144,8 +144,7 @@ void Towers::SetRotation(float angle)
 void Towers::SetScale(const sf::Vector2f& scale)
 {
 	this->scale = scale;
-	towerSprite.setScale(scale);
-	
+	towerSprite.setScale(scale);	
 }
 
 void Towers::SetRangeCircle()
@@ -362,7 +361,7 @@ void Towers::Fire_ElectricRocquet()
 	SOUND_MGR.PlaySfx("sound/elec.mp3");
 }
 
-void Towers::Fire_SprayF()
+void Towers::Fire_Spray()
 {
 	target->OnDamage(damage);
 	SprayEffect();

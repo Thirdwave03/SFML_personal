@@ -13,6 +13,7 @@ void GameMgr::Init()
 	Reset();
 	SetWaypointMap();
 	SetStageDataMap();
+	SetUpgradableInfoMap();
 }
 
 void GameMgr::Reset()
@@ -59,8 +60,8 @@ void GameMgr::SetUpgradableInfoMap()
 	upgradableInfoMap[10].push_back(11);
 	upgradableInfoMap[12].push_back(13);
 	upgradableInfoMap[14].push_back(15);
-	upgradableInfoMap[15].push_back(16);
-	upgradableInfoMap[16].push_back(17);
+	//upgradableInfoMap[15].push_back(16);
+	//upgradableInfoMap[16].push_back(17);
 }
 
 void GameMgr::SetStage0()
@@ -145,4 +146,9 @@ sf::Vector2i GameMgr::GetWaypointMap(int index)
 std::vector<int> GameMgr::GetStageData(int index)
 {
 	return stageDataMap[index];
+}
+
+std::vector<int> GameMgr::GetUpgradableInfo(int index)
+{
+	return upgradableInfoMap[index];
 }

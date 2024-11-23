@@ -428,11 +428,21 @@ void UiHud::UpdateTowerDescription()
 		SOUND_MGR.PlaySfx("sound/click.mp3");
 	}
 
-	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
-	
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	selectedTowerUpgradables = selectedTower->GetTowerUpgradables();
+	maxPage = 2;
+	if (selectedTowerUpgradables == 0)
+		maxPage = 1;
 
+	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
+
+	std::wstring blank = L"";
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	std::vector<int> upgradables = GAME_MGR.GetUpgradableInfo((int)selectedTower->GetTowerType());
+	
 	delKeySprite.setColor(sf::Color::Transparent);
+	upgradableSprite1.setColor(sf::Color::Transparent);
+	upgradableSprite2.setColor(sf::Color::Transparent);
+
 	if (towerDescriptionPage == 0)
 	{
 		towerDescription.setString(selectedTower->GetTowerDescription());
@@ -441,7 +451,6 @@ void UiHud::UpdateTowerDescription()
 	}
 	else if (towerDescriptionPage == 1)
 	{
-		std::wstring blank = L"";
 		if (selectedTower->GetTowerPriceOnSell() < 100);
 		{
 			blank = L" ";
@@ -453,9 +462,22 @@ void UiHud::UpdateTowerDescription()
 	}
 	else if (towerDescriptionPage == 2)
 	{
-		towerDescription.setString(L"키로 타워 판매");
-		towerDescription2.setString("!TO BE UPDATED!");
-		towerDescription3.setString("!TO BE UPDATED!");
+		upgradableSprite1.setTexture(TEXTURE_MGR.Get(towerTextureIds[upgradables[0]]));
+		upgradableSprite1.setColor(sf::Color::White);
+		blank = L"";
+		if (selectedTowerUpgradables == 2)
+		{
+			upgradableSprite2.setTexture(TEXTURE_MGR.Get(towerTextureIds[upgradables[1]]));
+			upgradableSprite2.setColor(sf::Color::White);
+		}
+		towerDescription.setString(L"업그레이드 가능 타워");
+		towerDescription2.setString(L"");
+		towerDescription3.setString(L"");
+
+		if (upgradableSprite1.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
+		{
+
+		}
 	}
 			
 	auto towerScreenPos = VIEW_MGR.WorldToScreen(VIEW_MGR.NonModifiedIsoWorldPos(selectedTower->GetIsoTileCoords()));
@@ -505,6 +527,12 @@ void UiHud::UpdateTowerDescription()
 	delKeySprite.setPosition(a.left + 175.f, a.top + 130.f);
 	Utils::SetOrigin(delKeySprite, Origins::TL);
 
+	upgradableSprite1.setPosition(a.left + 40.f, a.top + 50.f);
+	Utils::SetOrigin(delKeySprite, Origins::TC);
+
+	upgradableSprite2.setPosition(a.left + 200.f, a.top + 50.f);
+	Utils::SetOrigin(delKeySprite, Origins::TC);
+
 	textPageIndicator.setString("<<Q              " +std::to_string(towerDescriptionPage+1) + "/" + std::to_string(maxPage + 1) +  "              E>>");
 	textPageIndicator.setPosition({ a.left + a.width / 2.f,a.top + a.height - 20.f });
 	Utils::SetOrigin(textPageIndicator, Origins::BC);
@@ -534,6 +562,7 @@ void UiHud::Release()
 
 void UiHud::Reset()
 {
+	SetTowerTextureIds();
 	ResetDebugObjects();
 	isDebugMode = false;
 	
@@ -598,6 +627,12 @@ void UiHud::Reset()
 	delKeySprite.setTexture(TEXTURE_MGR.Get("graphics/Del.png"));
 	delKeySprite.setScale(1.5f,1.5f);
 	Utils::SetOrigin(delKeySprite, Origins::TL);
+
+	upgradableSprite1.setScale(buildingIconScale);
+	Utils::SetOrigin(upgradableSprite1, Origins::BC);
+	upgradableSprite2.setScale(buildingIconScale);
+	Utils::SetOrigin(upgradableSprite2, Origins::BC);
+
 
 	electricRocquet.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet.png"));
 	electricRocquet.setScale(buildingIconScale);
@@ -688,6 +723,14 @@ void UiHud::Reset()
 	stageInfoText.setFillColor(sf::Color::Black);
 	stageInfoText.setPosition(leftX + 80.f, topY);
 	Utils::SetOrigin(stageInfoText, Origins::TL);
+}
+
+void UiHud::SetTowerTextureIds()
+{
+	for (int i = 0; i < 16; i++)
+	{
+		towerTextureIds.push_back(TOWER_TABLE->Get((Towers::Types)i).textureId);
+	}
 }
 
 void UiHud::ResetDebugObjects()
@@ -862,6 +905,11 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(towerDescription3);
 		window.draw(textPageIndicator);
 		window.draw(delKeySprite);
+		if(selectedTowerUpgradables > 0)
+			window.draw(upgradableSprite1);
+		if (selectedTowerUpgradables > 1)
+			window.draw(upgradableSprite2);
+		
 	}
 
 	window.draw(buildButton);

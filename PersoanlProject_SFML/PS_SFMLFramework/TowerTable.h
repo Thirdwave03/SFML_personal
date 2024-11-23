@@ -16,7 +16,7 @@ struct DataTower
 	int price;								//  7
 	int priceOnSell;						//  8
 
-	int upgradableTowers;						//  9
+	int upgradableTowers;					//  9
 
 	Towers::AttackTypes attackType;			// 10
 	Towers::AttackBonusTypes bonusType;		// 11

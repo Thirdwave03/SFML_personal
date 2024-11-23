@@ -48,6 +48,7 @@ public:
 	int GetWaypointCnt() { return waypointMap.size(); }
 	std::vector<int> GetStageData(int index);
 	int GetTotalStage() { return stageDataMap.size(); }
+	std::vector<int> GetUpgradableInfo(int index);
 };
 
 #define GAME_MGR (GameMgr::Instance())
