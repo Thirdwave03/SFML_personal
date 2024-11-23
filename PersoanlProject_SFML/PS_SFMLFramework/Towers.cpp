@@ -121,6 +121,19 @@ void Towers::SetPosition(const sf::Vector2f& pos)
 	towerSprite.setPosition(position);
 	rangeCircle.setPosition(position);
 	sprayStraw.setPosition(position.x, position.y - 130.f);
+	switch (towerType)
+	{
+	case Types::ElectricRocquet:
+		elecRocquetEffect.setPosition(position);
+		break;
+	case Types::SprayF:
+	case Types::SprayR:
+		sprayStraw.setPosition(position.x, position.y - 130.f);
+		break;
+	case Types::MosquitoRepellent:
+
+		break;
+	}
 }
 
 void Towers::SetRotation(float angle)
@@ -175,15 +188,41 @@ void Towers::Reset()
 	SetOrigin(originPreset);
 	SetScale({ 3.f,3.f });
 	name = "Tower";
-	sprayStraw.setTexture(TEXTURE_MGR.Get("graphics/SprayStraw.png"));
-	sprayStraw.setScale({ 3.f,3.f });
 	Utils::SetOrigin(sprayStraw, Origins::ML);
 	SetRangeCircle();
+
+	switch (towerType)
+	{
+	case Types::ElectricRocquet:
+		elecRocquetEffect.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet_effect.png"));
+		elecRocquetEffect.setScale(3.f, 3.f);
+		elecRocquetEffect.setPosition(position);
+		elecRocquetEffect.setOrigin(origin);
+		electricEffectOnEnemy.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet_effect_on_Enemy.png"));
+		electricEffectOnEnemy.setScale(2.5f, 2.5f);
+		Utils::SetOrigin5SQOutBound(electricEffectOnEnemy, Origin5SQ::o24);
+		break;
+	case Types::SprayF:
+	case Types::SprayR:
+		fireEffects.setPrimitiveType(sf::PrimitiveType::Triangles);
+		fireEffects.resize(3);
+		sprayStraw.setTexture(TEXTURE_MGR.Get("graphics/SprayStraw.png"));
+		sprayStraw.setScale({ 3.f,3.f });
+		break;
+	case Types::MosquitoRepellent:
+		mosquitoRepellentEffect.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent_effect.png"));
+		mosquitoRepellentEffect.setScale(3.f, 3.f);
+		mosquitoRepellentEffect.setPosition(position);
+		mosquitoRepellentEffect.setOrigin(origin);
+		break;
+	}
 }
 
 void Towers::Update(float dt)
 {
+
 	attackTimer += dt;
+	
 	if (target != nullptr)
 	{
 		if (attackTimer > attackDuration)
@@ -196,6 +235,9 @@ void Towers::Update(float dt)
 			target = nullptr;
 		}
 	}
+	if (attackTimer > attackDuration)
+		attackTimer = attackDuration;
+	
 	if (target != nullptr)
 	{
 		if (!target->GetActive())
@@ -215,30 +257,71 @@ void Towers::Update(float dt)
 	{
 		SetTarget();
 	}
-
+	if ((int)towerType == 0)
+	{
+		UpdateElecRocquetEffet(dt);
+	}
 	if ((int)towerType == 1 || (int)towerType == 2)
 	{
-		UpdateSprayStraw(dt);
+		if (target != nullptr)
+		{
+			UpdateSprayStraw(dt);
+		}
+			UpdateSprayEffect(dt);
 	}
-
-	if (attackDuration - attackTimer < 0.5)
+	if ((int)towerType == 3)
 	{
-		sf::Color a = towerSprite.getColor();
-		towerSprite.setColor({ a.r, a.g, a.b, 255 });
-	}
-	else
-	{
-		sf::Color a = towerSprite.getColor();
-		towerSprite.setColor({ a.r, a.g, a.b, 120 });
+		UpdateMosquitoRepellentEffect(dt);
 	}
 }
 
 void Towers::UpdateSprayStraw(float dt)
+{	
+	sprayStraw.setRotation(Utils::Angle(Utils::GetNormal(target->GetPosition() - sprayStraw.getPosition())));
+}
+
+void Towers::UpdateSprayEffect(float dt)
 {
-	if (target != nullptr)
+	fireEffects[0].color = sf::Color(255,255,255,0);
+	fireEffects[1].color = sf::Color::Transparent;
+	fireEffects[2].color = sf::Color::Transparent;
+	if (attackTimer < 0.3)
 	{
-		sprayStraw.setRotation(Utils::Angle(Utils::GetNormal(target->GetPosition() - sprayStraw.getPosition())));
-	}	
+		for (sf::Uint8 i = 1; i < 3; i++)
+		{
+			sf::Uint8 opacity = 255 - attackTimer / 0.3 * 255;
+			fireEffects[i].color = sf::Color({ 80, 220, 255, opacity });
+		}
+	}
+}
+
+void Towers::UpdateElecRocquetEffet(float dt)
+{
+	elecRocquetEffect.setColor(sf::Color::Transparent);
+	sf::Uint8 opacity = 255 - (attackDuration - attackTimer) * 250 * (1/attackDuration);
+	elecRocquetEffect.setColor({ 255,255,255, opacity });
+
+	electricEffectOnEnemy.setColor(sf::Color::Transparent);
+	if (attackTimer < 0.3)
+	{
+		sf::Uint8 opacity2 = 255 - attackTimer / 0.3 * 255;
+		electricEffectOnEnemy.setColor({ 255, 255, 255, opacity2 });
+	}
+}
+
+void Towers::UpdateMosquitoRepellentEffect(float dt)
+{
+	mosquitoRepellentEffect.setColor(sf::Color::Transparent);
+	if (attackTimer < attackDuration/2)
+	{
+		sf::Uint8 opacity = 200;
+		mosquitoRepellentEffect.setColor({ 255,255,255,opacity });
+	}
+	else
+	{
+		sf::Uint8 opacity = 200 - (attackTimer-attackDuration/2) / (attackDuration/2) * 200;
+		mosquitoRepellentEffect.setColor({ 255,255,255,opacity });
+	}
 }
 
 void Towers::Draw(sf::RenderWindow& window)
@@ -250,25 +333,44 @@ void Towers::Draw(sf::RenderWindow& window)
 	window.draw(towerSprite);
 	if ((int)towerType == 1 || (int)towerType == 2)
 	{
-		if(target!=nullptr)
-		window.draw(sprayStraw);
+		if (target != nullptr)
+		{
+			window.draw(sprayStraw);
+			window.draw(fireEffects);
+		}
+	}
+	else if ((int)towerType == 0)
+	{
+		window.draw(elecRocquetEffect);
+		if (target != nullptr)
+		{
+			window.draw(electricEffectOnEnemy);
+		}
+	}
+	else if ((int)towerType == 3)
+	{
+		window.draw(mosquitoRepellentEffect);
 	}
 }
 
 void Towers::Fire_ElectricRocquet()
 {
 	target->OnDamage(damage);
+	ElectricEffectOnEnemy();
+	SOUND_MGR.PlaySfx("sound/elec.mp3");
 }
 
 void Towers::Fire_SprayF()
 {
 	target->OnDamage(damage);
+	SprayEffect();
 	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
 void Towers::Fire_SprayR()
 {
 	target->OnDamage(damage);
+	SprayEffect();
 	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
@@ -283,4 +385,25 @@ void Towers::Fire_MosquitoRepellent()
 			bug->OnDamage(damage);
 		}
 	}
+}
+
+void Towers::SprayEffect()
+{
+	fireEffects[0].color = sf::Color::Transparent;
+	fireEffects[1].color = sf::Color(80, 220, 255, 160);
+	fireEffects[2].color = sf::Color(80, 220, 255, 160);
+	fireEffects[0].position = { position.x, position.y - 130.f };
+	fireEffects[1].position = { target->GetPosition().x - 50.f, target->GetPosition().y };
+	fireEffects[2].position = { target->GetPosition().x + 50.f, target->GetPosition().y };
+}
+
+void Towers::ElectricEffectOnEnemy()
+{
+	electricEffectOnEnemy.setPosition(target->GetPosition());
+	electricEffectOnEnemy.setColor(sf::Color::White);
+	if (target->GetBugLayerType() == Bug::BugLayerType::Ground)
+		Utils::SetOrigin5SQ(electricEffectOnEnemy, Origin5SQ::o23);
+	else
+		Utils::SetOrigin5SQOutBound(electricEffectOnEnemy, Origin5SQ::o24);
+
 }

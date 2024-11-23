@@ -111,6 +111,11 @@ void SceneDev1::Update(float dt)
     {
         SOUND_MGR.StopBgm();
     }
+    TIME_MGR.SetTimeScale(1.0f);
+    if (InputMgr::GetKey(sf::Keyboard::Z))
+    {
+        TIME_MGR.SetTimeScale(2.0f);
+    }
 
     if (isSpawning)
     {

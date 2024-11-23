@@ -43,7 +43,6 @@ void UiHud::TurnDebugMode()
 	isDebugMode = !isDebugMode;
 }
 
-
 /// <summary>
 /// BuildBoxOpen += 4, Mouse On Ui += 2, isBuilding += 1
 /// </summary>
@@ -259,8 +258,8 @@ void UiHud::UiMouseCheck()
 				idxCnt[2]++;
 			if (it == 3)
 				idxCnt[3]++;
-		}
-		
+		}		
+
 		int bugSpriteDrawOrderIndex = 0;
 		
 		std::string str[_countof(idxCnt)] = { "0" };
@@ -281,19 +280,19 @@ void UiHud::UiMouseCheck()
 			switch (i)
 			{
 			case 0:
-				cockroach.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				cockroach.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 80.f));
 				cockroach.setColor(sf::Color::White);
 				break;
 			case 1:
-				spider.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				spider.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 80.f));
 				spider.setColor(sf::Color::White);
 				break;
 			case 2:
-				fly.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				fly.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 80.f));
 				fly.setColor(sf::Color::White);
 				break;
 			case 3:
-				mosquito.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 60.f));
+				mosquito.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f(20.f + bugSpriteDrawOrderIndex * 132.f, 80.f));
 				mosquito.setColor(sf::Color::White);
 				break;
 			}
@@ -301,10 +300,9 @@ void UiHud::UiMouseCheck()
 		}
 		
 		stageInfoText.setPosition(stageInfoBox.getGlobalBounds().getPosition() + sf::Vector2f{10.f,10.f});
-		stageInfoText.setString("   " + str[0] + str[1] + str[2] + str[3]);
+		stageInfoText.setString("Wave" + std::to_string(GAME_MGR.GetCurrentStage()) + "  incoming....\n   " + str[0] + str[1] + str[2] + str[3]);
 		Utils::SetOrigin(stageInfoText, Origins::TL);
 	}
-
 }
 
 void UiHud::UiMouseCheckOnClick()
@@ -344,8 +342,6 @@ void UiHud::UiMouseCheckOnClick()
 		isBuildBoxOpen = false;
 		SOUND_MGR.PlaySfx("sound/click2.wav");
 	}
-
-
 }
 
 void UiHud::OnBuilding()
@@ -387,7 +383,7 @@ bool UiHud::Build()
 void UiHud::SetSelectedTower(Towers* tower)
 {
 	/*if(!isTowerSelected)*/
-	selectedTower = tower;	
+	selectedTower = tower;
 	isTowerSelected = true;
 	isTowerDescriptionOpen = true;
 	SOUND_MGR.PlaySfx("sound/click2.wav");
@@ -433,17 +429,19 @@ void UiHud::UpdateTowerDescription()
 	}
 	towerDescriptionPage = Utils::Clamp(towerDescriptionPage, 0, maxPage);
 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+
 	if (towerDescriptionPage == 0)
 	{
 		towerDescription.setString(selectedTower->GetTowerDescription());
-		towerDescription2.setString(selectedTower->GetTowerDescription2());
+		towerDescription2.setString(L"공격속도 : " + converter.from_bytes((to_string_with_precision(1.f / selectedTower->GetTowerAttackDuration(), 2))));
 		towerDescription3.setString(selectedTower->GetTowerDescription3());
 	}
 	else if (towerDescriptionPage == 1)
 	{
-		towerDescription.setString("DAMAGE : " + std::to_string(selectedTower->GetTowerDamage()));
-		towerDescription2.setString("RANGE : " + to_string_with_precision(selectedTower->GetTowerRange(),1));
-		towerDescription3.setString("SELL AT: " + std::to_string(selectedTower->GetTowerPriceOnSell()));
+		towerDescription.setString(L"공격력 : " + std::to_wstring(selectedTower->GetTowerDamage()));
+		towerDescription2.setString(L"사거리 : " + converter.from_bytes(to_string_with_precision(selectedTower->GetTowerRange(),1)));
+		towerDescription3.setString(L"판매가 : " + std::to_wstring(selectedTower->GetTowerPriceOnSell()));
 	}
 	else if (towerDescriptionPage == 2)
 	{
@@ -456,7 +454,6 @@ void UiHud::UpdateTowerDescription()
 	auto vSize = VIEW_MGR.GetUiView().getSize();
 
 	towerBox.setPosition((sf::Vector2f)towerScreenPos);
-
 
 	Origins tempOrigin;
 	if (towerScreenPos.x > vSize.x / 2)
@@ -510,6 +507,7 @@ void UiHud::Init()
 
 void UiHud::Release()
 {
+
 }
 
 void UiHud::Reset()

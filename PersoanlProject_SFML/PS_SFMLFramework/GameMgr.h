@@ -18,6 +18,7 @@ protected:
 
 	std::unordered_map<int, sf::Vector2i> waypointMap;
 	std::unordered_map<int, std::vector<int>> stageDataMap;	
+	std::unordered_map<int, std::vector<int>> upgradableInfoMap;
 
 public:
 	int GetLife() { return life; }
@@ -32,6 +33,7 @@ public:
 	
 	void SetWaypointMap();
 	void SetStageDataMap();
+	void SetUpgradableInfoMap();
 
 	int GetCurrentStage() { return currentStage; }
 	void SetCurrentStage(int stage) { currentStage = stage; }

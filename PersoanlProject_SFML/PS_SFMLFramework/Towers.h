@@ -34,6 +34,10 @@ public:
 protected:
 	sf::Sprite towerSprite;
 	sf::Sprite sprayStraw;
+	sf::Sprite elecRocquetEffect;
+	sf::VertexArray fireEffects;
+	sf::Sprite electricEffectOnEnemy;
+	sf::Sprite mosquitoRepellentEffect;
 	
 	Types towerType;			//  0 
 	std::string textureId;		//  1
@@ -95,12 +99,16 @@ public:
 	float GetTowerRange() { return range; }
 	int GetTowerPriceOnSell() { return priceOnSell; }
 	int GetPrice() { return price; }
+	float GetTowerAttackDuration() { return attackDuration; }
 
 	void Init() override;
 	void Release() override;
 	void Reset() override;
 	void Update(float dt) override;
 	void UpdateSprayStraw(float dt);
+	void UpdateSprayEffect(float dt);
+	void UpdateElecRocquetEffet(float dt);
+	void UpdateMosquitoRepellentEffect(float dt);
 	void Draw(sf::RenderWindow& window) override;
 
 
@@ -108,4 +116,7 @@ public:
 	void Fire_SprayF();
 	void Fire_SprayR();
 	void Fire_MosquitoRepellent();
+
+	void SprayEffect();
+	void ElectricEffectOnEnemy();
 };
