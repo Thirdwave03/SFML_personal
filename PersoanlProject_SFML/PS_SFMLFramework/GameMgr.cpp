@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "GameMgr.h"
 
+void GameMgr::SetLife(int life)
+{
+	this->life = life;
+	life = Utils::Clamp(life, 0, 20);
+}
+
 void GameMgr::AddCoin(int addCoin)
 {
 	this->coin += addCoin;
@@ -18,8 +24,8 @@ void GameMgr::Init()
 
 void GameMgr::Reset()
 {
-	life = 10;
-	coin = 30;
+	life = 1000;
+	coin = 3000;
 	currentStage = 1;
 }
 
@@ -88,6 +94,7 @@ void GameMgr::SetStage1()
 	for (int i = 0; i < 200; i++) // 0 20 0 0 
 	{
 		stageDataMap[1].push_back(0);
+		stageDataMap[1].push_back(2);
 	}
 }
 

@@ -75,6 +75,9 @@ protected:
 	bool isBuilding = false;
 	bool isTowerSelected = false;
 	bool isTowerDescriptionOpen = false;
+	bool isInitialUiOn = true;
+	bool isInfoBoxEverOpened = false;
+	bool isBuildBoxEverOpened = false;
 
 	int towerDescriptionPage = 0;
 	int maxPage = 2; // 1 less number of actual pages

@@ -66,13 +66,13 @@ void Towers::Fire()
 		Fire_Spray();
 		break;
 	case 3: // MosqRep
-		Fire_AreaAttack();
+		Fire_MosquitoRepellent();
 		break;
 	case 4: // ElecRocqS
 		Fire_ElectricRocquet();
 		break;
 	case 5: // UVRep
-		Fire_AreaAttack();
+		Fire_UVRepellent();
 		break;
 	case 6: // ElecRocqU
 		Fire_ElectricRocquet();
@@ -81,13 +81,13 @@ void Towers::Fire()
 		Fire_Lightening();
 		break;
 	case 8: // TeslaCoil
-		Fire_AreaAttack();
+		Fire_TeslaCoil();
 		break;
 	case 9: // SprayFS
 		Fire_Spray();
 		break;
 	case 10: // SprayIce
-		Fire_Spray();
+		Fire_SprayFreeze();
 		break;
 	case 11: // Ice				*************
 		Fire_Ice(); // To be Updated
@@ -99,10 +99,10 @@ void Towers::Fire()
 		Fire_Fire(); // To be Updated
 		break;
 	case 14: // HomeMat
-		Fire_AreaAttack();
+		Fire_MosquitoRepellent();
 		break;
 	case 15: // HomeMatS
-		Fire_AreaAttack();
+		Fire_MosquitoRepellent();
 		break;
 	}
 	attackTimer = 0;
@@ -600,6 +600,8 @@ void Towers::Fire_Lightening()
 void Towers::Fire_Ice()
 {
 	target->OnDamage(damage);
+	if (target->GetSlowTimer() < slow)
+		target->SetSlowTimer(slow);
 	IceEffectOnEnemy();
 	SOUND_MGR.PlaySfx("sound/freezing.mp3");
 }
@@ -627,6 +629,15 @@ void Towers::Fire_Spray()
 	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
+void Towers::Fire_SprayFreeze()
+{
+	target->OnDamage(damage);
+	if (target->GetSlowTimer() < slow)
+		target->SetSlowTimer(slow);
+	SprayEffect();
+	SOUND_MGR.PlaySfx("sound/spray.mp3");
+}
+
 void Towers::Fire_SprayR()
 {
 	target->OnDamage(damage);
@@ -634,26 +645,12 @@ void Towers::Fire_SprayR()
 	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
-void Towers::Fire_AreaAttack()
+void Towers::Fire_MosquitoRepellent()
 {
 	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
 	for (auto& bug : bList)
 	{
-		if (attackType == AttackTypes::Air && bug->GetBugLayerType() == Bug::BugLayerType::Air)
-		{
-			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
-			{
-				bug->OnDamage(damage);
-			}
-		}
-		if (attackType == AttackTypes::Ground && bug->GetBugLayerType() == Bug::BugLayerType::Ground)
-		{
-			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
-			{
-				bug->OnDamage(damage);
-			}
-		}
-		if (attackType == AttackTypes::Both)
+		if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
 		{
 			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
 			{
@@ -661,23 +658,54 @@ void Towers::Fire_AreaAttack()
 			}
 		}
 	}
-	if (towerType == Types::MosquitoRepellent)
-	{
-		SOUND_MGR.PlaySfx("sound/mqRepel.mp3");
-	}
-	if (towerType == Types::HomeMat || towerType == Types::HomeMatS)
-	{
-		SOUND_MGR.PlaySfx("sound/mqRepel.mp3");
-	}
-	if (towerType == Types::TeslaCoil)
-	{
-		SOUND_MGR.PlaySfx("sound/teslaCoil.mp3");
-	}
-	if (towerType == Types::UVRepellent)
-	{
-		SOUND_MGR.PlaySfx("sound/UVR.mp3");
-	}
+	SOUND_MGR.PlaySfx("sound/mqRepel.mp3");
 }
+
+void Towers::Fire_UVRepellent()
+{
+	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+	for (auto& bug : bList)
+	{
+		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		{
+			bug->OnDamage(damage);
+			if (bug->GetStunTimer() < stun)
+				bug->SetStunTimer(stun);
+		}
+	}
+	SOUND_MGR.PlaySfx("sound/UVR.mp3");
+}
+
+void Towers::Fire_TeslaCoil()
+{
+	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+	for (auto& bug : bList)
+	{		
+		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		{
+			bug->OnDamage(damage);
+			if (bug->GetStunTimer() < stun)
+				bug->SetStunTimer(stun);
+		}
+	}
+	SOUND_MGR.PlaySfx("sound/teslaCoil.mp3");
+}
+
+//void Towers::Fire_HomeMat()
+//{
+//	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+//	for (auto& bug : bList)
+//	{
+//		if (bug->GetBugLayerType() == Bug::BugLayerType::Air)
+//		{
+//			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+//			{
+//				bug->OnDamage(damage);
+//			}
+//		}
+//	}
+//	SOUND_MGR.PlaySfx("sound/mqRepel.mp3");
+//}
 
 void Towers::SprayEffect()
 {

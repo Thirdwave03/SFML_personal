@@ -37,8 +37,12 @@ protected:
 
 	sf::Sprite bugSprite;
 	sf::IntRect animationTarget;
+	sf::Sprite stunSprite;
+	sf::IntRect stunAnimationTarget;
 
 	float accumTime;
+	bool stunAnimationFlag = false;
+
 	bool animationFlagH = false;
 	bool animationFlagV = false;
 
@@ -48,7 +52,7 @@ protected:
 	sf::RectangleShape maxhpBar;
 
 	float timerSlow = 0;
-	bool isSlowed;
+	float slowMultiplier = 1.f;
 
 	float timerStun;
 	bool isStunned;
@@ -57,8 +61,7 @@ protected:
 	bool isDead = false;
 	float deadTimer = 3.f;
 
-	float onHitTimer = 0.f;
-	
+	float onHitTimer = 0.f;	
 
 	int waypointIndex = 1;
 
@@ -78,6 +81,11 @@ public:
 
 	void SetDestinationTile(sf::Vector2i destination) { destinationTile = destination; }
 
+	void SetSlowTimer(float slow);
+	void SetStunTimer(float stun);
+	float GetSlowTimer() { return timerSlow; }
+	float GetStunTimer() { return timerStun; }
+
 	void OnDamage(int damage);
 	void OnDie();
 
@@ -96,6 +104,7 @@ public:
 	void Update(float dt) override;
 	void UpdateDirection(float dt);
 	void UpdateAnimation(float dt);
+	void UpdateStunAnimation(float dt);
 	void UpdateHealthBar(float dt);
 	void Draw(sf::RenderWindow& window) override;
 };

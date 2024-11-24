@@ -22,7 +22,7 @@ protected:
 
 public:
 	int GetLife() { return life; }
-	void SetLife(int life) { this->life = life; }
+	void SetLife(int life);
 
 	int GetCoin() { return coin; }
 	void SetCoin(int coin) { this->coin = coin; }

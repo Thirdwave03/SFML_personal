@@ -140,8 +140,13 @@ public:
 	void Fire_Ice();
 	void Fire_Fire();
 	void Fire_Spray();
+	void Fire_SprayFreeze();
 	void Fire_SprayR();
-	void Fire_AreaAttack();
+	void Fire_MosquitoRepellent();
+	void Fire_UVRepellent();
+	void Fire_TeslaCoil();
+	//void Fire_HomeMat();
+
 
 	void SprayEffect();
 	void SprayEffectR();

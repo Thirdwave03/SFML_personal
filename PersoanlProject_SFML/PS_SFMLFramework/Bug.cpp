@@ -43,6 +43,16 @@ void Bug::SetOrigin(const sf::Vector2f& newOrigin)
 	bugSprite.setOrigin(origin);
 }
 
+void Bug::SetSlowTimer(float slow)
+{
+	timerSlow = slow;
+}
+
+void Bug::SetStunTimer(float stun)
+{
+	timerStun = stun;
+}
+
 void Bug::OnDamage(int damage)
 {
 	onHitTimer = 0.5f;
@@ -133,6 +143,8 @@ void Bug::Reset()
 	maxhpBar.setOutlineThickness(2.5f);
 	Utils::SetOrigin(maxhpBar, Origins::ML);
 
+	Utils::SetOrigin(stunSprite, Origins::BC);
+
 	UpdateAnimation(0.f);
 	SetScale({ 2.f,2.f });
 	origin = Utils::SetOrigin5SQ(bugSprite, Origin5SQ::o23);
@@ -140,7 +152,10 @@ void Bug::Reset()
 
 void Bug::Update(float dt)
 {
+	timerStun -= dt;
+	
 	bugSprite.setColor({ 255,255,255,255 });
+	
 	if (onHitTimer > 0)
 	{
 		onHitTimer -= dt;
@@ -150,12 +165,24 @@ void Bug::Update(float dt)
 		}
 	}
 	UpdateHealthBar(dt);
+	if (timerSlow > 0)
+	{
+		timerSlow -= dt;
+		bugSprite.setColor({ 22,69,181,255 });
+	}
 
 	if (!isDead)
 	{
-		UpdateAnimation(dt);
 		UpdateDirection(dt);
-		SetPosition(position + direction * speed * speedMultiplier * dt);
+		if (timerSlow > 0)
+			slowMultiplier = 0.6f;
+		else
+			slowMultiplier = 1.f;
+		if (timerStun < 0)
+		{
+			SetPosition(position + direction * speed * speedMultiplier * dt * slowMultiplier);
+			UpdateAnimation(dt);
+		}
 	}	
 	
 	if (isDead)
@@ -213,6 +240,17 @@ void Bug::UpdateAnimation(float dt)
 	bugSprite.setScale({ 2.f * scaleflag,2.f});
 }
 
+void Bug::UpdateStunAnimation(float dt)
+{
+	if ((int)(timerStun * 10) % 2 == 0 )
+	{
+		stunAnimationFlag = !stunAnimationFlag;
+	}
+	stunAnimationTarget = { 64 * stunAnimationFlag, 0, 64,  64 };
+	stunSprite.setTextureRect(animationTarget);
+	stunSprite.setScale({ 2.f ,2.f });
+}
+
 void Bug::UpdateHealthBar(float dt)
 {
 	auto a = maxhpBar.getSize();
@@ -228,4 +266,6 @@ void Bug::Draw(sf::RenderWindow& window)
 	window.draw(bugSprite);
 	window.draw(hpBar);
 	window.draw(maxhpBar);
+	if (timerStun > 0)
+		window.draw(stunSprite);
 }
