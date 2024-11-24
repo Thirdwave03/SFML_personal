@@ -473,14 +473,30 @@ void UiHud::UpdateTowerDescription()
 	std::wstring tempwstr2;
 	if ((int)selectedTower->GetTowerAttackType() == 0)
 	{
-		
+		tempwstr1 = L"지상 및 공중 ";
+	}
+	else if ((int)selectedTower->GetTowerAttackType() == 1)
+	{
+		tempwstr1 = L"지상 ";
+	}
+	else if ((int)selectedTower->GetTowerAttackType() == 2)
+	{
+		tempwstr1 = L"공중 ";
+	}
+	if (selectedTower->GetTowerAreaAttack())
+	{
+		tempwstr2 = L"범위공격";
+	}
+	else if (!selectedTower->GetTowerAreaAttack())
+	{
+		tempwstr2 = L"단일공격";
 	}
 
 	if (towerDescriptionPage == 0)
 	{
 		towerDescription.setString(selectedTower->GetTowerDescription());
 		towerDescription2.setString(L"공격속도 : " + converter.from_bytes((to_string_with_precision(1.f / selectedTower->GetTowerAttackDuration(), 2))));
-		towerDescription3.setString(L"공격타입 : " );
+		towerDescription3.setString(L"공격타입 : " + tempwstr1 + tempwstr2);
 	}
 	else if (towerDescriptionPage == 1)
 	{
@@ -953,7 +969,38 @@ void UiHud::Update(float dt)
 		centerMsg.setString(L"우측 상단의 i 키를 눌러\n다음 웨이브 정보를 볼 수 있습니다.\n화면이동 : WASD 및 방향키\n튜토리얼 넘기기 : ESC");
 		Utils::SetOrigin(centerMsg, Origins::MC);
 		if (InputMgr::GetKeyDown(sf::Keyboard::Escape))
+		{
+			isInfoBoxEverOpened = true;
+			escPreventer = true;
+		}
+	}
+	if (!isBuildBoxEverOpened)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Escape) && !escPreventer)
+		{
+			isBuildBoxEverOpened = true;
+			centerMsg.setString(L"설치한 타워를 클릭하여 사거리 및 상세 스펙을 확인할 수 있습니다.");
+			Utils::SetOrigin(centerMsg, Origins::MC);
+			escPreventer = true;
+		}
+	}
+	if (!isTowerBoxEverOpened)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Escape) && !escPreventer)
+		{
+			isTowerBoxEverOpened = true;
+			centerMsg.setString(L"Q,E 키를 눌러 상세페이지를 넘길 수 있으며 타워 판매 및 업그레이드를 할 수 있습니다.\n준비가 완료되었으면 Space키로 웨이브를 시작하세요.");
+			Utils::SetOrigin(centerMsg, Origins::MC);
+			escPreventer = true;
+		}
+	}
+	if (!isReachedLastPage)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Escape) && !escPreventer)
+		{
 			isReachedLastPage = true;
+			escPreventer = true;
+		}
 	}
 	
 
