@@ -13,14 +13,18 @@ void InputMgr::Init()
     AxisInfo infoH;
     infoH.axis = Axis::Horizontal;
     infoH.AddKey(true, sf::Keyboard::D);
-    infoH.AddKey(false, sf::Keyboard::A);
+	infoH.AddKey(true, sf::Keyboard::Right);
+	infoH.AddKey(false, sf::Keyboard::A);
+	infoH.AddKey(false, sf::Keyboard::Left);
     axisInfoMap.insert({ infoH.axis, infoH });
 
     // Vertical
     AxisInfo infoV;
     infoV.axis = Axis::Vertical;
-    infoV.AddKey(true, sf::Keyboard::S);
-    infoV.AddKey(false, sf::Keyboard::W);
+	infoV.AddKey(true, sf::Keyboard::S);
+	infoV.AddKey(true, sf::Keyboard::Down);
+	infoV.AddKey(false, sf::Keyboard::W);
+	infoV.AddKey(false, sf::Keyboard::Up);
     axisInfoMap.insert({ infoV.axis, infoV });
 }
 

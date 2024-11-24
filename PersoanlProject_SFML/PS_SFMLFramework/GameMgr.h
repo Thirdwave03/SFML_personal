@@ -13,7 +13,7 @@ protected:
 	int life;
 	int coin;
 	int currentStage;
-	int totalStage = 20;
+	int totalStage = 41;
 	float hpMultiplier;
 
 	bool isSpawning;
@@ -54,6 +54,8 @@ public:
 	void SetStage0to5();
 	void SetStage6to10();
 	void SetStage11to20();
+	void SetStage21to30();
+	void SetStage31to40();
 	sf::Vector2i GetWaypointMap(int index);
 	int GetWaypointCnt() { return waypointMap.size(); }
 	std::vector<int> GetStageData(int index);

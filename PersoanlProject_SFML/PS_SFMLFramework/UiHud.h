@@ -68,6 +68,7 @@ protected:
 	
 	sf::RectangleShape blackBox;
     sf::Text centerMsg;
+	sf::Text centerMsg2;
 
 	bool isDebugMode = true;
 	bool isBuildBoxOpen = false;
@@ -80,6 +81,8 @@ protected:
 	bool isInitialUiOn = true;
 	bool isInfoBoxEverOpened = false;
 	bool isBuildBoxEverOpened = false;
+	bool isTowerBoxEverOpened = false;
+	bool isReachedLastPage = false;
 
 	bool isSettingBoxOn = false;
 

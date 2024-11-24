@@ -34,8 +34,6 @@ public:
 		Air,
 	};
 
-
-
 protected:
 	sf::Sprite towerSprite;
 	sf::Sprite sprayStraw;
@@ -116,6 +114,8 @@ public:
 	int GetTowerUpgradables() { return upgradableTowers; }
 	Types GetTowerType() { return towerType; }
 	std::string GetTextureId() { return textureId; }
+	AttackTypes GetTowerAttackType() { return attackType; }
+	bool GetTowerAreaAttack() { return isAreaAttack; }
 
 	void Init() override;
 	void Release() override;

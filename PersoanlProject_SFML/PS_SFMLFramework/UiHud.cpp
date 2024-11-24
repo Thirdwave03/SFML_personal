@@ -333,7 +333,12 @@ void UiHud::UiMouseCheckOnClick()
 
 		isBuildBoxOpen = true;
 		if (isInfoBoxEverOpened)
+		{
 			isBuildBoxEverOpened = true;
+			centerMsg.setCharacterSize(50.f);
+			centerMsg.setString(L"설치한 타워를 클릭하여 사거리 및 상세 스펙을 확인할 수 있습니다.");
+			Utils::SetOrigin(centerMsg, Origins::MC);
+		}
 		isInfoBoxOpen = false;
 		SOUND_MGR.PlaySfx("sound/click2.wav");
 	}
@@ -401,6 +406,12 @@ void UiHud::SetSelectedTower(Towers* tower)
 	selectedTower = tower;
 	isTowerSelected = true;
 	isTowerDescriptionOpen = true;
+	if (isBuildBoxEverOpened)
+	{
+		isTowerBoxEverOpened = true;
+		centerMsg.setString(L"Q,E 키를 눌러 상세페이지를 넘길 수 있으며 타워 판매 및 업그레이드를 할 수 있습니다.\n준비가 완료되었으면 Space키로 웨이브를 시작하세요.");
+		Utils::SetOrigin(centerMsg, Origins::MC);
+	}
 	SOUND_MGR.PlaySfx("sound/click2.wav");
 }
 
@@ -458,11 +469,18 @@ void UiHud::UpdateTowerDescription()
 	upgradableSprite1.setColor(sf::Color::Transparent);
 	upgradableSprite2.setColor(sf::Color::Transparent);
 
+	std::wstring tempwstr1;
+	std::wstring tempwstr2;
+	if ((int)selectedTower->GetTowerAttackType() == 0)
+	{
+		
+	}
+
 	if (towerDescriptionPage == 0)
 	{
 		towerDescription.setString(selectedTower->GetTowerDescription());
 		towerDescription2.setString(L"공격속도 : " + converter.from_bytes((to_string_with_precision(1.f / selectedTower->GetTowerAttackDuration(), 2))));
-		towerDescription3.setString(selectedTower->GetTowerDescription3());
+		towerDescription3.setString(L"공격타입 : " );
 	}
 	else if (towerDescriptionPage == 1)
 	{
@@ -477,6 +495,7 @@ void UiHud::UpdateTowerDescription()
 	}
 	else if (towerDescriptionPage == 2)
 	{
+		isReachedLastPage = true;
 		upgradableSprite1.setTexture(TEXTURE_MGR.Get(towerTextureIds[upgradables[0]]));
 		upgradableSprite1.setColor(sf::Color::White);
 		if (selectedTowerUpgradables == 2)
@@ -686,6 +705,7 @@ void UiHud::Reset()
 	ResetDebugObjects();
 	isDebugMode = false;
 	isGameOver = false;
+	isTowerBoxEverOpened = false;
 	isInitialUiOn = true;
 	
 	float textSize = 50.f;
@@ -704,9 +724,16 @@ void UiHud::Reset()
 	centerMsg.setCharacterSize(100.f);
 	centerMsg.setFillColor(sf::Color::White);
 	centerMsg.setPosition(uiViewSize / 2.f);
-	centerMsg.setString("The Bug\nPress Enter to Start");
+	centerMsg.setString(L"몰려오는 벌레들을 막아라..\nPress Enter to Start");
 	Utils::SetOrigin(centerMsg, Origins::MC);
 	
+	centerMsg2.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	centerMsg2.setCharacterSize(200.f);
+	centerMsg2.setFillColor(sf::Color::White);
+	centerMsg2.setPosition({ uiViewSize.x / 2.f , +200.f});
+	centerMsg2.setString(L"The Bug");
+	Utils::SetOrigin(centerMsg2, Origins::TC);
+
 	buildButton.setTexture(TEXTURE_MGR.Get("graphics/Build.png"));
 	buildButton.setPosition(rightX, topY);
 	Utils::SetOrigin(buildButton, Origins::TR);
@@ -843,7 +870,7 @@ void UiHud::Reset()
 	gameoverText.setCharacterSize(200.f);
 	gameoverText.setFillColor(sf::Color::White);
 	gameoverText.setPosition(FRAMEWORK.GetWindowSizeF() / 2.f);
-	gameoverText.setString("Game Over.... \n Thank you for playing");
+	gameoverText.setString(L"벌레들이 집을 점령했다... \n Thank you for playing");
 	Utils::SetOrigin(gameoverText, Origins::MC);
 
 	stageInfoButton.setTexture(TEXTURE_MGR.Get("graphics/Info.png"));
@@ -923,9 +950,12 @@ void UiHud::Update(float dt)
 	if (!isInfoBoxEverOpened)
 	{
 		centerMsg.setCharacterSize(50.f);
-		centerMsg.setString(L"우측 상단의 i 키를 눌러\n다음 웨이브 정보를 볼 수 있습니다.");
+		centerMsg.setString(L"우측 상단의 i 키를 눌러\n다음 웨이브 정보를 볼 수 있습니다.\n화면이동 : WASD 및 방향키\n튜토리얼 넘기기 : ESC");
 		Utils::SetOrigin(centerMsg, Origins::MC);
+		if (InputMgr::GetKeyDown(sf::Keyboard::Escape))
+			isReachedLastPage = true;
 	}
+	
 
 	if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 	{
@@ -960,8 +990,8 @@ void UiHud::Update(float dt)
 			gameoverText.setFillColor(sf::Color::White);
 			gameoverFadeOut.setFillColor(sf::Color::Black);
 			TIME_MGR.SetTimeScale(0.f);
-			if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
-				SCENE_MGR.ChangeScene(SceneIds::Dev1);
+			//if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+			//	SCENE_MGR.ChangeScene(SceneIds::Dev1);
 		}
 		sf::Uint8 temp = 255/4 * (4.f-gameoverFadeOutTimer);
 		gameoverFadeOut.setFillColor({ 0,0,0,temp });
@@ -1038,9 +1068,10 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(blackBox);
 		window.draw(centerMsg);
+		window.draw(centerMsg2);
 		return;
 	}
-	if (!isBuildBoxEverOpened)
+	if (!isReachedLastPage)
 	{
 		window.draw(centerMsg);
 	}

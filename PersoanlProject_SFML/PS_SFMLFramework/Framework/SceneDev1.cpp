@@ -112,6 +112,9 @@ void SceneDev1::Update(float dt)
         else
             uiHud->OnVictory();
     }
+    if(GAME_MGR.GetCurrentStage() >= 41 && bugs.size() == 0)
+        uiHud->OnVictory();
+
     if (InputMgr::GetKeyDown(sf::Keyboard::F5))
     {
         SOUND_MGR.PlayBgm("sound/mandarin-calmly-music-2965.mp3");
@@ -124,6 +127,14 @@ void SceneDev1::Update(float dt)
     if (InputMgr::GetKey(sf::Keyboard::Z))
     {
         TIME_MGR.SetTimeScale(2.0f);
+    }
+    if (InputMgr::GetKeyDown(sf::Keyboard::Numpad1))
+    {
+        GAME_MGR.AddCoin(30);
+    }
+    if (InputMgr::GetKeyDown(sf::Keyboard::Numpad2))
+    {
+        GAME_MGR.SetLife(20);
     }
 
     if (isSpawning)
@@ -141,6 +152,7 @@ void SceneDev1::Update(float dt)
     {
         isSpawning = false;
     }
+    
 
     auto tower = towers.begin();
     while (tower != towers.end())

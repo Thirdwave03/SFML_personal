@@ -47,6 +47,8 @@ void GameMgr::SetStageDataMap()
 {
 	SetStage0to5();
 	SetStage6to10();
+	SetStage11to20();
+	SetStage21to30();
 }
 
 void GameMgr::SetUpgradableInfoMap()
@@ -70,10 +72,27 @@ void GameMgr::SetUpgradableInfoMap()
 void GameMgr::SetCurrentStage(int stage)
 {
 	currentStage = stage;
-	hpMultiplier = 1.f + ((float)stage - 4)/5.f;
+	hpMultiplier = 1.f + ((float)currentStage - 4)/5.f;				// 10 = 2.2
 	
+	if (currentStage >= 10)
+	{
+		hpMultiplier = 2.2 + (float)(currentStage - 10) / 3.f;		// 20 = 5.53
+	}
+	if (currentStage >= 20)
+	{
+		hpMultiplier = 5.50f + (float)(currentStage - 20) / 2.0f;	// 30 = 10.5
+	}
+	if (currentStage >= 30)
+	{
+		hpMultiplier = 10.5f + (float)(currentStage - 30) / 1.0f;		// 40 = 20.5
+	}
 	if (hpMultiplier < 1.f)
 		hpMultiplier = 1.f;
+
+	if (currentStage <= 2)
+	{
+		hpMultiplier = 1.f - (0.6 - 0.2 * currentStage);
+	}
 }
 
 void GameMgr::SetStage0()
@@ -201,6 +220,40 @@ void GameMgr::SetStage11to20()
 		}
 	}
 }
+
+void GameMgr::SetStage21to30()
+{
+	for (int i = 21; i <= 30; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			stageDataMap[i].push_back(0);
+			stageDataMap[i].push_back(3);
+			stageDataMap[i].push_back(1);
+			stageDataMap[i].push_back(3);
+			stageDataMap[i].push_back(0);
+			stageDataMap[i].push_back(2);
+		}
+	}
+}
+
+void GameMgr::SetStage31to40()
+{
+	for (int i = 31; i <= 40; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			stageDataMap[i].push_back(0);
+			stageDataMap[i].push_back(3);
+			stageDataMap[i].push_back(0);
+			stageDataMap[i].push_back(3);
+			stageDataMap[i].push_back(0);
+			stageDataMap[i].push_back(3);
+		}
+	}
+}
+
+
 
 
 
