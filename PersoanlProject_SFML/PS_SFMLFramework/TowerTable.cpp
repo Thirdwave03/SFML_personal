@@ -31,10 +31,11 @@ bool TowerTable::Load()
 		table[id].priceOnSell = std::stoi(row[8]);
 		table[id].upgradableTowers = std::stoi(row[9]);
 		table[id].attackType = (Towers::AttackTypes)std::stoi(row[10]);
-		table[id].bonusType = (Towers::AttackBonusTypes)std::stoi(row[11]);
-		table[id].description = converter.from_bytes(row[12]);
-		table[id].description2 = converter.from_bytes(row[13]);
-		table[id].description3 = converter.from_bytes(row[14]);
+		table[id].slow = std::stof(row[11]);
+		table[id].stun = std::stof(row[12]);		
+		table[id].description = converter.from_bytes(row[13]);
+		table[id].description2 = converter.from_bytes(row[14]);
+		table[id].description3 = converter.from_bytes(row[15]);
 		
 	}
 	return true;

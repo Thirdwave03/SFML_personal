@@ -107,7 +107,7 @@ public:
 
 	void SetSelectedTower(Towers* tower);
 	void SetNullSelectedTower();
-
+	
 	void OnTowerSelect();
 	void UpdateTowerDescription();
 

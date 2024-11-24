@@ -41,7 +41,8 @@ void Towers::SetType(Types type)
 	priceOnSell = tData.priceOnSell;
 	upgradableTowers = tData.upgradableTowers;
 	attackType = tData.attackType;
-	bonusType = tData.bonusType;
+	slow = tData.slow;
+	stun = tData.stun;
 	description = tData.description;
 	description2 = tData.description2;
 	description3 = tData.description3;
@@ -55,17 +56,53 @@ void Towers::Fire()
 {
 	switch ((int)towerType)
 	{
-	case 0:
+	case 0: // ElecRocq
 		Fire_ElectricRocquet();
 		break;
-	case 1:
+	case 1: // SprayF
 		Fire_Spray();
 		break;
-	case 2:
+	case 2: // SprayR
 		Fire_Spray();
 		break;
-	case 3:
-		Fire_MosquitoRepellent();
+	case 3: // MosqRep
+		Fire_AreaAttack();
+		break;
+	case 4: // ElecRocqS
+		Fire_ElectricRocquet();
+		break;
+	case 5: // UVRep
+		Fire_AreaAttack();
+		break;
+	case 6: // ElecRocqU
+		Fire_ElectricRocquet();
+		break;
+	case 7: // Lightning		*************
+		Fire_Lightening();
+		break;
+	case 8: // TeslaCoil
+		Fire_AreaAttack();
+		break;
+	case 9: // SprayFS
+		Fire_Spray();
+		break;
+	case 10: // SprayIce
+		Fire_Spray();
+		break;
+	case 11: // Ice				*************
+		Fire_Ice(); // To be Updated
+		break;
+	case 12: // SprayTorch
+		Fire_SprayR();			// To be Updated
+		break;
+	case 13: // Fire			*************
+		Fire_Fire(); // To be Updated
+		break;
+	case 14: // HomeMat
+		Fire_AreaAttack();
+		break;
+	case 15: // HomeMatS
+		Fire_AreaAttack();
 		break;
 	}
 	attackTimer = 0;
@@ -195,6 +232,8 @@ void Towers::Reset()
 	switch (towerType)
 	{
 	case Types::ElectricRocquet:
+	case Types::ElectricRocquetS:
+	case Types::ElectricRocquetU:
 		elecRocquetEffect.setTexture(TEXTURE_MGR.Get("graphics/electricRocquet_effect.png"));
 		elecRocquetEffect.setScale(3.f, 3.f);
 		elecRocquetEffect.setPosition(position);
@@ -205,23 +244,57 @@ void Towers::Reset()
 		break;
 	case Types::SprayF:
 	case Types::SprayR:
+	case Types::SprayFS:
+	case Types::SprayFreeze:
+	case Types::SprayTorch:
 		fireEffects.setPrimitiveType(sf::PrimitiveType::Triangles);
 		fireEffects.resize(3);
 		sprayStraw.setTexture(TEXTURE_MGR.Get("graphics/SprayStraw.png"));
 		sprayStraw.setScale({ 3.f,3.f });
 		break;
+	case Types::Lightning:
+		lighteningEffectOnEnemy.setTexture(TEXTURE_MGR.Get("graphics/Lightening_Effect.png"));
+		lighteningEffectOnEnemy.setScale(3.0f, 3.0f);
+		Utils::SetOrigin5SQOutBound(electricEffectOnEnemy, Origin5SQ::o24);
 	case Types::MosquitoRepellent:
 		mosquitoRepellentEffect.setTexture(TEXTURE_MGR.Get("graphics/MosquitoRepellent_effect.png"));
 		mosquitoRepellentEffect.setScale(3.f, 3.f);
 		mosquitoRepellentEffect.setPosition(position);
 		mosquitoRepellentEffect.setOrigin(origin);
+	case Types::HomeMat:
+	case Types::HomeMatS:
+		homeMatEffect.setTexture(TEXTURE_MGR.Get("graphics/HomeMat_effect.png"));
+		homeMatEffect.setScale(3.f, 3.f);
+		homeMatEffect.setPosition(position);
+		homeMatEffect.setOrigin(origin);
+		break;
+	case Types::TeslaCoil:
+		teslaCoilEffect.setTexture(TEXTURE_MGR.Get("graphics/TeslaCoil_effect.png"));
+		teslaCoilEffect.setScale(3.f, 3.f);
+		teslaCoilEffect.setPosition(position);
+		teslaCoilEffect.setOrigin(origin);
+	case Types::UVRepellent:
+		UVRepellentEffect.setTexture(TEXTURE_MGR.Get("graphics/UVRepellent_effect.png"));
+		UVRepellentEffect.setScale(3.f, 3.f);
+		UVRepellentEffect.setPosition(position);
+		UVRepellentEffect.setOrigin(origin);
+		break;
+	case Types::Fire:
+		fireEffect.setTexture(TEXTURE_MGR.Get("graphics/Fire_effect.png"));
+		fireEffect.setScale(9.0f, 6.0f);
+		fireEffect.setPosition(position);
+		Utils::SetOrigin(fireEffect, Origins::MC);
+		break;
+	case Types::Ice:
+		iceEffectOnEnemy.setTexture(TEXTURE_MGR.Get("graphics/Ice.png"));
+		iceEffectOnEnemy.setScale(3.0f, 3.0f);
+		Utils::SetOrigin5SQOutBound(iceEffectOnEnemy, Origin5SQ::o24);
 		break;
 	}
 }
 
 void Towers::Update(float dt)
 {
-
 	attackTimer += dt;
 	
 	if (target != nullptr)
@@ -258,11 +331,15 @@ void Towers::Update(float dt)
 	{
 		SetTarget();
 	}
-	if ((int)towerType == 0)
+	if ((int)towerType == 0 || (int)towerType == 4 || (int)towerType == 6)
 	{
-		UpdateElecRocquetEffet(dt);
+		UpdateElecRocquetEffect(dt);
 	}
-	if ((int)towerType == 1 || (int)towerType == 2)
+	if ((int)towerType == 7)
+	{
+		UpdateLighteningEffect(dt);
+	}
+	if ((int)towerType == 1 || (int)towerType == 2 || (int)towerType == 9 || (int)towerType == 10)
 	{
 		if (target != nullptr)
 		{
@@ -270,9 +347,37 @@ void Towers::Update(float dt)
 		}
 			UpdateSprayEffect(dt);
 	}
+	if ((int)towerType == 12)
+	{
+		if (target != nullptr)
+		{
+			UpdateSprayStraw(dt);
+		}
+		UpdateSprayEffectR(dt);
+	}
 	if ((int)towerType == 3)
 	{
 		UpdateMosquitoRepellentEffect(dt);
+	}
+	if ((int)towerType == 5)
+	{
+		UpdateUVRepellentEffect(dt);
+	}
+	if ((int)towerType == 14 || (int)towerType == 15)
+	{
+		UpdateHomeMatEffect(dt);
+	}
+	if ((int)towerType == 8)
+	{
+		UpdateTeslaCoilEffect(dt);
+	}
+	if ((int)towerType == 11)
+	{
+		UpdateIceEffect(dt);
+	}
+	if ((int)towerType == 13)
+	{
+		UpdateFireEffect(dt);
 	}
 }
 
@@ -296,7 +401,22 @@ void Towers::UpdateSprayEffect(float dt)
 	}
 }
 
-void Towers::UpdateElecRocquetEffet(float dt)
+void Towers::UpdateSprayEffectR(float dt)
+{
+	fireEffects[0].color = sf::Color(255, 255, 0, 0);
+	fireEffects[1].color = sf::Color::Transparent;
+	fireEffects[2].color = sf::Color::Transparent;
+	if (attackTimer < 0.3)
+	{
+		for (sf::Uint8 i = 1; i < 3; i++)
+		{
+			sf::Uint8 opacity = 255 - attackTimer / 0.3 * 255;
+			fireEffects[i].color = sf::Color({ 255, 0, 0, opacity });
+		}
+	}
+}
+
+void Towers::UpdateElecRocquetEffect(float dt)
 {
 	elecRocquetEffect.setColor(sf::Color::Transparent);
 	sf::Uint8 opacity = 255 - (attackDuration - attackTimer) * 250 * (1/attackDuration);
@@ -309,6 +429,42 @@ void Towers::UpdateElecRocquetEffet(float dt)
 		electricEffectOnEnemy.setColor({ 255, 255, 255, opacity2 });
 	}
 }
+
+void Towers::UpdateLighteningEffect(float dt)
+{
+	lighteningEffectOnEnemy.setColor(sf::Color::Transparent);
+	if (attackTimer < 0.3)
+	{
+		sf::Uint8 opacity2 = 255 - attackTimer / 0.3 * 255;
+		lighteningEffectOnEnemy.setColor({ 255, 255, 255, opacity2 });
+	}
+}
+
+void Towers::UpdateIceEffect(float dt)
+{
+	iceEffectOnEnemy.setColor(sf::Color::Transparent);
+	if (attackTimer < 0.3)
+	{
+		sf::Uint8 opacity2 = 255 - attackTimer / 0.3 * 255;
+		iceEffectOnEnemy.setColor({ 255, 255, 255, opacity2 });
+	}
+}
+
+void Towers::UpdateFireEffect(float dt)
+{
+	fireEffect.setColor(sf::Color::Transparent);
+	if (attackTimer < attackDuration / 2)
+	{
+		sf::Uint8 opacity = 150;
+		fireEffect.setColor({ 255,255,255,opacity });
+	}
+	else
+	{
+		sf::Uint8 opacity = 150 - (attackTimer - attackDuration / 2) / (attackDuration / 2) * 150;
+		fireEffect.setColor({ 255,255,255,opacity });
+	}
+}
+
 
 void Towers::UpdateMosquitoRepellentEffect(float dt)
 {
@@ -325,6 +481,51 @@ void Towers::UpdateMosquitoRepellentEffect(float dt)
 	}
 }
 
+void Towers::UpdateUVRepellentEffect(float dt)
+{
+	UVRepellentEffect.setColor(sf::Color::Transparent);
+	if (attackTimer < attackDuration / 2)
+	{
+		sf::Uint8 opacity = 200;
+		UVRepellentEffect.setColor({ 255,255,255,opacity });
+	}
+	else
+	{
+		sf::Uint8 opacity = 200 - (attackTimer - attackDuration / 2) / (attackDuration / 2) * 200;
+		UVRepellentEffect.setColor({ 255,255,255,opacity });
+	}
+}
+
+void Towers::UpdateHomeMatEffect(float dt)
+{
+	homeMatEffect.setColor(sf::Color::Transparent);
+	if (attackTimer < attackDuration / 2)
+	{
+		sf::Uint8 opacity = 200;
+		homeMatEffect.setColor({ 255,255,255,opacity });
+	}
+	else
+	{
+		sf::Uint8 opacity = 200 - (attackTimer - attackDuration / 2) / (attackDuration / 2) * 200;
+		homeMatEffect.setColor({ 255,255,255,opacity });
+	}
+}
+
+void Towers::UpdateTeslaCoilEffect(float dt)
+{
+	teslaCoilEffect.setColor(sf::Color::Transparent);
+	if (attackTimer < attackDuration / 2)
+	{
+		sf::Uint8 opacity = 200;
+		teslaCoilEffect.setColor({ 255,255,255,opacity });
+	}
+	else
+	{
+		sf::Uint8 opacity = 200 - (attackTimer - attackDuration / 2) / (attackDuration / 2) * 200;
+		teslaCoilEffect.setColor({ 255,255,255,opacity });
+	}
+}
+
 void Towers::Draw(sf::RenderWindow& window)
 {
 	if (isSelected)
@@ -332,7 +533,7 @@ void Towers::Draw(sf::RenderWindow& window)
 		window.draw(rangeCircle);
 	}
 	window.draw(towerSprite);
-	if ((int)towerType == 1 || (int)towerType == 2)
+	if ((int)towerType == 1 || (int)towerType == 2 || (int)towerType == 9 || (int)towerType == 10 || (int)towerType == 12)
 	{
 		if (target != nullptr)
 		{
@@ -340,17 +541,44 @@ void Towers::Draw(sf::RenderWindow& window)
 			window.draw(fireEffects);
 		}
 	}
-	else if ((int)towerType == 0)
-	{
+	else if ((int)towerType == 0 || (int)towerType == 4 || (int)towerType == 6)
+	{ // 7 LighteningÀº ÀÓ½Ã
 		window.draw(elecRocquetEffect);
 		if (target != nullptr)
 		{
 			window.draw(electricEffectOnEnemy);
 		}
 	}
+	else if ((int)towerType == 7)
+	{
+		if (target != nullptr)
+		{
+			window.draw(lighteningEffectOnEnemy);
+		}
+	}
 	else if ((int)towerType == 3)
 	{
 		window.draw(mosquitoRepellentEffect);
+	}
+	else if ((int)towerType == 5)
+	{
+		window.draw(UVRepellentEffect);
+	}
+	else if ((int)towerType == 8)
+	{
+		window.draw(teslaCoilEffect);
+	}
+	else if ((int)towerType == 14 || (int)towerType == 15)
+	{
+		window.draw(homeMatEffect);
+	}
+	else if ((int)towerType == 11)
+	{
+		window.draw(iceEffectOnEnemy);
+	}
+	else if ((int)towerType == 13)
+	{
+		window.draw(fireEffect);
 	}
 }
 
@@ -359,6 +587,37 @@ void Towers::Fire_ElectricRocquet()
 	target->OnDamage(damage);
 	ElectricEffectOnEnemy();
 	SOUND_MGR.PlaySfx("sound/elec.mp3");
+}
+
+void Towers::Fire_Lightening()
+{
+	target->OnDamage(damage);
+	LighteiningEffectOnEnemy();
+	SOUND_MGR.PlaySfx("sound/lightening.mp3");
+
+}
+
+void Towers::Fire_Ice()
+{
+	target->OnDamage(damage);
+	IceEffectOnEnemy();
+	SOUND_MGR.PlaySfx("sound/freezing.mp3");
+}
+
+void Towers::Fire_Fire()
+{
+	SOUND_MGR.PlaySfx("sound/fire.wav");
+	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+	for (auto& bug : bList)
+	{
+		if (attackType == AttackTypes::Ground && bug->GetBugLayerType() == Bug::BugLayerType::Ground)
+		{
+			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+			{
+				bug->OnDamage(damage);
+			}
+		}
+	}
 }
 
 void Towers::Fire_Spray()
@@ -371,20 +630,52 @@ void Towers::Fire_Spray()
 void Towers::Fire_SprayR()
 {
 	target->OnDamage(damage);
-	SprayEffect();
+	SprayEffectR();
 	SOUND_MGR.PlaySfx("sound/spray.mp3");
 }
 
-void Towers::Fire_MosquitoRepellent()
+void Towers::Fire_AreaAttack()
 {
 	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
 	for (auto& bug : bList)
 	{
-		if(bug->GetBugLayerType() == Bug::BugLayerType::Air)
-		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		if (attackType == AttackTypes::Air && bug->GetBugLayerType() == Bug::BugLayerType::Air)
 		{
-			bug->OnDamage(damage);
+			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+			{
+				bug->OnDamage(damage);
+			}
 		}
+		if (attackType == AttackTypes::Ground && bug->GetBugLayerType() == Bug::BugLayerType::Ground)
+		{
+			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+			{
+				bug->OnDamage(damage);
+			}
+		}
+		if (attackType == AttackTypes::Both)
+		{
+			if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+			{
+				bug->OnDamage(damage);
+			}
+		}
+	}
+	if (towerType == Types::MosquitoRepellent)
+	{
+		SOUND_MGR.PlaySfx("sound/mqRepel.mp3");
+	}
+	if (towerType == Types::HomeMat || towerType == Types::HomeMatS)
+	{
+		SOUND_MGR.PlaySfx("sound/mqRepel.mp3");
+	}
+	if (towerType == Types::TeslaCoil)
+	{
+		SOUND_MGR.PlaySfx("sound/teslaCoil.mp3");
+	}
+	if (towerType == Types::UVRepellent)
+	{
+		SOUND_MGR.PlaySfx("sound/UVR.mp3");
 	}
 }
 
@@ -393,6 +684,16 @@ void Towers::SprayEffect()
 	fireEffects[0].color = sf::Color::Transparent;
 	fireEffects[1].color = sf::Color(80, 220, 255, 160);
 	fireEffects[2].color = sf::Color(80, 220, 255, 160);
+	fireEffects[0].position = { position.x, position.y - 130.f };
+	fireEffects[1].position = { target->GetPosition().x - 50.f, target->GetPosition().y };
+	fireEffects[2].position = { target->GetPosition().x + 50.f, target->GetPosition().y };
+}
+
+void Towers::SprayEffectR()
+{
+	fireEffects[0].color = sf::Color(255,255,0,0);
+	fireEffects[1].color = sf::Color(255, 0, 0, 160);
+	fireEffects[2].color = sf::Color(255, 0, 0, 160);
 	fireEffects[0].position = { position.x, position.y - 130.f };
 	fireEffects[1].position = { target->GetPosition().x - 50.f, target->GetPosition().y };
 	fireEffects[2].position = { target->GetPosition().x + 50.f, target->GetPosition().y };
@@ -407,4 +708,38 @@ void Towers::ElectricEffectOnEnemy()
 	else
 		Utils::SetOrigin5SQOutBound(electricEffectOnEnemy, Origin5SQ::o24);
 
+}
+
+void Towers::LighteiningEffectOnEnemy()
+{
+	lighteningEffectOnEnemy.setPosition(target->GetPosition());
+	lighteningEffectOnEnemy.setColor(sf::Color::White);
+	if (target->GetBugLayerType() == Bug::BugLayerType::Ground)
+		Utils::SetOrigin5SQ(lighteningEffectOnEnemy, Origin5SQ::o24);
+	else
+		Utils::SetOrigin5SQOutBound(lighteningEffectOnEnemy, Origin5SQ::o24);
+}
+
+void Towers::IceEffectOnEnemy()
+{
+	iceEffectOnEnemy.setPosition(target->GetPosition());
+	iceEffectOnEnemy.setColor(sf::Color::White);
+	if (target->GetBugLayerType() == Bug::BugLayerType::Ground)
+		Utils::SetOrigin5SQ(iceEffectOnEnemy, Origin5SQ::o23);
+	else
+		Utils::SetOrigin5SQOutBound(iceEffectOnEnemy, Origin5SQ::o24);
+}
+
+void Towers::FireEffectOnEnemy()
+{
+	fireEffect.setPosition(target->GetPosition());
+	fireEffect.setColor(sf::Color::White);
+	if (target->GetBugLayerType() == Bug::BugLayerType::Ground)
+	{
+		Utils::SetOrigin5SQ(fireEffect, Origin5SQ::o23);
+		Utils::SetOrigin5SQOutBound(fireEffect, Origin5SQ::o23);
+	}
+	
+	else
+		Utils::SetOrigin5SQOutBound(fireEffect, Origin5SQ::o24);
 }

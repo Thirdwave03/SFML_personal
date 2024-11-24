@@ -61,11 +61,15 @@ int UiHud::GetBoolStatus()
 
 void UiHud::UiMouseCheck()
 {
+	if(!isTowerDescriptionOpen)
+		towerBox.setSize({ 0.f,0.f });
+
 	isMouseOnUi = false;
 	if (buildButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
 		buildingMenu.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
 		stageInfoButton.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
-		stageInfoBox.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())
+		stageInfoBox.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())||
+		towerBox.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition())
 		)
 	{
 		isMouseOnUi = true;
@@ -497,7 +501,7 @@ void UiHud::UpdateTowerDescription()
 			{
 				wstr2 = L"단일 공격";
 			}
-			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).isAreaAttack == 0)
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[0]).isAreaAttack == 1)
 			{
 				wstr2 = L"범위 공격";
 			}
@@ -515,6 +519,19 @@ void UiHud::UpdateTowerDescription()
 				L"공격력 : " +	std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[0]).damage) +
 				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[0]).price));
 			Utils::SetOrigin(upgradableGuideText, Origins::ML);
+			if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
+			{
+				if (GAME_MGR.GetCoin() > TOWER_TABLE->Get((Towers::Types)upgradables[0]).price)
+				{
+					selectedTower->SetType((Towers::Types)upgradables[0]);
+					GAME_MGR.SpendCoin(TOWER_TABLE->Get((Towers::Types)upgradables[0]).price);
+					SOUND_MGR.PlaySfx("sound/built.wav");
+				}
+				else
+				{
+					SOUND_MGR.PlaySfx("sound/fail.wav");
+				}
+			}
 		}
 		if (selectedTowerUpgradables == 2 && upgradableSprite2.getGlobalBounds().contains((sf::Vector2f)InputMgr::GetMousePosition()))
 		{
@@ -536,7 +553,7 @@ void UiHud::UpdateTowerDescription()
 			{
 				wstr2 = L"단일 공격";
 			}
-			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).isAreaAttack == 0)
+			if ((int)TOWER_TABLE->Get((Towers::Types)upgradables[1]).isAreaAttack == 1)
 			{
 				wstr2 = L"범위 공격";
 			}
@@ -554,6 +571,19 @@ void UiHud::UpdateTowerDescription()
 				L"공격력 : " + std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[1]).damage) +
 				L"\n가격 : " + std::to_wstring(TOWER_TABLE->Get((Towers::Types)upgradables[1]).price));
 			Utils::SetOrigin(upgradableGuideText, Origins::ML);
+			if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
+			{
+				if (GAME_MGR.GetCoin() > TOWER_TABLE->Get((Towers::Types)upgradables[1]).price)
+				{
+					selectedTower->SetType((Towers::Types)upgradables[1]);
+					GAME_MGR.SpendCoin(TOWER_TABLE->Get((Towers::Types)upgradables[1]).price);
+					SOUND_MGR.PlaySfx("sound/built.wav");
+				}
+				else
+				{
+					SOUND_MGR.PlaySfx("sound/fail.wav");
+				}
+			}
 		}
 	}
 			

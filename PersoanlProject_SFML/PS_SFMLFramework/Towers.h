@@ -34,14 +34,7 @@ public:
 		Air,
 	};
 
-	enum class AttackBonusTypes
-	{
-		Default,
-		CockroachBonus,
-		MosquitoBonus,
-		SpiderBonus,
-		FlyBonus,
-	};
+
 
 protected:
 	sf::Sprite towerSprite;
@@ -49,7 +42,13 @@ protected:
 	sf::Sprite elecRocquetEffect;
 	sf::VertexArray fireEffects;
 	sf::Sprite electricEffectOnEnemy;
+	sf::Sprite lighteningEffectOnEnemy;
 	sf::Sprite mosquitoRepellentEffect;
+	sf::Sprite UVRepellentEffect;
+	sf::Sprite homeMatEffect;
+	sf::Sprite teslaCoilEffect;
+	sf::Sprite iceEffectOnEnemy;
+	sf::Sprite fireEffect;
 	
 	Types towerType;			//  0 
 	std::string textureId;		//  1
@@ -68,11 +67,13 @@ protected:
 	int upgradableTowers;		//  9
 
 	AttackTypes attackType;		// 10
-	AttackBonusTypes bonusType;	// 11
+	
+	float slow;				  	// 11
+	float stun;				  	// 12
 
-	std::wstring description;	// 12
-	std::wstring description2;	// 13
-	std::wstring description3;	// 14
+	std::wstring description; 	// 13
+	std::wstring description2;	// 14
+	std::wstring description3;	// 15
 
 	int targetNumbers;
 	bool isSelected = false;
@@ -122,16 +123,30 @@ public:
 	void Update(float dt) override;
 	void UpdateSprayStraw(float dt);
 	void UpdateSprayEffect(float dt);
-	void UpdateElecRocquetEffet(float dt);
+	void UpdateSprayEffectR(float dt);
+	void UpdateElecRocquetEffect(float dt);
+	void UpdateLighteningEffect(float dt);
+	void UpdateIceEffect(float dt);
+	void UpdateFireEffect(float dt);
 	void UpdateMosquitoRepellentEffect(float dt);
+	void UpdateUVRepellentEffect(float dt);
+	void UpdateHomeMatEffect(float dt);
+	void UpdateTeslaCoilEffect(float dt);
 	void Draw(sf::RenderWindow& window) override;
 
 
 	void Fire_ElectricRocquet();
+	void Fire_Lightening();
+	void Fire_Ice();
+	void Fire_Fire();
 	void Fire_Spray();
 	void Fire_SprayR();
-	void Fire_MosquitoRepellent();
+	void Fire_AreaAttack();
 
 	void SprayEffect();
+	void SprayEffectR();
 	void ElectricEffectOnEnemy();
+	void LighteiningEffectOnEnemy();
+	void IceEffectOnEnemy();
+	void FireEffectOnEnemy();
 };

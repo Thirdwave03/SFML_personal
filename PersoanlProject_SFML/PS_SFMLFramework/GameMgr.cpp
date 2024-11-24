@@ -85,9 +85,9 @@ void GameMgr::SetStage0()
 
 void GameMgr::SetStage1()
 {
-	for (int i = 0; i < 20; i++) // 0 20 0 0 
+	for (int i = 0; i < 200; i++) // 0 20 0 0 
 	{
-		stageDataMap[1].push_back(1);
+		stageDataMap[1].push_back(0);
 	}
 }
 

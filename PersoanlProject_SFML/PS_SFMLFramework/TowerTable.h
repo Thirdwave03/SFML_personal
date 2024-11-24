@@ -19,11 +19,12 @@ struct DataTower
 	int upgradableTowers;					//  9
 
 	Towers::AttackTypes attackType;			// 10
-	Towers::AttackBonusTypes bonusType;		// 11
+	float slow;								// 11
+	float stun;								// 12
 
-	std::wstring description;				// 12
-	std::wstring description2;				// 13
-	std::wstring description3;				// 14
+	std::wstring description;				// 13
+	std::wstring description2;				// 14
+	std::wstring description3;				// 15
 };
 
 class TowerTable : public DataTable
