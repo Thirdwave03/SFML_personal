@@ -55,6 +55,7 @@ protected:
 	float slowMultiplier = 1.f;
 
 	float timerStun;
+	float stunAccumTime =0.5f;
 	bool isStunned;
 
 	bool isGoldRewarded = false;

@@ -592,9 +592,10 @@ void Towers::Fire_ElectricRocquet()
 void Towers::Fire_Lightening()
 {
 	target->OnDamage(damage);
+	if (target->GetStunTimer() < stun)
+		target->SetStunTimer(stun);
 	LighteiningEffectOnEnemy();
 	SOUND_MGR.PlaySfx("sound/lightening.mp3");
-
 }
 
 void Towers::Fire_Ice()

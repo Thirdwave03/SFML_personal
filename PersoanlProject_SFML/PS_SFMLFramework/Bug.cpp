@@ -119,6 +119,9 @@ void Bug::Release()
 void Bug::Reset()
 {
 	SetActive(true);
+	timerSlow = 0.f;
+	timerStun = -1.f;
+
 	isDead = false;
 	isGoldRewarded = false;
 	auto a = bugSprite.getColor();
@@ -143,6 +146,8 @@ void Bug::Reset()
 	maxhpBar.setOutlineThickness(2.5f);
 	Utils::SetOrigin(maxhpBar, Origins::ML);
 
+	stunSprite.setTexture(TEXTURE_MGR.Get("graphics/Stun_Sheet.png"));
+	stunSprite.setScale({ 2.f,2.f });
 	Utils::SetOrigin(stunSprite, Origins::BC);
 
 	UpdateAnimation(0.f);
@@ -152,7 +157,11 @@ void Bug::Reset()
 
 void Bug::Update(float dt)
 {
-	timerStun -= dt;
+	if (timerStun > 0)
+	{
+		UpdateStunAnimation(dt);
+		timerStun -= dt;
+	}
 	
 	bugSprite.setColor({ 255,255,255,255 });
 	
@@ -242,13 +251,17 @@ void Bug::UpdateAnimation(float dt)
 
 void Bug::UpdateStunAnimation(float dt)
 {
-	if ((int)(timerStun * 10) % 2 == 0 )
+	stunAccumTime += dt;
+	if (stunAccumTime > 0.18 )
 	{
+		stunAccumTime = 0;
 		stunAnimationFlag = !stunAnimationFlag;
 	}
 	stunAnimationTarget = { 64 * stunAnimationFlag, 0, 64,  64 };
-	stunSprite.setTextureRect(animationTarget);
+	stunSprite.setTextureRect(stunAnimationTarget);
 	stunSprite.setScale({ 2.f ,2.f });
+	stunSprite.setPosition(position);
+	Utils::SetOrigin(stunSprite, Origins::BC);
 }
 
 void Bug::UpdateHealthBar(float dt)
