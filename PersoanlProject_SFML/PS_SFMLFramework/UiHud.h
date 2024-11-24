@@ -66,7 +66,8 @@ protected:
 
 	sf::Vector2f buildingIconScale = { 2.f,2.f };
 	
-    sf::Text forCalibrationCheck;
+	sf::RectangleShape blackBox;
+    sf::Text centerMsg;
 
 	bool isDebugMode = true;
 	bool isBuildBoxOpen = false;
@@ -75,9 +76,15 @@ protected:
 	bool isBuilding = false;
 	bool isTowerSelected = false;
 	bool isTowerDescriptionOpen = false;
+
 	bool isInitialUiOn = true;
 	bool isInfoBoxEverOpened = false;
 	bool isBuildBoxEverOpened = false;
+
+	bool isSettingBoxOn = false;
+
+	float waveTimer = 30.f;
+	bool isGameStart = false;
 
 	int towerDescriptionPage = 0;
 	int maxPage = 2; // 1 less number of actual pages
@@ -108,11 +115,15 @@ public:
 	void OnBuilding();
 	bool Build();
 
+	void OnVictory();
+
 	void SetSelectedTower(Towers* tower);
 	void SetNullSelectedTower();
 	
 	void OnTowerSelect();
 	void UpdateTowerDescription();
+
+	bool IsInitUiOpen() { return isInitialUiOn; }
 
 	Towers::Types GetBuildingTower() { return buildingTower; }
 

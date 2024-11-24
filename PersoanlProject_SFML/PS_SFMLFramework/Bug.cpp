@@ -80,7 +80,7 @@ void Bug::SetType(int bugTypeId)
 	auto bData = BUG_TABLE->Get(bugType);
 	textureId = bData.textureId;
 	bugName = bData.bugName;
-	maxHp = bData.maxHp;
+	maxHp = bData.maxHp * GAME_MGR.GetHpMultiplier();
 	speed = bData.speed;
 	damage = bData.damage;
 	gold = bData.gold;
@@ -184,7 +184,7 @@ void Bug::Update(float dt)
 	{
 		UpdateDirection(dt);
 		if (timerSlow > 0)
-			slowMultiplier = 0.6f;
+			slowMultiplier = 0.5f;
 		else
 			slowMultiplier = 1.f;
 		if (timerStun < 0)

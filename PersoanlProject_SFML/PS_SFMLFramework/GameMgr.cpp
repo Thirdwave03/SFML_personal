@@ -24,9 +24,10 @@ void GameMgr::Init()
 
 void GameMgr::Reset()
 {
-	life = 1000;
-	coin = 3000;
+	life = 20;
+	coin = 30;
 	currentStage = 1;
+	hpMultiplier = 1.f;
 }
 
 void GameMgr::SetWaypointMap()
@@ -44,12 +45,8 @@ void GameMgr::SetWaypointMap()
 
 void GameMgr::SetStageDataMap()
 {
-	SetStage0();
-	SetStage1();
-	SetStage2();
-	SetStage3();
-	SetStage4();
-	SetStage5();
+	SetStage0to5();
+	SetStage6to10();
 }
 
 void GameMgr::SetUpgradableInfoMap()
@@ -68,6 +65,15 @@ void GameMgr::SetUpgradableInfoMap()
 	upgradableInfoMap[14].push_back(15);
 	//upgradableInfoMap[15].push_back(16);
 	//upgradableInfoMap[16].push_back(17);
+}
+
+void GameMgr::SetCurrentStage(int stage)
+{
+	currentStage = stage;
+	hpMultiplier = 1.f + ((float)stage - 4)/5.f;
+	
+	if (hpMultiplier < 1.f)
+		hpMultiplier = 1.f;
 }
 
 void GameMgr::SetStage0()
@@ -91,10 +97,9 @@ void GameMgr::SetStage0()
 
 void GameMgr::SetStage1()
 {
-	for (int i = 0; i < 200; i++) // 0 20 0 0 
+	for (int i = 0; i < 20; i++) // 0 20 0 0 
 	{
-		stageDataMap[1].push_back(0);
-		stageDataMap[1].push_back(2);
+		stageDataMap[1].push_back(1);
 	}
 }
 
@@ -135,15 +140,69 @@ void GameMgr::SetStage4()
 
 void GameMgr::SetStage5()
 {
-	for (int i = 0; i < 4; i++) // 0 0 20 0
+	for (int i = 0; i < 10; i++) // 0 0 10 10
 	{
 		stageDataMap[5].push_back(2);
-		stageDataMap[5].push_back(2);
-		stageDataMap[5].push_back(2);
-		stageDataMap[5].push_back(2);
-		stageDataMap[5].push_back(2);
+		stageDataMap[5].push_back(3);
 	}
 }
+
+void GameMgr::SetStage0to5()
+{
+	SetStage0();
+	SetStage1();
+	SetStage2();
+	SetStage3();
+	SetStage4();
+	SetStage5();
+}
+
+void GameMgr::SetStage6to10()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		stageDataMap[6].push_back(1);
+		stageDataMap[6].push_back(0);
+	}
+	for (int i = 0; i < 20; i++)
+	{
+		stageDataMap[7].push_back(0);		
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		stageDataMap[8].push_back(3);
+		stageDataMap[8].push_back(2);
+	}
+	for (int i = 0; i < 20; i++)
+	{
+		stageDataMap[9].push_back(2);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		stageDataMap[10].push_back(0);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		stageDataMap[10].push_back(2);
+	}
+}
+
+void GameMgr::SetStage11to20()
+{
+	for (int i = 11; i <= 20; i++)
+	{
+		for (int j = 0; j < 5 ; j++)
+		{
+			stageDataMap[i].push_back(0);
+			stageDataMap[i].push_back(2);
+			stageDataMap[i].push_back(1);
+			stageDataMap[i].push_back(3);
+			stageDataMap[i].push_back(0);
+		}
+	}
+}
+
+
 
 sf::Vector2i GameMgr::GetWaypointMap(int index)
 {	

@@ -332,6 +332,8 @@ void UiHud::UiMouseCheckOnClick()
 		Utils::SetOrigin(MosquitoRepellent, Origins::BC);
 
 		isBuildBoxOpen = true;
+		if (isInfoBoxEverOpened)
+			isBuildBoxEverOpened = true;
 		isInfoBoxOpen = false;
 		SOUND_MGR.PlaySfx("sound/click2.wav");
 	}
@@ -343,6 +345,7 @@ void UiHud::UiMouseCheckOnClick()
 		stageInfoBoxCloseButton.setPosition({ a.left + a.width - 15.f, a.top + 5.f });
 
 		isInfoBoxOpen = true;
+		isInfoBoxEverOpened = true;
 		isBuildBoxOpen = false;
 		SOUND_MGR.PlaySfx("sound/click2.wav");
 	}
@@ -382,6 +385,14 @@ void UiHud::OnBuilding()
 bool UiHud::Build()
 {
 	return false;
+}
+
+void UiHud::OnVictory()
+{
+	isInitialUiOn = true;
+	centerMsg.setCharacterSize(80.f);
+	centerMsg.setString(L"Victory!\n집을 벌레들로부터 지켜냈습니다..!\nThank you for playing");
+	Utils::SetOrigin(centerMsg, Origins::MC);
 }
 
 void UiHud::SetSelectedTower(Towers* tower)
@@ -521,7 +532,7 @@ void UiHud::UpdateTowerDescription()
 			Utils::SetOrigin(upgradableGuideText, Origins::ML);
 			if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
 			{
-				if (GAME_MGR.GetCoin() > TOWER_TABLE->Get((Towers::Types)upgradables[0]).price)
+				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get((Towers::Types)upgradables[0]).price)
 				{
 					selectedTower->SetType((Towers::Types)upgradables[0]);
 					GAME_MGR.SpendCoin(TOWER_TABLE->Get((Towers::Types)upgradables[0]).price);
@@ -573,7 +584,7 @@ void UiHud::UpdateTowerDescription()
 			Utils::SetOrigin(upgradableGuideText, Origins::ML);
 			if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
 			{
-				if (GAME_MGR.GetCoin() > TOWER_TABLE->Get((Towers::Types)upgradables[1]).price)
+				if (GAME_MGR.GetCoin() >= TOWER_TABLE->Get((Towers::Types)upgradables[1]).price)
 				{
 					selectedTower->SetType((Towers::Types)upgradables[1]);
 					GAME_MGR.SpendCoin(TOWER_TABLE->Get((Towers::Types)upgradables[1]).price);
@@ -669,9 +680,13 @@ void UiHud::Release()
 
 void UiHud::Reset()
 {
+	TIME_MGR.SetTimeScale(1.f);
+	GAME_MGR.Reset();
 	SetTowerTextureIds();
 	ResetDebugObjects();
 	isDebugMode = false;
+	isGameOver = false;
+	isInitialUiOn = true;
 	
 	float textSize = 50.f;
 	auto uiViewSize = VIEW_MGR.GetUiView().getSize();
@@ -679,6 +694,18 @@ void UiHud::Reset()
 	float topY = 25.f;
 	float rightX = uiViewSize.x - 25.f;
 	float bottomY = uiViewSize.y - 75.f;
+
+	blackBox.setFillColor(sf::Color::Black);
+	blackBox.setSize({ 3000.f, 1500.f });
+	blackBox.setPosition(uiViewSize / 2.f);
+	Utils::SetOrigin(blackBox, Origins::MC);
+
+	centerMsg.setFont(FONT_MGR.Get("fonts/koreanFont1.ttf"));
+	centerMsg.setCharacterSize(100.f);
+	centerMsg.setFillColor(sf::Color::White);
+	centerMsg.setPosition(uiViewSize / 2.f);
+	centerMsg.setString("The Bug\nPress Enter to Start");
+	Utils::SetOrigin(centerMsg, Origins::MC);
 	
 	buildButton.setTexture(TEXTURE_MGR.Get("graphics/Build.png"));
 	buildButton.setPosition(rightX, topY);
@@ -881,6 +908,25 @@ void UiHud::ResetDebugObjects()
 
 void UiHud::Update(float dt)
 {
+	if (isInitialUiOn)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+			isInitialUiOn = false;
+		return;
+	}
+	if (!isBuildBoxEverOpened)
+	{
+		centerMsg.setCharacterSize(50.f);
+		centerMsg.setString(L"우측 상단의 망치 아이콘을 눌러\n건물을 건설 할 수 있습니다.");
+		Utils::SetOrigin(centerMsg, Origins::MC);
+	}
+	if (!isInfoBoxEverOpened)
+	{
+		centerMsg.setCharacterSize(50.f);
+		centerMsg.setString(L"우측 상단의 i 키를 눌러\n다음 웨이브 정보를 볼 수 있습니다.");
+		Utils::SetOrigin(centerMsg, Origins::MC);
+	}
+
 	if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 	{
 		UiMouseCheckOnClick();
@@ -901,7 +947,6 @@ void UiHud::Update(float dt)
 		isGameOver = true;
 	}
 
-
 	if (isGameOver)
 	{
 		if (gameoverFadeOutTimer > 0)
@@ -913,6 +958,10 @@ void UiHud::Update(float dt)
 		{
 			gameoverFadeOutTimer = Utils::Clamp(gameoverFadeOutTimer, 0.f, 5.f);
 			gameoverText.setFillColor(sf::Color::White);
+			gameoverFadeOut.setFillColor(sf::Color::Black);
+			TIME_MGR.SetTimeScale(0.f);
+			if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+				SCENE_MGR.ChangeScene(SceneIds::Dev1);
 		}
 		sf::Uint8 temp = 255/4 * (4.f-gameoverFadeOutTimer);
 		gameoverFadeOut.setFillColor({ 0,0,0,temp });
@@ -985,6 +1034,18 @@ void UiHud::UpdateDebugObjects(float dt)
 
 void UiHud::Draw(sf::RenderWindow& window)
 {
+	if (isInitialUiOn)
+	{
+		window.draw(blackBox);
+		window.draw(centerMsg);
+		return;
+	}
+	if (!isBuildBoxEverOpened)
+	{
+		window.draw(centerMsg);
+	}
+
+
 	if (isBuildBoxOpen)
 	{
 		window.draw(buildingMenu);

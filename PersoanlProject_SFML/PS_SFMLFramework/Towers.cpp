@@ -286,9 +286,6 @@ void Towers::Reset()
 		Utils::SetOrigin(fireEffect, Origins::MC);
 		break;
 	case Types::Ice:
-		iceEffectOnEnemy.setTexture(TEXTURE_MGR.Get("graphics/Ice.png"));
-		iceEffectOnEnemy.setScale(3.0f, 3.0f);
-		Utils::SetOrigin5SQOutBound(iceEffectOnEnemy, Origin5SQ::o24);
 		break;
 	}
 }
@@ -599,11 +596,18 @@ void Towers::Fire_Lightening()
 }
 
 void Towers::Fire_Ice()
-{
-	target->OnDamage(damage);
-	if (target->GetSlowTimer() < slow)
-		target->SetSlowTimer(slow);
-	IceEffectOnEnemy();
+{	
+	SOUND_MGR.PlaySfx("sound/freezing.mp3");
+	auto& bList = dynamic_cast<SceneDev1*>(SCENE_MGR.GetCurrentScene())->GetBugList();
+	for (auto& bug : bList)
+	{
+		if (Utils::DistanceWithIsoTileRatio(bug->GetPosition(), position) < 192.f * range)
+		{
+			bug->OnDamage(damage);
+			if (bug->GetSlowTimer() < slow)
+				bug->SetSlowTimer(slow);
+		}
+	}
 	SOUND_MGR.PlaySfx("sound/freezing.mp3");
 }
 

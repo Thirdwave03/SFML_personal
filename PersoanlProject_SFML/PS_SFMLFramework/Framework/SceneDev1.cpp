@@ -39,7 +39,6 @@ void SceneDev1::Enter()
 {
     //worldView.setSize(FRAMEWORK.GetWindowSizeF()/2.f);
     VIEW_MGR.GetWorldView() = FRAMEWORK.GetWindow().getDefaultView();
-
    
     Scene::Enter();
 
@@ -75,6 +74,9 @@ void SceneDev1::Update(float dt)
 {
     Scene::Update(dt);
 
+    if (uiHud->IsInitUiOpen())
+        return;
+
     VIEW_MGR.WorldToIso(isoTile->GetIsoTileSize(), isoTile->GetScale());
     
     sf::Vector2f mPos = ScreenToWorld(InputMgr::GetMousePosition());
@@ -105,10 +107,10 @@ void SceneDev1::Update(float dt)
     }
     if (InputMgr::GetKeyDown(sf::Keyboard::Space))
     {
-        if (GAME_MGR.GetCurrentStage() <= GAME_MGR.GetTotalStage())
+        if (GAME_MGR.GetCurrentStage() <= GAME_MGR.GetTotalStage2())
             SetWaveSpawnQueue();
         else
-            GAME_MGR.SetLife(0);
+            uiHud->OnVictory();
     }
     if (InputMgr::GetKeyDown(sf::Keyboard::F5))
     {
@@ -140,6 +142,20 @@ void SceneDev1::Update(float dt)
         isSpawning = false;
     }
 
+    auto tower = towers.begin();
+    while (tower != towers.end())
+    {
+        if (!(*tower)->IsActive())
+        {
+            towerPool.Return(*tower);
+            RemoveGo(*tower);
+            tower = towers.erase(tower);
+        }
+        else
+        {
+            tower++;
+        }
+    }
 
     auto bug = bugs.begin();
     while (bug != bugs.end())
