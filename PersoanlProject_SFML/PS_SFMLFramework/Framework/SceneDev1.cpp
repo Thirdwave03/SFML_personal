@@ -112,7 +112,7 @@ void SceneDev1::Update(float dt)
         else
             uiHud->OnVictory();
     }
-    if(GAME_MGR.GetCurrentStage() >= 41 && bugs.size() == 0)
+    if(GAME_MGR.GetCurrentStage() >= 51 && bugs.size() == 0)
         uiHud->OnVictory();
 
     if (InputMgr::GetKeyDown(sf::Keyboard::F5))

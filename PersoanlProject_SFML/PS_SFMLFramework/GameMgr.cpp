@@ -76,15 +76,19 @@ void GameMgr::SetCurrentStage(int stage)
 	
 	if (currentStage >= 10)
 	{
-		hpMultiplier = 2.2 + (float)(currentStage - 10) / 3.f;		// 20 = 5.53
+		hpMultiplier = 2.2f + (float)(currentStage - 10) / 2.5f;		// 20 = 2.2 + 4 // 6.2
 	}
 	if (currentStage >= 20)
 	{
-		hpMultiplier = 5.50f + (float)(currentStage - 20) / 2.0f;	// 30 = 10.5
+		hpMultiplier = 6.2f + (float)(currentStage - 20) / 1.5f;	// 30 = 6.2 + 6.66 12.67
 	}
 	if (currentStage >= 30)
 	{
-		hpMultiplier = 10.5f + (float)(currentStage - 30) / 1.0f;		// 40 = 20.5
+		hpMultiplier = 12.7f + (float)(currentStage - 30) / 0.8f;		// 40 = 12.7 + 12.5
+	}
+	if (currentStage >= 40)
+	{
+		hpMultiplier = 25.2f + (float)(currentStage - 30) / 0.5f;  // 45.2
 	}
 	if (hpMultiplier < 1.f)
 		hpMultiplier = 1.f;
@@ -237,9 +241,9 @@ void GameMgr::SetStage21to30()
 	}
 }
 
-void GameMgr::SetStage31to40()
+void GameMgr::SetStage31to50()
 {
-	for (int i = 31; i <= 40; i++)
+	for (int i = 31; i <= 50; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
