@@ -89,7 +89,7 @@ void GameMgr::SetCurrentStage(int stage)
 	}
 	if (currentStage >= 40)
 	{
-		hpMultiplier = 25.2f + (float)(currentStage - 30) / 0.5f;  // 45.2
+		hpMultiplier = 25.2f + (float)(currentStage - 40) / 0.43f;  // 45.2
 	}
 	if (hpMultiplier < 1.f)
 		hpMultiplier = 1.f;
