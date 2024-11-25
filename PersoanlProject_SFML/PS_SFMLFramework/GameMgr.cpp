@@ -49,6 +49,7 @@ void GameMgr::SetStageDataMap()
 	SetStage6to10();
 	SetStage11to20();
 	SetStage21to30();
+	SetStage31to50();
 }
 
 void GameMgr::SetUpgradableInfoMap()
