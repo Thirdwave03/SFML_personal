@@ -128,10 +128,10 @@ void SceneDev1::Update(float dt)
     {
         TIME_MGR.SetTimeScale(2.0f);
     }
-    //if (InputMgr::GetKeyDown(sf::Keyboard::Numpad1))
-    //{
-    //    GAME_MGR.AddCoin(30);
-    //}
+    if (InputMgr::GetKeyDown(sf::Keyboard::Numpad1))
+    {
+        GAME_MGR.AddCoin(30);
+    }
     //if (InputMgr::GetKeyDown(sf::Keyboard::Numpad2))
     //{
     //    GAME_MGR.SetLife(20);

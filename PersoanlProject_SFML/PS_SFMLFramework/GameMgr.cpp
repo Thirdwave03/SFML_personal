@@ -4,7 +4,7 @@
 void GameMgr::SetLife(int life)
 {
 	this->life = life;
-	life = Utils::Clamp(life, 0, 20);
+	this->life = Utils::Clamp(life, 0, 20);
 }
 
 void GameMgr::AddCoin(int addCoin)
